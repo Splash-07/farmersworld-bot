@@ -1,16 +1,14 @@
 export function msToTime(ms: number) {
-  if (ms < 0) return `0h:0m`;
-  // 1- Convert to seconds:
   let seconds = ms / 1000;
-  // 2- Extract hours:
-  const hours = Math.floor(seconds / 3600); // 3,600 seconds in 1 hour
-  seconds = seconds % 3600; // seconds remaining after extracting hours
-  // 3- Extract minutes:
-  const minutes = Math.floor(seconds / 60); // 60 seconds in 1 minute
-  // 4- Keep only seconds not extracted to minutes:
-  seconds = seconds % 60;
-  return `${hours > 0 ? hours + (hours > 1 ? " hours" : " hour") : ""} ${
-    minutes > 0 ? minutes + (minutes > 1 ? " mins" : " min") : ""
-  }`.trim();
+  const hours = Math.floor(seconds / 3600);
+  seconds = seconds % 3600;
+  const minutes = Math.floor(seconds / 60);
+  seconds = Math.floor(seconds % 60);
+  return `${hours >= 10 ? hours : hours < 10 && hours > 0 ? `0${hours}` : "00"}:${
+    minutes >= 10 ? minutes : minutes < 10 && minutes > 0 ? `0${minutes}` : "00"
+  }:${seconds >= 10 ? seconds : seconds < 10 && seconds > 0 ? `0${seconds}` : "00"}`;
 }
-// ${seconds > 0 ? seconds + (seconds > 1 ? " seconds" : " second") : ""}
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

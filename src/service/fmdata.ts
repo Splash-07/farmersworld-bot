@@ -1,29 +1,35 @@
-import { TableRowEnums } from "./../types/data.types";
+import { setAccount, setMbs, setTools } from "../store/slices/user.slice";
+import { store } from "../store/store";
+import { AccountResponse, TableRowEnums, ToolsResponse } from "./../types/data.types";
 import { rpc } from "./wax";
 
-export async function getAllTableRows(userAccount: string) {
-  // const tables: TableRowEnums[] = ["accounts", "tools", "mbs", "buildings", "crops", "animals", "breedings", "account2fa"];
-  //   const result = await Promise.all(tables.map((table, index) => getTableRow(userAccount, table, index)));
-  // const account = await getTableRow(userAccount, tables[0]);
-  // const assets = await getTableRow(userAccount, tables[1]);
-  //   const mbs = await getTableRow(userAccount, tables[2]);
-  //   const building = await getTableRow(userAccount, tables[3], 4);
-  //   const crops = await getTableRow(userAccount, tables[4], 5);
-  //   const animals = await getTableRow(userAccount, tables[5], 6);
-  //   const breedings = await getTableRow(userAccount, tables[6], 7);
-  //   const account2fa = await getTableRow(userAccount, tables[7], 8);
+export async function getAccountData(username: string) {
+  const accountList = await getTableRow<AccountResponse>(username, TableRowEnums.accounts);
+  if (accountList) store.dispatch(setAccount(accountList));
+}
+export async function getToolsData(username: string) {
+  const tools = await getTableRow<ToolsResponse>(username, TableRowEnums.tools);
+  if (tools) {
+    store.dispatch(setTools(tools));
+  }
+}
+export async function getMbsData(username: string) {
+  const mbs = await getTableRow<ToolsResponse>(username, TableRowEnums.mbs);
+  if (mbs) {
+    store.dispatch(setMbs(mbs));
+  }
 }
 
-export async function getTableRow(userAccount: string, table: TableRowEnums) {
+export async function getTableRow<Type>(userAccount: string, table: TableRowEnums): Promise<false | Type[]> {
   const index = {
     accounts: 1,
     tools: 2,
-    mbs: 3,
-    buildings: 4,
-    crops: 5,
-    animals: 6,
-    breedings: 7,
-    account2fa: 8,
+    mbs: 2,
+    buildings: 2,
+    crops: 2,
+    animals: 2,
+    breedings: 2,
+    account2fa: 2,
   };
   try {
     const data = await rpc.get_table_rows({
@@ -39,7 +45,7 @@ export async function getTableRow(userAccount: string, table: TableRowEnums) {
       reverse: false,
       show_payer: false,
     });
-    return data.rows;
+    return data.rows as Type[];
   } catch (error: any) {
     console.log(`"ОШИБКА при получении списка ${table}: ${error.message}`);
     return false;

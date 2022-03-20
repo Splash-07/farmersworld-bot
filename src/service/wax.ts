@@ -1,8 +1,6 @@
 import * as data from "../store/data";
 import * as waxjs from "@waxio/waxjs/dist";
-
-import { Api, JsonRpc } from "eosjs";
-import { JsSignatureProvider } from "eosjs/dist/eosjs-jssig";
+import { JsonRpc } from "eosjs";
 
 const endpointNum = Math.floor(Math.random() * data.endpoints.length);
 const defaultEndpoint = data.endpoints[endpointNum];

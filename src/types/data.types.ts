@@ -5,12 +5,23 @@
 // }
 export interface Account {
   account: string;
+  balances: {
+    wood: number;
+    gold: number;
+    food: number;
+  };
+  energy: number;
+  last_mine_tx: string;
+  max_energy: number;
+}
+export interface AccountResponse {
+  account: string;
   balances: string[];
   energy: number;
   last_mine_tx: string;
   max_energy: number;
 }
-export interface Tools {
+export interface ToolsResponse {
   asset_id: string;
   current_durability: number;
   durability: number;
@@ -19,6 +30,9 @@ export interface Tools {
   template_id: number;
   type: string;
 }
+export interface MbsResponse extends Omit<ToolsResponse, "current_durability" | "durability"> {
+  unstaking_time: 1642867026;
+}
 
 export interface DataInfoInterface {
   name: string;
@@ -26,6 +40,17 @@ export interface DataInfoInterface {
   gold: number;
   wood: number;
   schema_name: string;
+}
+export interface ToolInfoInterface extends DataInfoInterface {
+  type: string;
+  reward: number;
+  hourly_reward_wood: number;
+  hourly_reward_gold: number;
+  hourly_reward_food: number;
+  energy: number;
+  durability: number;
+  counter: number;
+  hourly_durability_cost: number;
 }
 export interface AssetInfoInterface extends DataInfoInterface {
   cost: { gold: number; wood: number; food: number; fc: number };

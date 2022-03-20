@@ -1,12 +1,13 @@
-import { Tools, Account } from "./../../types/data.types";
+import { Account, AccountResponse, MbsResponse, ToolsResponse } from "./../../types/data.types";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface UserState {
   username: string | null;
   account?: Account;
-  tools: {
-    list?: Tools[];
-    next?: Tools;
+  items: {
+    toolsList: ToolsResponse[];
+    mbsList: MbsResponse[];
+    next?: ToolsResponse | MbsResponse;
     timer_to_action?: number;
   };
 }
@@ -14,12 +15,23 @@ export interface UserState {
 const initialState: UserState = {
   username: null,
   account: undefined,
-  tools: {
-    list: undefined,
+  items: {
+    toolsList: [],
+    mbsList: [],
     next: undefined,
     timer_to_action: undefined,
   },
 };
+
+export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[]) {
+  const array = [...tools, ...mbs];
+  const foundedItem = array.reduce((prev, cur) => {
+    return prev.next_availability < cur.next_availability ? prev : cur;
+  });
+  const timer = foundedItem.next_availability * 1000 - new Date().getTime();
+
+  return { item: foundedItem, timer };
+}
 
 export const userSlice = createSlice({
   name: "user",
@@ -28,22 +40,34 @@ export const userSlice = createSlice({
     login: (state, { payload }) => {
       state.username = payload;
     },
-    getAccount: (state, { payload }) => {
-      state.account = payload[0];
+    setAccount: (state, { payload }: { payload: AccountResponse[] }) => {
+      const firstObj = payload[0];
+      state.account = {
+        account: firstObj.account,
+        balances: {
+          wood: parseFloat(firstObj.balances[0].split(" ")[0]),
+          gold: parseFloat(firstObj.balances[1].split(" ")[0]),
+          food: parseFloat(firstObj.balances[2].split(" ")[0]),
+        },
+        energy: firstObj.energy,
+        last_mine_tx: firstObj.last_mine_tx,
+        max_energy: firstObj.max_energy,
+      };
     },
-    getTools: (state, { payload }) => {
-      state.tools.list = payload;
+    setTools: (state, { payload }) => {
+      state.items.toolsList = payload;
     },
-    getMbs: (state, { payload }) => {
-      state.tools.list = payload;
+    setMbs: (state, { payload }) => {
+      state.items.mbsList = payload;
     },
-    getNextTool: (state, { payload }) => {
-      state.tools.next = payload.item;
-      state.tools.timer_to_action = payload.timer;
+    setNextAction: (state) => {
+      const lowCdItem = findLowestCD(state.items.toolsList, state.items.mbsList);
+      state.items.next = lowCdItem.item;
+      state.items.timer_to_action = lowCdItem.timer;
     },
   },
 });
 
-export const { login, getAccount, getTools, getNextTool } = userSlice.actions;
+export const { login, setAccount, setTools, setMbs, setNextAction } = userSlice.actions;
 
 export default userSlice.reducer;

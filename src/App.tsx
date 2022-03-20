@@ -1,18 +1,16 @@
 import "@fontsource/m-plus-rounded-1c";
 
-import { ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
-import Home from "./components/Home/Home";
-import Header from "./components/Header/Header";
+import { Box, ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
+import Home from "./components/Home";
+import Header from "./components/Header";
 const theme = extendTheme({
   styles: {
     global: {
-      // styles for the `body`
       body: {
-        bg: "gray.900",
+        bg: "#202023",
         color: "orange.50",
-        fontFamily: "M PLUS Rounded 1c, sans-serif",
+        fontFamily: `"M PLUS Rounded 1c", sans-serif`,
       },
-      // styles for the `a`
       a: {
         color: "teal.500",
         _hover: {
@@ -25,12 +23,12 @@ const theme = extendTheme({
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <div className="app">
+      <Box h={"100vh"}>
         <Header />
         <Container maxW={"container.md"}>
           <Home />
         </Container>
-      </div>
+      </Box>
     </ChakraProvider>
   );
 }
