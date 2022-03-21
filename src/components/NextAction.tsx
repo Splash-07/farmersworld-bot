@@ -1,31 +1,33 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAssetInfo } from "../store/data";
 import { RootState } from "../store/store";
 import { msToTime } from "../utils/timers";
-import { getMbsData, getToolsData } from "../service/fmdata";
-import { handleNextAction } from "../service/fwactions";
+import { getAccountData, getMbsData, getToolsData } from "../service/fmdata";
 import { setNextAction } from "../store/slices/user.slice";
+import { assetNameMap } from "../store/data";
 
 const NextAction = () => {
-  const { user } = useSelector((state: RootState) => state);
-  const color = user.items.next?.type === "Wood" ? "#4299E1" : user.items.next?.type === "Gold" ? "#DD6B20" : "#319795";
+  const { username, items } = useSelector((state: RootState) => state.user);
+  const color = items.next?.type === "Wood" ? "#4299E1" : items.next?.type === "Gold" ? "#DD6B20" : "#319795";
   const dispatch = useDispatch();
-  const items = user.items;
+
   // auto fetch tools data 1 per minute
   useEffect(() => {
     (async () => {
-      await getToolsData(user.username!);
-      await getMbsData(user.username!);
+      await getToolsData(username!);
+      await getMbsData(username!);
       dispatch(setNextAction());
     })();
-    // setInterval(() => {
-    //   getToolsData(user.username!);
-    // }, 30000);
-    // return () => {
-    //   clearInterval();
-    // };
+    setInterval(async () => {
+      await getAccountData(username!);
+      await getToolsData(username!);
+      await getMbsData(username!);
+      dispatch(setNextAction());
+    }, 30000);
+    return () => {
+      clearInterval();
+    };
   }, []);
 
   // claim next item if timer is up
@@ -49,12 +51,13 @@ const NextAction = () => {
       boxShadow="md"
       w="100%"
       justifyContent="center"
+      fontSize="15px"
     >
       <Box color={items.timer_to_action < 0 ? "tomato" : "whiteAlpha.900"}>{msToTime(items.timer_to_action)}</Box>
       <Flex gap="5px">
         <Text>Claim with:</Text>
         <Text color={color} fontWeight="semibold">
-          {`${getAssetInfo(items.next!.template_id.toString())!.name}`}
+          {`${assetNameMap.get(items.next!.template_id.toString())}`}
         </Text>
       </Flex>
     </Flex>

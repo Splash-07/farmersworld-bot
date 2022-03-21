@@ -1,21 +1,44 @@
 import { CheckIcon } from "@chakra-ui/icons";
-import { Flex, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, useMediaQuery } from "@chakra-ui/react";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import {
+  Flex,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Switch,
+  useMediaQuery,
+} from "@chakra-ui/react";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { FC, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 
 interface CustomInputInterface {
   initialValue: number;
+  isDisabled: boolean;
   type: string;
   dispatchAction: ActionCreatorWithPayload<any, string>;
+  dispatchToggle: ActionCreatorWithoutPayload<string>;
+  minPossible: number;
+  maxPossible: number;
 }
-const CustomInput: FC<CustomInputInterface> = ({ initialValue, type, dispatchAction }) => {
+const CustomInput: FC<CustomInputInterface> = ({
+  isDisabled,
+  dispatchToggle,
+  initialValue,
+  type,
+  dispatchAction,
+  minPossible,
+  maxPossible,
+}) => {
+  const dispatch = useDispatch();
+
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
   const [value, setValue] = useState<string>(initialValue.toString());
   const [isDebouncing, setIsDebouncing] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const dispatch = useDispatch();
+
   const dispatchValue = useMemo(
     () =>
       debounce((value) => {
@@ -27,51 +50,58 @@ const CustomInput: FC<CustomInputInterface> = ({ initialValue, type, dispatchAct
         }
         setTimeout(() => {
           setIsDebouncing(false);
+
           setIsSuccess(true);
         }, 1000);
-        setTimeout(() => {
-          setIsSuccess(false);
-        }, 3000);
       }, 1000),
     []
   );
   return (
     <Flex width="100%" alignItems="center" gap="10px">
+      <Switch isChecked={!isDisabled} colorScheme="whiteAlpha" onChange={() => dispatch(dispatchToggle())} />
       <InputGroup size="sm" fontSize="14px">
         <InputLeftAddon
           children={type}
           backdropBlur="lg"
           backgroundColor="whiteAlpha.100"
-          borderColor="whiteAlpha.300"
+          borderColor="whiteAlpha.200"
           boxShadow="md"
           fontWeight="medium"
           width={breakPoint480 ? "unset" : "100px"}
+          minWidth={breakPoint480 ? "158px" : "unset"}
           isTruncated
         />
         <Input
           focusBorderColor="orange.100"
-          borderColor="whiteAlpha.300"
+          borderColor="whiteAlpha.200"
           boxShadow="md"
           type="number"
           placeholder="0"
+          isDisabled={isDisabled}
           value={value}
           onChange={(e) => {
-            setValue(e.target.value);
-            dispatchValue(e.target.value);
+            const value = e.target.value;
+            if (value.length === 0) return setValue(value);
+            if (parseInt(value) <= maxPossible) {
+              setValue(value);
+              dispatchValue(value);
+            } else {
+              setValue(maxPossible.toString());
+              dispatchValue(maxPossible.toString());
+            }
           }}
         />
-        {type.includes("Durability") && (
+        {type.includes("Repair") && (
           <InputRightAddon
             children="%"
             backdropBlur="lg"
             backgroundColor="whiteAlpha.100"
-            borderColor="whiteAlpha.300"
+            borderColor="whiteAlpha.200"
             boxShadow="md"
             fontWeight="medium"
           />
         )}
       </InputGroup>
-
       <IconButton
         size="sm"
         backdropBlur="lg"

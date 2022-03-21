@@ -1,6 +1,6 @@
-import { Box, Center, useMediaQuery, Wrap, WrapItem } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { getAssetInfo } from "../store/data";
+import { assetNameMap, filterMbsByType, mbsMultiMap } from "../store/data";
 import { RootState } from "../store/store";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
 import { adjustedTime, msToTime } from "../utils/timers";
@@ -25,41 +25,84 @@ const ToolsList = () => {
     key: number,
     mbs: MbsResponse[]
   ) {
-    const asset = getAssetInfo(template_id);
-    if (asset) {
+    const toolName = assetNameMap.get(template_id);
+    if (toolName) {
       const color = responseItem.type === "Wood" ? "#4299E1" : responseItem.type === "Gold" ? "#DD6B20" : "#319795";
       const timer = adjustedTime(responseItem, mbs);
+
+      // count store/max store
+      const exception = ["Ancient Stone Axe", "Mining Excavator"];
+      const hour = exception.includes(toolName) ? 7200000 : 3600000;
+
+      const filteredMbs = filterMbsByType(mbs, responseItem.type);
+
+      const canBeStored =
+        filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())!), 0) + 1;
+
+      const currentlyStored = canBeStored - Math.ceil(timer / hour);
       return (
-        <WrapItem key={key} alignItems="center" justifyContent="space-evenly" w="100%">
-          <Box width={breakPoint480 ? "150px" : "200px"} overflow="hidden" isTruncated color={color}>
-            {asset.name}
+        <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+          <Box minWidth="130px" overflow="hidden" isTruncated color={color}>
+            {toolName}
           </Box>
-          <Box fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+          <Flex justifyContent="center" w="100%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
             {msToTime(timer)}
-          </Box>
-        </WrapItem>
+          </Flex>
+          {!assetNameMap.get(template_id)?.includes("Membership") ? (
+            <Flex justifyContent="center" w="100%" fontSize="14px">{`${currentlyStored}/${canBeStored}`}</Flex>
+          ) : (
+            <Flex justifyContent="center" w="100%" fontSize="14px"></Flex>
+          )}
+        </GridItem>
       );
     }
   }
 
   return (
-    <Wrap
+    <Grid
       width={breakPoint480 ? "unset" : "100%"}
-      direction="column"
       backgroundColor="whiteAlpha.100"
       borderRadius="md"
       padding="3"
       boxShadow="md"
+      overflowX="auto"
+      w="100%"
+      maxWidth="300px"
     >
-      <Center display="flex" flexDir="column" width="100%">
+      <GridItem display="flex" alignItems="center" justifyContent="space-between" w="100%" textAlign={"center"}>
+        <Flex w="100%" minWidth="130px" justifyContent="center">
+          Asset name
+        </Flex>
+        <Flex justifyContent="center" textAlign="center" w="100%">
+          Timer
+        </Flex>
+        <Flex justifyContent="center" textAlign="center" w="100%">
+          Stored
+        </Flex>
+      </GridItem>
+      <Grid
+        gap="1px"
+        maxHeight="300px"
+        overflowY="auto"
+        sx={{
+          "&::-webkit-scrollbar": {
+            width: "3px",
+            borderRadius: "8px",
+            backgroundColor: `whiteAlpha.100`,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: `whiteAlpha.300`,
+          },
+        }}
+      >
         {items.toolsList &&
           sortList(items.toolsList).map((tool, index) =>
             renderAsset(tool, tool.template_id.toString(), index, items.mbsList)
           )}
         {items.mbsList &&
           items.mbsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
-      </Center>
-    </Wrap>
+      </Grid>
+    </Grid>
   );
 };
 

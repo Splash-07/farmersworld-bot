@@ -1,4 +1,5 @@
-import { getAssetInfo, mbsMultiMap } from "../store/data";
+import { assetNameMap } from "./../store/data";
+import { filterMbsByType, mbsMultiMap } from "../store/data";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
 
 export function msToTime(ms: number) {
@@ -17,17 +18,17 @@ export function sleep(ms: number) {
 }
 
 export function adjustedTime(tool: ToolsResponse | MbsResponse, mbs: MbsResponse[]) {
-  const item = getAssetInfo(tool.template_id.toString());
+  const itemName = assetNameMap.get(tool.template_id.toString());
   let timer = tool.next_availability * 1000 - new Date().getTime();
-  if (item?.schema_name !== "tools") return timer;
+  // if item is mbs -> return timer
+  if (mbsMultiMap.get(tool.template_id.toString()) !== undefined) return timer;
 
-  const toolType = item.type;
-  const mbsFiltered = mbs.filter((mbs) => mbs.type === toolType);
+  const mbsFiltered = filterMbsByType(mbs, tool.type);
   if (mbsFiltered.length === 0) return timer;
 
   // If item is tool and we have members card, then add additional time, tyo store items (so less operation will occurs -> less CPU usage)
   const exception = ["Ancient Stone Axe", "Mining Excavator"];
-  const hour = exception.includes(item.name) ? 7200000 : 3600000;
+  const hour = exception.includes(itemName!) ? 7200000 : 3600000;
   const additiveTime = mbsFiltered.reduce(
     (acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())! * hour),
     0

@@ -1,8 +1,9 @@
-import { ToolsResponse } from "./../types/data.types";
-import { getAssetInfo } from "../store/data";
-import { toggleUpdateFarm } from "../store/slices/settings.slice";
+import { assetNameMap } from "./../store/data";
+import { MbsResponse, ToolsResponse } from "./../types/data.types";
+import { pushLog, toggleUpdateFarm } from "../store/slices/settings.slice";
 import { store } from "./../store/store";
 import { wax } from "./wax";
+import { sleep } from "../utils/timers";
 
 const { user, settings } = store.getState();
 export async function actionClaim(
@@ -104,49 +105,90 @@ export async function actionRepair(
   }
 }
 
-export async function handleNextAction(nextItem: ToolsResponse) {
-  // If item is tool
-  if (nextItem.asset_id) {
-    // handle recourses
-    await handleToolRepair(nextItem);
+export async function handleNextAction(nextItem: ToolsResponse | MbsResponse) {
+  // handle resources restore if nextItem is Tool
+  if (!assetNameMap.get(nextItem.template_id.toString())?.includes("Membership")) {
+    await handleToolRepair(nextItem as ToolsResponse);
     await handleEnergyRestore();
-    const response = await actionClaim(user.items.next!.asset_id, user.username!);
-    if (response.status === true) {
-      console.log("Claim action SUCCESS", response.result);
-      store.dispatch(toggleUpdateFarm(true));
-    } else {
-      console.log("Claim action FAILED", response.result);
-    }
   }
-  // If item is mbs
+
+  const response = await actionClaim(user.items.next!.asset_id, user.username!);
+  if (response.status === true) {
+    pushLog(
+      `<span style="color: #38A169;">Successfully</span> claimed <span style="color: #feebc8;"><strong>${assetNameMap.get(
+        nextItem.template_id.toString()
+      )}</strong></span>.`
+    );
+    console.log("Claim action SUCCESS", response.result);
+    await sleep(2000);
+    store.dispatch(toggleUpdateFarm(true));
+  } else {
+    store.dispatch(
+      pushLog(
+        `<span style="color: #E53E3E;">Filed</span> to claim <span style="color: #feebc8;"><strong>${assetNameMap.get(
+          nextItem.template_id.toString()
+        )}</strong></span>.`
+      )
+    );
+    console.log("Claim action FAILED", response.result);
+  }
 }
 
 export async function handleToolRepair(tool: ToolsResponse) {
-  if ((tool.current_durability / tool.durability) * 100 <= settings.minDurability) {
+  if (settings.repairIsDisabled && (tool.current_durability / tool.durability) * 100 <= settings.minRepair) {
     const res = await actionRepair(tool.asset_id, user.username!);
     if (res.status === true) {
-      console.log(`Repaired ${getAssetInfo(tool.template_id.toString())?.name}`, res.result);
+      store.dispatch(
+        pushLog(
+          `<span style="color: #38A169;">Successfully</span> repaired <span style="color: #feebc8;"><strong>${assetNameMap.get(
+            tool.template_id.toString()
+          )}</strong></span>.`
+        )
+      );
+      console.log(`Repaired ${assetNameMap.get(tool.template_id.toString())}`, res.result);
+      await sleep(2000);
       store.dispatch(toggleUpdateFarm(true));
     } else {
-      console.log(`Failed to repair ${getAssetInfo(tool.template_id.toString())?.name}`, res.result);
+      store.dispatch(
+        pushLog(
+          `<span style="color: #E53E3E;">Filed</span> to repair <span style="color: #feebc8;"><strong>${assetNameMap.get(
+            tool.template_id.toString()
+          )}</strong></span>.`
+        )
+      );
+      console.log(`Failed to repair ${assetNameMap.get(tool.template_id.toString())}`, res.result);
     }
   }
 }
 export async function handleEnergyRestore() {
   const acc = user.account;
-  if (acc && acc.energy < settings.minEnergy) {
+  if (acc && settings.energyIsDisabled && acc.energy < settings.minEnergy) {
     let energyToRecover = acc.max_energy - acc.energy;
     if (acc.balances.food * 5 < energyToRecover) {
       energyToRecover = Math.floor(acc.balances.food * 5);
       if (energyToRecover > 0) {
         const res = await actionEnergyRecovery(energyToRecover, user.username!);
         if (res.status === true) {
+          store.dispatch(
+            pushLog(
+              `<span style="color: #38A169;">Successfully</span> recovered <span style="color: #feebc8;"><strong>${energyToRecover}</strong></span> amount of <span style="color: #feebc8;"><strong>energy</strong></span>.`
+            )
+          );
           console.log(`Refilled energy ${energyToRecover}`, res.result);
+          await sleep(2000);
           store.dispatch(toggleUpdateFarm(true));
         } else {
+          store.dispatch(
+            pushLog(
+              `<span style="color: #E53E3E;">Failed</span> to recover <span style="color: #feebc8;"><strong>energy</strong></span>.`
+            )
+          );
           console.log(`Failed to refill energy ${energyToRecover}`, res.result);
         }
       } else {
+        pushLog(
+          `<span style="color: #E53E3E;">Failed</span> to recover <span style="color: #feebc8;"><strong>energy</strong></span>. Dont have enough food.`
+        );
         console.log(`Dont enough food to restore energy`);
       }
     }

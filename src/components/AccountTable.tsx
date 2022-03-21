@@ -9,7 +9,8 @@ import woodIcon from "../assets/icons/wood-icon.png";
 import meatIcon from "../assets/icons/meat-icon.png";
 import goldIcon from "../assets/icons/gold-icon.png";
 import energyIcon from "../assets/icons/energy-icon.png";
-import { toggleUpdateFarm } from "../store/slices/settings.slice";
+import { pushLog, toggleUpdateFarm } from "../store/slices/settings.slice";
+import { logger } from "../utils/logger";
 
 const balanceIcons = [woodIcon, goldIcon, meatIcon, energyIcon];
 
@@ -20,6 +21,8 @@ const AccountTable = () => {
   useEffect(() => {
     (async () => {
       await getAccountData(user.username!);
+      const log = logger(`Logged in. Hello, <strong><span style="color: #feebc8;">${user.username}</span></strong>`);
+      dispatch(pushLog(log));
     })();
   }, []);
 

@@ -4,6 +4,7 @@ import { wax } from "../service/wax";
 import { login } from "../store/slices/user.slice";
 import { RootState } from "../store/store";
 import AccountTable from "./AccountTable";
+import Logger from "./Logger";
 
 import NextAction from "./NextAction";
 import Settings from "./Settings";
@@ -44,6 +45,9 @@ const Home = () => {
           <NextAction />
           <Settings />
         </Flex>
+      </Flex>
+      <Flex gap="20px" direction="column" backgroundColor="whiteAlpha.100" borderRadius="md" padding="3" boxShadow="md">
+        <Logger />
       </Flex>
     </Flex>
   );

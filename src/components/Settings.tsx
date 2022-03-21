@@ -1,11 +1,11 @@
 import { Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { setDurability, setEnergy } from "../store/slices/settings.slice";
+import { setMinEnergy, setMinRepair, toggleEnergy, toggleRepair } from "../store/slices/settings.slice";
 import { RootState } from "../store/store";
 import CustomInput from "./CustomInput";
 
 const Settings = () => {
-  const { minDurability, minEnergy } = useSelector((state: RootState) => state.settings);
+  const { user, settings } = useSelector((state: RootState) => state);
   return (
     <Flex
       w="100%"
@@ -22,10 +22,26 @@ const Settings = () => {
       </Text>
       <Wrap flexDir="column">
         <WrapItem width="100%">
-          <CustomInput type="Durability restore when <" initialValue={minDurability} dispatchAction={setDurability} />
+          <CustomInput
+            dispatchToggle={toggleRepair}
+            isDisabled={settings.repairIsDisabled}
+            minPossible={0}
+            maxPossible={90}
+            type="Repair tool when <"
+            initialValue={settings.minRepair}
+            dispatchAction={setMinRepair}
+          />
         </WrapItem>
         <WrapItem width="100%">
-          <CustomInput type="Energy restore when <" initialValue={minEnergy} dispatchAction={setEnergy} />
+          <CustomInput
+            dispatchToggle={toggleEnergy}
+            isDisabled={settings.energyIsDisabled}
+            minPossible={50}
+            maxPossible={user.account?.max_energy! - 50}
+            type="Restore energy when <"
+            initialValue={settings.minEnergy}
+            dispatchAction={setMinEnergy}
+          />
         </WrapItem>
       </Wrap>
     </Flex>
