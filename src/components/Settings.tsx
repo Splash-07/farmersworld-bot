@@ -5,7 +5,7 @@ import { RootState } from "../store/store";
 import CustomInput from "./CustomInput";
 
 const Settings = () => {
-  const { minDurability, minEnergy, minFood } = useSelector((state: RootState) => state.settings);
+  const { minDurability, minEnergy } = useSelector((state: RootState) => state.settings);
   return (
     <Flex
       w="100%"
@@ -20,12 +20,12 @@ const Settings = () => {
       <Text textTransform="uppercase" alignSelf="center" fontWeight="semibold">
         Settings
       </Text>
-      <Wrap flexWrap="wrap" justify="space-evenly">
-        <WrapItem>
-          <CustomInput type="Durability" initialValue={minDurability} dispatchAction={setDurability} />
+      <Wrap flexDir="column">
+        <WrapItem width="100%">
+          <CustomInput type="Durability restore when <" initialValue={minDurability} dispatchAction={setDurability} />
         </WrapItem>
-        <WrapItem>
-          <CustomInput type="Energy" initialValue={minEnergy} dispatchAction={setEnergy} />
+        <WrapItem width="100%">
+          <CustomInput type="Energy restore when <" initialValue={minEnergy} dispatchAction={setEnergy} />
         </WrapItem>
       </Wrap>
     </Flex>

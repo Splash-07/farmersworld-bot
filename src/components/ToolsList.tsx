@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { getAssetInfo } from "../store/data";
 import { RootState } from "../store/store";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
-import { msToTime } from "../utils/timers";
+import { adjustedTime, msToTime } from "../utils/timers";
 
 const ToolsList = () => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
@@ -19,11 +19,16 @@ const ToolsList = () => {
     return sorted;
   }
 
-  function renderAsset(responseItem: ToolsResponse | MbsResponse, template_id: string, key: number) {
+  function renderAsset(
+    responseItem: ToolsResponse | MbsResponse,
+    template_id: string,
+    key: number,
+    mbs: MbsResponse[]
+  ) {
     const asset = getAssetInfo(template_id);
     if (asset) {
       const color = responseItem.type === "Wood" ? "#4299E1" : responseItem.type === "Gold" ? "#DD6B20" : "#319795";
-      const timer = responseItem.next_availability * 1000 - new Date().getTime();
+      const timer = adjustedTime(responseItem, mbs);
       return (
         <WrapItem key={key} alignItems="center" justifyContent="space-evenly" w="100%">
           <Box width={breakPoint480 ? "150px" : "200px"} overflow="hidden" isTruncated color={color}>
@@ -48,8 +53,11 @@ const ToolsList = () => {
     >
       <Center display="flex" flexDir="column" width="100%">
         {items.toolsList &&
-          sortList(items.toolsList).map((tool, index) => renderAsset(tool, tool.template_id.toString(), index))}
-        {items.mbsList && items.mbsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index))}
+          sortList(items.toolsList).map((tool, index) =>
+            renderAsset(tool, tool.template_id.toString(), index, items.mbsList)
+          )}
+        {items.mbsList &&
+          items.mbsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
       </Center>
     </Wrap>
   );

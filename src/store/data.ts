@@ -1,152 +1,15 @@
-import { AssetInfoInterface, ToolInfoInterface } from "./../types/data.types";
-const toolsDataInfo: ToolInfoInterface[] = [
-  {
-    name: "Ancient Stone Axe",
-    template_id: "378691",
-    type: "Wood",
-    reward: 0.35,
-    hourly_reward_wood: 0.35,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 0,
-    energy: 2,
-    durability: 0.5,
-    gold: 20,
-    wood: 110,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 0.1,
-  },
-  {
-    name: "Stone Axe",
-    template_id: "260763",
-    type: "Wood",
-    reward: 1.7,
-    hourly_reward_wood: 1.7,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 0,
-    energy: 5,
-    durability: 3,
-    gold: 135,
-    wood: 800,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 0.6,
-  },
-  {
-    name: "Axe",
-    template_id: "203881",
-    type: "Wood",
-    reward: 5,
-    hourly_reward_wood: 5,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 0,
-    energy: 10,
-    durability: 5,
-    gold: 400,
-    wood: 2400,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 1,
-  },
-  {
-    name: "Saw",
-    template_id: "203883",
-    type: "Wood",
-    reward: 17,
-    hourly_reward_wood: 17,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 0,
-    energy: 30,
-    durability: 15,
-    gold: 1200,
-    wood: 7200,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 3,
-  },
-  {
-    name: "Chainsaw",
-    template_id: "203886",
-    type: "Wood",
-    reward: 54,
-    hourly_reward_wood: 54,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 0,
-    energy: 60,
-    durability: 45,
-    gold: 3600,
-    wood: 21600,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 9,
-  },
-
-  {
-    name: "Fishing Rod",
-    template_id: "203887",
-    type: "Food",
-    reward: 5,
-    hourly_reward_wood: 0,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 5,
-    energy: 0,
-    durability: 5,
-    gold: 200,
-    wood: 1200,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 1,
-  },
-  {
-    name: "Fishing Net",
-    template_id: "203888",
-    type: "Food",
-    reward: 20,
-    hourly_reward_wood: 0,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 20,
-    energy: 0,
-    durability: 20,
-    gold: 800,
-    wood: 4800,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 4,
-  },
-  {
-    name: "Boat",
-    template_id: "203889",
-    type: "Food",
-    reward: 80,
-    hourly_reward_wood: 0,
-    hourly_reward_gold: 0,
-    hourly_reward_food: 80,
-    energy: 0,
-    durability: 32,
-    gold: 3200,
-    wood: 19200,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 6.4,
-  },
-
-  {
-    name: "Mining Excavator",
-    template_id: "203891",
-    type: "Gold",
-    reward: 50,
-    hourly_reward_wood: 0,
-    hourly_reward_gold: 50,
-    hourly_reward_food: 0,
-    energy: 66.5,
-    durability: 2.5,
-    gold: 4000,
-    wood: 24000,
-    counter: 0,
-    schema_name: "tools",
-    hourly_durability_cost: 1,
-  },
-];
+import { AssetInfoInterface } from "./../types/data.types";
+export const mbsMultiMap = new Map([
+  ["260636", 1],
+  ["260638", 2],
+  ["260639", 3],
+  ["260628", 1],
+  ["260629", 2],
+  ["260631", 3],
+  ["260642", 1],
+  ["260644", 2],
+  ["260647", 3],
+]);
 export const assetsDataInfo: AssetInfoInterface[] = [
   {
     name: "Barley",
@@ -155,7 +18,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "foods",
     cost: { gold: 41, wood: 0, food: 0, fc: 0 },
-    exchange: true,
   },
   {
     name: "Corn",
@@ -164,7 +26,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "foods",
     cost: { gold: 61, wood: 0, food: 0, fc: 0 },
-    exchange: true,
   },
 
   {
@@ -174,7 +35,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "plants",
     cost: { gold: 51, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
   {
     name: "Corn Seed",
@@ -183,7 +43,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "plants",
     cost: { gold: 76, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
 
   {
@@ -193,7 +52,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "foods",
     cost: { gold: 141, wood: 0, food: 0, fc: 0 },
-    exchange: true,
   },
 
   {
@@ -205,7 +63,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 41, wood: 110, food: 0, fc: 0 },
     energy: 4,
     repair: 1,
-    exchange: false,
+    type: "Wood",
   },
   {
     name: "Stone Axe",
@@ -216,7 +74,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 135, wood: 800, food: 0, fc: 0 },
     energy: 5,
     repair: 3,
-    exchange: false,
+    type: "Wood",
   },
   {
     name: "Axe",
@@ -227,7 +85,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 400, wood: 2400, food: 0, fc: 0 },
     energy: 10,
     repair: 5,
-    exchange: false,
+    type: "Wood",
   },
   {
     name: "Saw",
@@ -238,7 +96,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 1200, wood: 7200, food: 0, fc: 0 },
     energy: 30,
     repair: 15,
-    exchange: false,
+    type: "Wood",
   },
   {
     name: "Chainsaw",
@@ -249,7 +107,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 3600, wood: 21600, food: 0, fc: 0 },
     energy: 60,
     repair: 45,
-    exchange: false,
+    type: "Wood",
   },
 
   {
@@ -261,7 +119,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 200, wood: 1200, food: 0, fc: 0 },
     energy: 0,
     repair: 5,
-    exchange: false,
+    type: "Food",
   },
   {
     name: "Fishing Net",
@@ -272,7 +130,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 800, wood: 4800, food: 0, fc: 0 },
     energy: 0,
     repair: 20,
-    exchange: false,
+    type: "Food",
   },
   {
     name: "Boat",
@@ -283,7 +141,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 3200, wood: 19200, food: 0, fc: 0 },
     energy: 0,
     repair: 32,
-    exchange: false,
+    type: "Food",
   },
 
   {
@@ -295,7 +153,7 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     cost: { gold: 4000, wood: 24000, food: 0, fc: 0 },
     energy: 133,
     repair: 5,
-    exchange: false,
+    type: "Gold",
   },
 
   {
@@ -307,7 +165,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     building: true,
     cost: { gold: 120, wood: 200, food: 0, fc: 0 },
     claim: { energy: 200 },
-    exchange: false,
   },
   {
     name: "Coop",
@@ -318,7 +175,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     building: true,
     cost: { gold: 240, wood: 400, food: 0, fc: 0 },
     claim: { energy: 250 },
-    exchange: false,
   },
   {
     name: "Cowshed",
@@ -329,7 +185,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     building: true,
     cost: { gold: 360, wood: 600, food: 0, fc: 0 },
     claim: { energy: 300 },
-    exchange: false,
   },
 
   {
@@ -341,7 +196,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 3,
     schema_name: "farmanimals",
     cost: { gold: 281, wood: 0, food: 0, fc: 0 },
-    exchange: true,
   },
   {
     name: "Chick",
@@ -352,7 +206,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 4,
     schema_name: "farmanimals",
     cost: { gold: 281, wood: 0, food: 9, fc: 0 },
-    exchange: false,
   },
   {
     name: "Chicken",
@@ -363,7 +216,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 4,
     schema_name: "farmanimals",
     cost: { gold: 937, wood: 0, food: 9, fc: 0 },
-    exchange: false,
   },
 
   {
@@ -375,7 +227,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 2,
     schema_name: "farmanimals",
     cost: { gold: 1001, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
   {
     name: "Female Calf",
@@ -386,7 +237,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 4,
     schema_name: "farmanimals",
     cost: { gold: 1847, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
   {
     name: "Male Calf",
@@ -397,7 +247,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 4,
     schema_name: "farmanimals",
     cost: { gold: 1847, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
   {
     name: "Dairy Cow",
@@ -408,7 +257,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 6,
     schema_name: "farmanimals",
     cost: { gold: 2503, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
   {
     name: "Bull",
@@ -418,7 +266,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     daily_claim_limit: 4,
     schema_name: "farmanimals",
     cost: { gold: 2503, wood: 0, food: 0, fc: 0 },
-    exchange: false,
   },
 
   {
@@ -428,7 +275,6 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "farmercoins",
     cost: { gold: 0, wood: 0, food: 0, fc: 1 },
-    exchange: false,
   },
 
   {
@@ -438,7 +284,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 400, wood: 0, food: 0, fc: 60 },
-    exchange: false,
+    gradeMulti: 1,
+    type: "Food",
   },
   {
     name: "Food Membership Silver",
@@ -447,7 +294,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 800, wood: 0, food: 0, fc: 120 },
-    exchange: false,
+    gradeMulti: 2,
+    type: "Food",
   },
   {
     name: "Food Membership Gold",
@@ -456,7 +304,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 1600, wood: 0, food: 0, fc: 240 },
-    exchange: false,
+    gradeMulti: 3,
+    type: "Food",
   },
 
   {
@@ -466,7 +315,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 400, wood: 0, food: 0, fc: 60 },
-    exchange: false,
+    gradeMulti: 1,
+    type: "Wood",
   },
   {
     name: "Wood Membership Silver",
@@ -475,7 +325,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 800, wood: 0, food: 0, fc: 120 },
-    exchange: false,
+    gradeMulti: 2,
+    type: "Wood",
   },
   {
     name: "Wood Membership Gold",
@@ -484,7 +335,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 1600, wood: 0, food: 0, fc: 240 },
-    exchange: false,
+    gradeMulti: 3,
+    type: "Wood",
   },
 
   {
@@ -494,7 +346,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 400, wood: 0, food: 0, fc: 60 },
-    exchange: false,
+    gradeMulti: 1,
+    type: "Gold",
   },
   {
     name: "Gold Membership Silver",
@@ -503,7 +356,8 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 800, wood: 0, food: 0, fc: 120 },
-    exchange: false,
+    gradeMulti: 2,
+    type: "Gold",
   },
   {
     name: "Gold Membership Gold",
@@ -512,13 +366,10 @@ export const assetsDataInfo: AssetInfoInterface[] = [
     wood: 0,
     schema_name: "memberships",
     cost: { gold: 1600, wood: 0, food: 0, fc: 240 },
-    exchange: false,
+    gradeMulti: 3,
+    type: "Gold",
   },
 ];
-export function getToolInfo(template_id: string) {
-  const found = toolsDataInfo.find((asset) => asset.template_id === template_id);
-  return found;
-}
 export function getAssetInfo(template_id: string) {
   const found = assetsDataInfo.find((asset) => asset.template_id === template_id);
   return found;

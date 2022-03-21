@@ -1,8 +1,3 @@
-// export interface DataResponse{
-//   rows: AssetsResponseInterface[] | AccountInfoResponseInterface[];
-//   next_ley: string;
-//   more: boolean;
-// }
 export interface Account {
   account: string;
   balances: {
@@ -31,7 +26,7 @@ export interface ToolsResponse {
   type: string;
 }
 export interface MbsResponse extends Omit<ToolsResponse, "current_durability" | "durability"> {
-  unstaking_time: 1642867026;
+  unstaking_time: number;
 }
 
 export interface DataInfoInterface {
@@ -41,20 +36,10 @@ export interface DataInfoInterface {
   wood: number;
   schema_name: string;
 }
-export interface ToolInfoInterface extends DataInfoInterface {
-  type: string;
-  reward: number;
-  hourly_reward_wood: number;
-  hourly_reward_gold: number;
-  hourly_reward_food: number;
-  energy: number;
-  durability: number;
-  counter: number;
-  hourly_durability_cost: number;
-}
 export interface AssetInfoInterface extends DataInfoInterface {
+  gradeMulti?: number;
+  type?: "Wood" | "Food" | "Gold";
   cost: { gold: number; wood: number; food: number; fc: number };
-  exchange: boolean;
   energy?: number;
   repair?: number;
   building?: boolean;
@@ -73,16 +58,3 @@ export enum TableRowEnums {
   breedings = "breedings",
   account2fa = "account2fa",
 }
-// export interface ToolInfoInterface extends DataInfoInterface {
-//   type: "Wood" | "Food" | "Gold";
-//   reward: number;
-//   hourly_reward_wood: number;
-//   hourly_reward_gold: number;
-//   hourly_reward_food: number;
-//   energy: number;
-//   durability: number;
-//   gold: number;
-//   wood: number;
-//   counter: number;
-//   hourly_durability_cost: number;
-// }

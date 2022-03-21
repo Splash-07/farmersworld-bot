@@ -1,5 +1,6 @@
 import { Account, AccountResponse, MbsResponse, ToolsResponse } from "./../../types/data.types";
 import { createSlice } from "@reduxjs/toolkit";
+import { findLowestCD } from "../../utils/timers";
 
 export interface UserState {
   username: string | null;
@@ -22,16 +23,6 @@ const initialState: UserState = {
     timer_to_action: undefined,
   },
 };
-
-export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[]) {
-  const array = [...tools, ...mbs];
-  const foundedItem = array.reduce((prev, cur) => {
-    return prev.next_availability < cur.next_availability ? prev : cur;
-  });
-  const timer = foundedItem.next_availability * 1000 - new Date().getTime();
-
-  return { item: foundedItem, timer };
-}
 
 export const userSlice = createSlice({
   name: "user",

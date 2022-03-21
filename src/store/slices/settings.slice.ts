@@ -5,6 +5,7 @@ export interface UserState {
   minEnergy: number;
   minFood: number;
   updateFarm: boolean;
+  additionalTimer: number;
 }
 
 const initialState: UserState = {
@@ -12,6 +13,7 @@ const initialState: UserState = {
   minEnergy: 200,
   minFood: 100,
   updateFarm: false,
+  additionalTimer: 10000,
 };
 
 export const settingsSlice = createSlice({

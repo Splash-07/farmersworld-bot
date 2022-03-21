@@ -1,3 +1,6 @@
+import { getAssetInfo, mbsMultiMap } from "../store/data";
+import { MbsResponse, ToolsResponse } from "../types/data.types";
+
 export function msToTime(ms: number) {
   let seconds = ms / 1000;
   const hours = Math.floor(seconds / 3600);
@@ -11,4 +14,39 @@ export function msToTime(ms: number) {
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function adjustedTime(tool: ToolsResponse | MbsResponse, mbs: MbsResponse[]) {
+  const item = getAssetInfo(tool.template_id.toString());
+  let timer = tool.next_availability * 1000 - new Date().getTime();
+  if (item?.schema_name !== "tools") return timer;
+
+  const toolType = item.type;
+  const mbsFiltered = mbs.filter((mbs) => mbs.type === toolType);
+  if (mbsFiltered.length === 0) return timer;
+
+  // If item is tool and we have members card, then add additional time, tyo store items (so less operation will occurs -> less CPU usage)
+  const exception = ["Ancient Stone Axe", "Mining Excavator"];
+  const hour = exception.includes(item.name) ? 7200000 : 3600000;
+  const additiveTime = mbsFiltered.reduce(
+    (acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())! * hour),
+    0
+  );
+  timer += additiveTime;
+  return timer;
+}
+
+export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[]) {
+  const array = [...tools, ...mbs];
+  const adjustedTimeArray = array.map((item) => {
+    return {
+      ...item,
+      next_availability: adjustedTime(item, mbs),
+    };
+  });
+  const foundedItem = adjustedTimeArray.reduce((prev, cur) => {
+    return prev.next_availability < cur.next_availability ? prev : cur;
+  });
+
+  return { item: foundedItem, timer: foundedItem.next_availability };
 }
