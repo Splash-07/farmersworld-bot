@@ -10,7 +10,6 @@ import meatIcon from "../assets/icons/meat-icon.png";
 import goldIcon from "../assets/icons/gold-icon.png";
 import energyIcon from "../assets/icons/energy-icon.png";
 import { pushLog, toggleUpdateFarm } from "../store/slices/settings.slice";
-import { logger } from "../utils/logger";
 
 const balanceIcons = [woodIcon, goldIcon, meatIcon, energyIcon];
 

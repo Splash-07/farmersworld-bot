@@ -24,21 +24,21 @@ npm start
 
 ## Features
 
-- Claim tools, membership cards
-- Restore energy (optionally)
-- Repair tools (optionally)
-- Depending on quantity and grade of membership cards storing charges (less CPU usage)
+- Claim tools, membership cards;
+- Restore energy (optionally);
+- Repair tools (optionally);
+- Depending on quantity and grade of membership cards storing charges (less CPU usage).
 
 ## Bot workflow
 
 ![Alt text](/public/FWbot.png)
 
-1. Login with wax.wallet
-2. Fetch blockchain data with eosio rpc api
-3. Auto fetch data every 40sec.
-4. Finding tool or mbs card with lowest cooldown (adjusted according mbs cards that you have, checking if charges can be stored)
-5. If cooldown is over -> claim action performing. If error occurs -> will try again in 40sec.
-6. Repeating 4th and 5th steps
+1. Login with wax.wallet;
+2. Fetch blockchain data with eosio rpc api;
+3. Auto fetch data every 40sec;
+4. Finding tool or mbs card with lowest cooldown (adjusted according mbs cards that you have, checking if charges can be stored);
+5. If cooldown is over -> claim action performing. If error occurs -> will try again in 40sec;
+6. Repeating 4th and 5th steps.
 
 ## Contributing
 
