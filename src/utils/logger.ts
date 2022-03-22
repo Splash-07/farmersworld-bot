@@ -1,5 +1,3 @@
-import { msToTime } from "./timers";
-
 export function logger(text: string) {
   const currentTime = new Date();
   const timer = `${

@@ -16,7 +16,6 @@ export function selectEndpoint(newEndpoint: string): void {
   rpc = new JsonRpc(endpoint);
   wax = new waxjs.WaxJS({
     rpcEndpoint: endpoint,
-
     tryAutoLogin: false,
   });
   localStorage.endpoint = endpoint;

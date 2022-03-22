@@ -66,7 +66,8 @@ export const settingsSlice = createSlice({
       state.loggerArray.push(log);
     },
     pushLog: (state, { payload }) => {
-      state.loggerArray.push(payload);
+      const log = logger(payload);
+      state.loggerArray.push(log);
     },
   },
 });

@@ -1,14 +1,5 @@
 import { CheckIcon } from "@chakra-ui/icons";
-import {
-  Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  Switch,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { Flex, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, useMediaQuery } from "@chakra-ui/react";
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { FC, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -20,7 +11,6 @@ interface CustomInputInterface {
   type: string;
   dispatchAction: ActionCreatorWithPayload<any, string>;
   dispatchToggle: ActionCreatorWithoutPayload<string>;
-  minPossible: number;
   maxPossible: number;
 }
 const CustomInput: FC<CustomInputInterface> = ({
@@ -29,36 +19,38 @@ const CustomInput: FC<CustomInputInterface> = ({
   initialValue,
   type,
   dispatchAction,
-  minPossible,
   maxPossible,
 }) => {
   const dispatch = useDispatch();
 
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
   const [value, setValue] = useState<string>(initialValue.toString());
-  const [isDebouncing, setIsDebouncing] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const dispatchValue = useMemo(
     () =>
       debounce((value) => {
-        setIsDebouncing(true);
         if (value.length === 0) {
           dispatch(dispatchAction(0));
         } else {
           dispatch(dispatchAction(parseInt(value)));
         }
-        setTimeout(() => {
-          setIsDebouncing(false);
-
-          setIsSuccess(true);
-        }, 1000);
       }, 1000),
     []
   );
   return (
     <Flex width="100%" alignItems="center" gap="10px">
-      <Switch isChecked={!isDisabled} colorScheme="whiteAlpha" onChange={() => dispatch(dispatchToggle())} />
+      <IconButton
+        size="sm"
+        backdropBlur="lg"
+        backgroundColor="whiteAlpha.100"
+        borderColor="whiteAlpha.300"
+        _hover={{ bg: "whiteAlpha.300" }}
+        _focus={{ outlineColor: "orange.50", outlineWidth: "1px" }}
+        boxShadow="md"
+        aria-label="check"
+        icon={<CheckIcon color={isDisabled ? "whiteAlpha.50" : "green.500"} />}
+        onClick={() => dispatch(dispatchToggle())}
+      ></IconButton>
       <InputGroup size="sm" fontSize="14px">
         <InputLeftAddon
           children={type}
@@ -102,16 +94,6 @@ const CustomInput: FC<CustomInputInterface> = ({
           />
         )}
       </InputGroup>
-      <IconButton
-        size="sm"
-        backdropBlur="lg"
-        backgroundColor="whiteAlpha.100"
-        borderColor="whiteAlpha.300"
-        boxShadow="md"
-        aria-label="check"
-        isLoading={isDebouncing}
-        icon={<CheckIcon color={isSuccess ? "green.500" : "whiteAlpha.50"} />}
-      ></IconButton>
     </Flex>
   );
 };

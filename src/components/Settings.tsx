@@ -25,7 +25,6 @@ const Settings = () => {
           <CustomInput
             dispatchToggle={toggleRepair}
             isDisabled={settings.repairIsDisabled}
-            minPossible={0}
             maxPossible={90}
             type="Repair tool when <"
             initialValue={settings.minRepair}
@@ -36,7 +35,6 @@ const Settings = () => {
           <CustomInput
             dispatchToggle={toggleEnergy}
             isDisabled={settings.energyIsDisabled}
-            minPossible={50}
             maxPossible={user.account?.max_energy! - 50}
             type="Restore energy when <"
             initialValue={settings.minEnergy}

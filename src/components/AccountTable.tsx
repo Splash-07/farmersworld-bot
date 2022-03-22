@@ -21,7 +21,7 @@ const AccountTable = () => {
   useEffect(() => {
     (async () => {
       await getAccountData(user.username!);
-      const log = logger(`Logged in. Hello, <strong><span style="color: #feebc8;">${user.username}</span></strong>`);
+      const log = `Logged in. Hello, <strong><span style="color: #feebc8;">${user.username}</span></strong>`;
       dispatch(pushLog(log));
     })();
   }, []);

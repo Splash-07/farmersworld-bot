@@ -2,10 +2,11 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { msToTime } from "../utils/timers";
+import { msToTime, sleep } from "../utils/timers";
 import { getAccountData, getMbsData, getToolsData } from "../service/fmdata";
 import { setNextAction } from "../store/slices/user.slice";
 import { assetNameMap } from "../store/data";
+import { handleNextAction } from "../service/fwactions";
 
 const NextAction = () => {
   const { username, items } = useSelector((state: RootState) => state.user);
@@ -31,14 +32,18 @@ const NextAction = () => {
   }, []);
 
   // claim next item if timer is up
-  // useEffect(() => {
-  //   (async () => {
-  //     if (user.tools.timer_to_action && user.tools.timer_to_action < 0) {
-  //       console.log("Timer is up, starting action");
-  //       await handleNextAction(user.tools.next!);
-  //     }
-  //   })();
-  // }, [user.tools.timer_to_action, user.tools.next]);
+  useEffect(() => {
+    (async () => {
+      if (username && items.next && items.timer_to_action && items.timer_to_action < 0) {
+        await handleNextAction(items.next, username);
+        await sleep(2000);
+        await getAccountData(username);
+        await getToolsData(username);
+        await getMbsData(username);
+        dispatch(setNextAction());
+      }
+    })();
+  }, [items.timer_to_action, items.next]);
 
   if (items.timer_to_action === undefined) return <div>Loading</div>;
 

@@ -62,6 +62,7 @@ const ToolsList = () => {
     <Grid
       width={breakPoint480 ? "unset" : "100%"}
       backgroundColor="whiteAlpha.100"
+      alignContent="flex-start"
       borderRadius="md"
       padding="3"
       boxShadow="md"

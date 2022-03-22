@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { wax } from "../service/wax";
 import { login } from "../store/slices/user.slice";
 import { RootState } from "../store/store";
+
 import AccountTable from "./AccountTable";
 import Logger from "./Logger";
-
 import NextAction from "./NextAction";
 import Settings from "./Settings";
 import ToolsList from "./ToolsList";
@@ -21,11 +21,17 @@ const Home = () => {
       dispatch(login(username));
     } catch (error) {}
   }
-
   if (!username)
     return (
       <Box display={"flex"} alignContent="center" justifyContent="center" gap="20px" marginTop="30px">
-        <Button onClick={handleLogin} bg={"orange.100"} color={"gray.900"} padding="20px 30px">
+        <Button
+          onClick={handleLogin}
+          bg={"whiteAlpha.100"}
+          color={"orange.50"}
+          _hover={{ bg: "whiteAlpha.300", color: "orange.100" }}
+          _focus={{ outlineColor: "orange.50", outlineWidth: "1px" }}
+          padding="20px 30px"
+        >
           Login with WAX.Wallet
         </Button>
       </Box>
