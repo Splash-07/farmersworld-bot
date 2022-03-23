@@ -1,6 +1,5 @@
-import { CheckIcon } from "@chakra-ui/icons";
-import { Flex, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, useMediaQuery } from "@chakra-ui/react";
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { Flex, Input, InputGroup, InputLeftAddon, InputRightAddon, useMediaQuery } from "@chakra-ui/react";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { FC, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
@@ -10,17 +9,9 @@ interface CustomInputInterface {
   isDisabled: boolean;
   type: string;
   dispatchAction: ActionCreatorWithPayload<any, string>;
-  dispatchToggle: ActionCreatorWithoutPayload<string>;
   maxPossible: number;
 }
-const CustomInput: FC<CustomInputInterface> = ({
-  isDisabled,
-  dispatchToggle,
-  initialValue,
-  type,
-  dispatchAction,
-  maxPossible,
-}) => {
+const CustomInput: FC<CustomInputInterface> = ({ isDisabled, initialValue, type, dispatchAction, maxPossible }) => {
   const dispatch = useDispatch();
 
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
@@ -39,18 +30,6 @@ const CustomInput: FC<CustomInputInterface> = ({
   );
   return (
     <Flex width="100%" alignItems="center" gap="10px">
-      <IconButton
-        size="sm"
-        backdropBlur="lg"
-        backgroundColor="whiteAlpha.100"
-        borderColor="whiteAlpha.300"
-        _hover={{ bg: "whiteAlpha.300" }}
-        _focus={{ outlineColor: "orange.50", outlineWidth: "1px" }}
-        boxShadow="md"
-        aria-label="check"
-        icon={<CheckIcon color={isDisabled ? "whiteAlpha.50" : "green.500"} />}
-        onClick={() => dispatch(dispatchToggle())}
-      ></IconButton>
       <InputGroup size="sm" fontSize="14px">
         <InputLeftAddon
           children={type}
@@ -59,6 +38,7 @@ const CustomInput: FC<CustomInputInterface> = ({
           borderColor="whiteAlpha.200"
           boxShadow="md"
           fontWeight="medium"
+          color={isDisabled ? "whiteAlpha.400" : "orange.50"}
           width={breakPoint480 ? "unset" : "100px"}
           minWidth={breakPoint480 ? "158px" : "unset"}
           isTruncated

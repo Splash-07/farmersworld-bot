@@ -1,4 +1,4 @@
-export interface Account {
+export interface Resources {
   account: string;
   balances: {
     wood: number;
@@ -9,7 +9,35 @@ export interface Account {
   last_mine_tx: string;
   max_energy: number;
 }
+export interface Account {
+  cpuUsed: number;
+  cpuMax: number;
+  cpuAvailable: number;
+  waxBalance: number;
+  waxStackedOnCpu: number;
+  waxSelfStackedOnCpu: number;
+}
 export interface AccountResponse {
+  cpu_limit: {
+    available: number;
+    max: number;
+    used: number;
+  };
+  core_liquid_balance: string;
+  total_resources: {
+    cpu_weight: string;
+    net_weight: string;
+    owner: string;
+    ram_bytes: number;
+  };
+  self_delegated_bandwidth: {
+    cpu_weight: string;
+    from: string;
+    net_weight: string;
+    to: string;
+  };
+}
+export interface AccountResourcesResponse {
   account: string;
   balances: string[];
   energy: number;
@@ -25,8 +53,14 @@ export interface ToolsResponse {
   template_id: number;
   type: string;
 }
+export interface NextToolItem extends ToolsResponse {
+  timer_to_action: number;
+}
 export interface MbsResponse extends Omit<ToolsResponse, "current_durability" | "durability"> {
   unstaking_time: number;
+}
+export interface NextMbsItem extends MbsResponse {
+  timer_to_action: number;
 }
 
 export interface DataInfoInterface {

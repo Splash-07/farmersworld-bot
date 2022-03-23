@@ -7,7 +7,7 @@ import storage from "redux-persist/lib/storage";
 const settingsPersistConfig = {
   key: "settings",
   storage,
-  blacklist: ["loggerArray"],
+  blacklist: ["loggerArray", "updateData"],
 };
 const reducers = combineReducers({
   user: userReducer,

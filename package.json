@@ -19,7 +19,8 @@
     "react-redux": "^7.2.6",
     "react-scripts": "5.0.0",
     "redux-persist": "^6.0.0",
-    "sass": "^1.49.9"
+    "sass": "^1.49.9",
+    "use-sound": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -3,6 +3,7 @@ import { filterMbsByType, mbsMultiMap } from "../store/data";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
 
 export function msToTime(ms: number) {
+  if (ms < 0) return "00:00:00";
   let seconds = ms / 1000;
   const hours = Math.floor(seconds / 3600);
   seconds = seconds % 3600;

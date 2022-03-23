@@ -1,32 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { logger } from "../../utils/logger";
 
-export interface UserState {
+export interface SettingsState {
   minRepair: number;
   minEnergy: number;
   minFood: number;
-  updateFarm: boolean;
+  updateData: boolean;
   additionalTimer: number;
   repairIsDisabled: boolean;
   energyIsDisabled: boolean;
   loggerArray: string[];
+  soundIsDisabled: boolean;
 }
-
-const initialState: UserState = {
+// если данные false -> грузим данные, записываем все и ставим на true
+const initialState: SettingsState = {
   minRepair: 50,
   minEnergy: 200,
   minFood: 100,
-  updateFarm: false,
   additionalTimer: 10000,
   repairIsDisabled: false,
   energyIsDisabled: false,
   loggerArray: [],
+  soundIsDisabled: true,
+  updateData: false,
 };
 
 export const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
+    toggleUpdateData: (state, { payload }) => {
+      state.updateData = payload;
+    },
     setMinRepair: (state, { payload }) => {
       const log = logger(
         `Repair minimal value has been changed. New value = <span style="color: #feebc8;"><strong>${payload}%</strong></span>.`
@@ -44,9 +49,7 @@ export const settingsSlice = createSlice({
     setMinFood: (state, { payload }) => {
       state.minFood = payload;
     },
-    toggleUpdateFarm: (state, { payload }) => {
-      state.updateFarm = payload;
-    },
+
     toggleRepair: (state) => {
       const log = logger(
         `Repair has been <span style="color: #feebc8;"><strong>${
@@ -65,6 +68,15 @@ export const settingsSlice = createSlice({
       state.energyIsDisabled = !state.energyIsDisabled;
       state.loggerArray.push(log);
     },
+    toggleSoundNotification: (state) => {
+      const log = logger(
+        `Sound notification has been <span style="color: #feebc8;"><strong>${
+          !state.soundIsDisabled ? "disabled" : "enabled"
+        }</strong></span>.`
+      );
+      state.soundIsDisabled = !state.soundIsDisabled;
+      state.loggerArray.push(log);
+    },
     pushLog: (state, { payload }) => {
       const log = logger(payload);
       state.loggerArray.push(log);
@@ -72,7 +84,15 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setMinRepair, setMinEnergy, setMinFood, toggleUpdateFarm, toggleRepair, toggleEnergy, pushLog } =
-  settingsSlice.actions;
+export const {
+  toggleSoundNotification,
+  setMinRepair,
+  setMinEnergy,
+  setMinFood,
+  toggleUpdateData,
+  toggleRepair,
+  toggleEnergy,
+  pushLog,
+} = settingsSlice.actions;
 
 export default settingsSlice.reducer;

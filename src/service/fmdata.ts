@@ -1,22 +1,53 @@
-import { setAccount, setMbs, setTools } from "../store/slices/user.slice";
+import { setAccount, setMbs, setResources, setTools } from "../store/slices/user.slice";
 import { store } from "../store/store";
-import { AccountResponse, TableRowEnums, ToolsResponse } from "./../types/data.types";
+import { AccountResourcesResponse, AccountResponse, TableRowEnums, ToolsResponse } from "./../types/data.types";
 import { rpc } from "./wax";
 
-export async function getAccountData(username: string) {
-  const accountList = await getTableRow<AccountResponse>(username, TableRowEnums.accounts);
-  if (accountList) store.dispatch(setAccount(accountList));
+export async function getResourcesData(username: string) {
+  try {
+    const accountResourcesList = await getTableRow<AccountResourcesResponse>(username, TableRowEnums.accounts);
+    if (accountResourcesList) {
+      store.dispatch(setResources(accountResourcesList));
+      return accountResourcesList;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch account recourses data: ${error.message}`);
+  }
 }
 export async function getToolsData(username: string) {
-  const tools = await getTableRow<ToolsResponse>(username, TableRowEnums.tools);
-  if (tools) {
-    store.dispatch(setTools(tools));
+  try {
+    const tools = await getTableRow<ToolsResponse>(username, TableRowEnums.tools);
+    if (tools) {
+      store.dispatch(setTools(tools));
+      return tools;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch tools data: ${error.message}`);
   }
 }
 export async function getMbsData(username: string) {
-  const mbs = await getTableRow<ToolsResponse>(username, TableRowEnums.mbs);
-  if (mbs) {
-    store.dispatch(setMbs(mbs));
+  try {
+    const mbs = await getTableRow<ToolsResponse>(username, TableRowEnums.mbs);
+    if (mbs) {
+      store.dispatch(setMbs(mbs));
+      return mbs;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch mbs data: ${error.message}`);
+  }
+}
+
+export async function getAccountData(username: string) {
+  try {
+    const accountData = await rpc.get_account(username);
+    // console.log(accountData);
+    if (accountData) {
+      store.dispatch(setAccount(accountData as AccountResponse));
+      return accountData;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch account data: ${error.message}`);
+    return false;
   }
 }
 
@@ -47,7 +78,7 @@ export async function getTableRow<Type>(userAccount: string, table: TableRowEnum
     });
     return data.rows as Type[];
   } catch (error: any) {
-    console.log(`"ОШИБКА при получении списка ${table}: ${error.message}`);
+    console.log(`Failed to fetch ${table} data: ${error.message}`);
     return false;
   }
 }

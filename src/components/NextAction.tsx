@@ -1,55 +1,41 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { msToTime, sleep } from "../utils/timers";
-import { getAccountData, getMbsData, getToolsData } from "../service/fmdata";
-import { setNextAction } from "../store/slices/user.slice";
-import { assetNameMap } from "../store/data";
+import { sleep } from "../utils/timers";
 import { handleNextAction } from "../service/fwactions";
+import { assetNameMap } from "../store/data";
+import Countdown from "./Countdown";
+import useSound from "use-sound";
+import { toggleUpdateData } from "../store/slices/settings.slice";
+import { getTextColor } from "../utils/utils";
+const notify_sound = require("../assets/notify_sound.mp3");
 
 const NextAction = () => {
-  const { username, items } = useSelector((state: RootState) => state.user);
-  const color = items.next?.type === "Wood" ? "#4299E1" : items.next?.type === "Gold" ? "#DD6B20" : "#319795";
+  const { user, settings } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
+  const color = getTextColor(user.items.next?.type!);
 
-  // auto fetch tools data 1 per minute
+  const [breakPoint480] = useMediaQuery("(min-width: 480px)");
+  const [notificationSound] = useSound(notify_sound);
+
   useEffect(() => {
-    (async () => {
-      await getToolsData(username!);
-      await getMbsData(username!);
-      dispatch(setNextAction());
-    })();
-    setInterval(async () => {
-      await getAccountData(username!);
-      await getToolsData(username!);
-      await getMbsData(username!);
-      dispatch(setNextAction());
-    }, 30000);
-    return () => {
-      clearInterval();
-    };
-  }, []);
+    if (user.items.next && user.items.next?.timer_to_action < 0) {
+      (async () => {
+        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+        await handleNextAction(user, settings);
+        if (!settings.soundIsDisabled) notificationSound();
+        await sleep(8000);
+        dispatch(toggleUpdateData(true));
+      })();
+    }
+  }, [user.items.next?.timer_to_action, user.items.next]);
 
-  // claim next item if timer is up
-  useEffect(() => {
-    (async () => {
-      if (username && items.next && items.timer_to_action && items.timer_to_action < 0) {
-        await handleNextAction(items.next, username);
-        await sleep(2000);
-        await getAccountData(username);
-        await getToolsData(username);
-        await getMbsData(username);
-        dispatch(setNextAction());
-      }
-    })();
-  }, [items.timer_to_action, items.next]);
-
-  if (items.timer_to_action === undefined) return <div>Loading</div>;
+  if (user.items.next?.timer_to_action === undefined) return <div>Loading</div>;
 
   return (
     <Flex
-      gap={"20px"}
+      gap={"5px"}
       backgroundColor="whiteAlpha.100"
       borderRadius="md"
       padding="3"
@@ -58,12 +44,16 @@ const NextAction = () => {
       justifyContent="center"
       fontSize="15px"
     >
-      <Box color={items.timer_to_action < 0 ? "tomato" : "whiteAlpha.900"}>{msToTime(items.timer_to_action)}</Box>
-      <Flex gap="5px">
-        <Text>Claim with:</Text>
-        <Text color={color} fontWeight="semibold">
-          {`${assetNameMap.get(items.next!.template_id.toString())}`}
+      {/* <Box color={user.items.next.timer_to_action < 0 ? "tomato" : "whiteAlpha.900"}>{msToTime(user.items.next.timer_to_action)}</Box> */}
+      <Countdown timer={user.items.next.timer_to_action} />
+      <Flex gap="3px">
+        <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
+        <Text color={color} fontWeight="semibold" maxWidth="20ch" isTruncated>
+          {assetNameMap.get(user.items.next.template_id.toString())}
         </Text>
+        <Text>{`(${
+          "durability" in user.items.next ? `${user.items.next.current_durability}/${user.items.next.durability})` : ""
+        }`}</Text>
       </Flex>
     </Flex>
   );

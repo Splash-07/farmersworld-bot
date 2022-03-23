@@ -21,6 +21,7 @@ const Home = () => {
       dispatch(login(username));
     } catch (error) {}
   }
+
   if (!username)
     return (
       <Box display={"flex"} alignContent="center" justifyContent="center" gap="20px" marginTop="30px">

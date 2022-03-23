@@ -4,6 +4,7 @@ import { assetNameMap, filterMbsByType, mbsMultiMap } from "../store/data";
 import { RootState } from "../store/store";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
 import { adjustedTime, msToTime } from "../utils/timers";
+import { getTextColor } from "../utils/utils";
 
 const ToolsList = () => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
@@ -27,7 +28,7 @@ const ToolsList = () => {
   ) {
     const toolName = assetNameMap.get(template_id);
     if (toolName) {
-      const color = responseItem.type === "Wood" ? "#4299E1" : responseItem.type === "Gold" ? "#DD6B20" : "#319795";
+      const color = getTextColor(responseItem.type);
       const timer = adjustedTime(responseItem, mbs);
 
       // count store/max store

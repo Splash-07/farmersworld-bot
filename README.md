@@ -35,13 +35,14 @@ npm start
 
 1. Login with wax.wallet;
 2. Fetch blockchain data with eosio rpc api;
-3. Auto fetch data every 40sec;
+3. Auto fetch data every 30sec;
 4. Finding tool or mbs card with lowest cooldown (adjusted according mbs cards that you have, checking if charges can be stored);
-5. If cooldown is over -> claim action performing. If error occurs -> will try again in 40sec;
+5. If cooldown is over -> claim action performing.;
 6. Repeating 4th and 5th steps.
 
 ## Contributing
 
 Pull requests are welcome. For feature requests and bug reports, please open an issue first to discuss what you would like to change.
 
+Thanks [Shr1xy](https://github.com/Shr1xy) for account sharing for testing.
 More profound version of farmersworld bot [by shakhruz](https://github.com/shakhruz/angelfarmers-ui).
