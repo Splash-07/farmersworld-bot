@@ -7,7 +7,7 @@ Simple farmersworld claim-bot for novices.
 1. Clone repository
 
 ```bash
-git clone Splash-07/fw-bot
+git clone https://github.com/Splash-07/fw-bot
 ```
 
 2. Install all dependencies
