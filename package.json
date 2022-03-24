@@ -6,6 +6,8 @@
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.6",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
     "@fontsource/m-plus-rounded-1c": "^4.5.3",
     "@reduxjs/toolkit": "^1.8.0",
     "@waxio/waxjs": "^1.0.4",
