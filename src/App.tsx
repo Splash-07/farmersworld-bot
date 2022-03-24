@@ -25,7 +25,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <Box h={"100vh"}>
         <Header />
-        <Container maxW={"container.md"}>
+        <Container maxW={"container.lg"}>
           <Home />
         </Container>
       </Box>

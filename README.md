@@ -43,5 +43,6 @@ npm start
 Pull requests are welcome. For feature requests and bug reports, please open an issue first to discuss what you would like to change.
 
 Thanks [Shr1xy](https://github.com/Shr1xy) for account sharing for testing.
+
 More profound version of farmersworld bot [by shakhruz](https://github.com/shakhruz/angelfarmers-ui).
 ![Alt text](/public/FWbot.png)

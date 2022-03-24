@@ -43,16 +43,16 @@ const ToolsList = () => {
       const currentlyStored = canBeStored - Math.ceil(timer / hour);
       return (
         <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
-          <Box minWidth="130px" overflow="hidden" isTruncated color={color}>
+          <Box overflow="hidden" isTruncated color={color} w="100%">
             {toolName}
           </Box>
-          <Flex justifyContent="center" w="100%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+          <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
             {msToTime(timer)}
           </Flex>
           {!assetNameMap.get(template_id)?.includes("Membership") ? (
-            <Flex justifyContent="center" w="100%" fontSize="14px">{`${currentlyStored}/${canBeStored}`}</Flex>
+            <Flex justifyContent="center" w="50%" fontSize="14px">{`${currentlyStored}/${canBeStored}`}</Flex>
           ) : (
-            <Flex justifyContent="center" w="100%" fontSize="14px"></Flex>
+            <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
           )}
         </GridItem>
       );
@@ -69,16 +69,16 @@ const ToolsList = () => {
       boxShadow="md"
       overflowX="auto"
       w="100%"
-      maxWidth="300px"
+      maxWidth="400px"
     >
       <GridItem display="flex" alignItems="center" justifyContent="space-between" w="100%" textAlign={"center"}>
-        <Flex w="100%" minWidth="130px" justifyContent="center">
+        <Flex w="100%" justifyContent="center">
           Asset name
         </Flex>
-        <Flex justifyContent="center" textAlign="center" w="100%">
+        <Flex justifyContent="center" textAlign="center" w="50%">
           Timer
         </Flex>
-        <Flex justifyContent="center" textAlign="center" w="100%">
+        <Flex justifyContent="center" textAlign="center" w="50%">
           Stored
         </Flex>
       </GridItem>

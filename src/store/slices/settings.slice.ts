@@ -12,7 +12,6 @@ export interface SettingsState {
   loggerArray: string[];
   soundIsDisabled: boolean;
 }
-// если данные false -> грузим данные, записываем все и ставим на true
 const initialState: SettingsState = {
   minRepair: 50,
   minEnergy: 200,

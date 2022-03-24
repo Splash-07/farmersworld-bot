@@ -8,7 +8,7 @@ const Logger = () => {
   const log = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const logBox = log.current!;
-    if (logBox.scrollTop + logBox.clientHeight >= logBox.scrollHeight - 50) {
+    if (logBox.scrollTop + logBox.clientHeight >= logBox.scrollHeight - 80) {
       logBox.scrollTo(0, logBox.scrollHeight);
     }
   }, [settings.loggerArray]);

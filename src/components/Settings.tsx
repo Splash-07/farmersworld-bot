@@ -63,7 +63,7 @@ const Settings = () => {
               lineHeight="30px"
               fontSize="14px"
             >
-              Claim sound notifications
+              Sound notifications
             </Box>
           </SettingBar>
         </WrapItem>
