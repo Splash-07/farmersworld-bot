@@ -18,7 +18,6 @@ const Countdown = ({
     // delay before claim action
     const delay = 5000;
     if (ms + delay < 0) {
-      console.log(ms);
       setTriggerAction(true);
     } else {
       const interval = setInterval(() => setMs(ms - 1000), 1000);

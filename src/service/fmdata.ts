@@ -12,6 +12,7 @@ export async function getResourcesData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch account recourses data: ${error.message}`);
+    return Promise.reject(`Failed to fetch account recourses data: ${error.message}`);
   }
 }
 export async function getToolsData(username: string) {
@@ -23,6 +24,7 @@ export async function getToolsData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch tools data: ${error.message}`);
+    return Promise.reject(`Failed to fetch tools data: ${error.message}`);
   }
 }
 export async function getMbsData(username: string) {
@@ -34,6 +36,7 @@ export async function getMbsData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch mbs data: ${error.message}`);
+    return Promise.reject(`Failed to fetch mbs data: ${error.message}`);
   }
 }
 
@@ -47,7 +50,7 @@ export async function getAccountData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch account data: ${error.message}`);
-    return false;
+    return Promise.reject(`Failed to fetch account data: ${error.message}`);
   }
 }
 
@@ -76,7 +79,7 @@ export async function getTableRow<Type>(userAccount: string, table: TableRowEnum
       reverse: false,
       show_payer: false,
     });
-    return data.rows as Type[];
+    return data.rows;
   } catch (error: any) {
     console.log(`Failed to fetch ${table} data: ${error.message}`);
     return false;

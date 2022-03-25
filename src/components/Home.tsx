@@ -12,7 +12,7 @@ import ToolsList from "./ToolsList";
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
 
-  const { username } = useSelector((state: RootState) => state.user);
+  const { username, items } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
   async function handleLogin() {

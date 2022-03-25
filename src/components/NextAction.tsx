@@ -1,4 +1,4 @@
-import { Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { Center, Flex, Spinner, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -22,22 +22,37 @@ const NextAction = () => {
   let nextItem = user.items.next;
   const color = getTextColor(nextItem?.type!);
 
-  useEffect(() => {
-    console.log(triggerAction);
-    if (triggerAction) {
-      (async () => {
-        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-        if (!settings.soundIsDisabled) notificationSound();
-        await handleNextAction(user, settings);
-        await sleep(5000);
-        dispatch(toggleUpdateData(true));
-        await sleep(3000);
-        setTriggerAction(false);
-      })();
-    }
-  }, [triggerAction]);
+  // useEffect(() => {
+  //   if (triggerAction) {
+  //     (async () => {
+  //       dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+  //       if (!settings.soundIsDisabled) notificationSound();
+  //       await handleNextAction(user, settings);
+  //       await sleep(5000);
+  //       dispatch(toggleUpdateData(true));
+  //       await sleep(3000);
+  //       setTriggerAction(false);
+  //     })();
+  //   }
+  // }, [triggerAction]);
 
-  if (nextItem?.timer_to_action === undefined) return <div>Loading</div>;
+  if (!nextItem)
+    return (
+      <Flex
+        gap={"5px"}
+        backgroundColor="whiteAlpha.100"
+        borderRadius="md"
+        padding="3"
+        boxShadow="md"
+        w="100%"
+        justifyContent="center"
+        fontSize="15px"
+      >
+        <Center>
+          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="orange.100" size="xl" />
+        </Center>
+      </Flex>
+    );
 
   return (
     <Flex
@@ -50,14 +65,13 @@ const NextAction = () => {
       justifyContent="center"
       fontSize="15px"
     >
-      {/* <Box color={nextItem.timer_to_action < 0 ? "tomato" : "whiteAlpha.900"}>{msToTime(nextItem.timer_to_action)}</Box> */}
       <Countdown setTriggerAction={setTriggerAction} timer={nextItem.timer_to_action} />
       <Flex gap="3px" alignItems="center">
         <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>
           {assetNameMap.get(nextItem.template_id.toString())}
         </Text>
-        <Text>{`(${"durability" in nextItem ? `${nextItem.current_durability}/${nextItem.durability})` : ""}`}</Text>
+        <Text>{`${"durability" in nextItem ? `(${nextItem.current_durability}/${nextItem.durability})` : ""}`}</Text>
       </Flex>
     </Flex>
   );

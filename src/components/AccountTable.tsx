@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Slider, SliderFilledTrack, SliderTrack, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Skeleton, Slider, SliderFilledTrack, SliderTrack, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,8 +11,7 @@ import goldIcon from "../assets/icons/gold-icon.png";
 import energyIcon from "../assets/icons/energy-icon.png";
 import { pushLog, toggleUpdateData } from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
-
-const balanceIcons = [woodIcon, goldIcon, meatIcon, energyIcon];
+import { sleep } from "../utils/timers";
 
 const AccountTable = () => {
   const { user, settings } = useSelector((state: RootState) => state);
@@ -44,15 +43,23 @@ const AccountTable = () => {
     if (settings.updateData === true) {
       (async () => {
         if (user.username) {
+          // / Action will not perform, untill data fetched correctly
           Promise.all([
             getAccountData(user.username),
             getResourcesData(user.username),
             getToolsData(user.username),
             getMbsData(user.username),
-          ]).then(async (result) => {
-            console.log(result);
-            dispatch(setNextAction());
-          });
+          ])
+            .then(async (result) => {
+              console.log(result);
+              dispatch(setNextAction());
+            })
+            .catch(async (error: any) => {
+              console.log("promise failed" + error);
+              dispatch(toggleUpdateData(false));
+              await sleep(4000);
+              dispatch(toggleUpdateData(true));
+            });
         }
       })();
     }
@@ -78,8 +85,20 @@ const AccountTable = () => {
 
       <Flex flexDir="column" gap="10px" maxWidth="350px" width="100%">
         <Flex gap="5px" justifyContent="space-evenly">
-          <Box>{`CPU: ${Math.ceil((user.account?.cpuUsed! / user.account?.cpuMax!) * 100)}%`}</Box>
-          <Box>{`Stacking: ${user.account?.waxStackedOnCpu}W`}</Box>
+          {!user.account ? (
+            <Skeleton>
+              <Box>some text</Box>
+            </Skeleton>
+          ) : (
+            <Box>{`CPU: ${Math.ceil((user.account?.cpuUsed! / user.account?.cpuMax!) * 100)}%`}</Box>
+          )}
+          {!user.account ? (
+            <Skeleton>
+              <Box>some text</Box>
+            </Skeleton>
+          ) : (
+            <Box>{`Stacking: ${user.account?.waxStackedOnCpu}W`}</Box>
+          )}
         </Flex>
         <Slider
           aria-label="slider-ex-1"
@@ -93,16 +112,45 @@ const AccountTable = () => {
         </Slider>
       </Flex>
       <Flex gap="20px" justifyContent="space-evenly" w="100%" flexWrap="wrap">
-        {user.resources &&
-          Object.entries(user.resources.balances).map((type, index) => (
-            <Box key={type[0]} display="flex" gap="15px" alignContent="center" alignItems="center">
-              <Image w="32px" src={balanceIcons[index]} />
-              <Text fontSize="15px">{`${type[1].toFixed(2)}`}</Text>
-            </Box>
-          ))}
+        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
+          <Image w="32px" src={woodIcon} />
+          {!user.resources ? (
+            <Skeleton>
+              <Text fontSize="15px">some text</Text>
+            </Skeleton>
+          ) : (
+            <Text fontSize="15px">{`${user.resources?.balances.wood.toFixed(2)}`}</Text>
+          )}
+        </Box>
+        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
+          <Image w="32px" src={goldIcon} />
+          {!user.resources ? (
+            <Skeleton>
+              <Text fontSize="15px">some text</Text>
+            </Skeleton>
+          ) : (
+            <Text fontSize="15px">{`${user.resources?.balances.gold.toFixed(2)}`}</Text>
+          )}
+        </Box>
+        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
+          <Image w="32px" src={meatIcon} />
+          {!user.resources ? (
+            <Skeleton>
+              <Text fontSize="15px">some text</Text>
+            </Skeleton>
+          ) : (
+            <Text fontSize="15px">{`${user.resources?.balances.food.toFixed(2)}`}</Text>
+          )}
+        </Box>
         <Box display="flex" gap="15px" alignContent="center" alignItems="center">
           <Image w="32px" src={energyIcon} />
-          <Text fontSize="15px">{`${user.resources?.energy} / ${user.resources?.max_energy}`}</Text>
+          {!user.resources ? (
+            <Skeleton>
+              <Text fontSize="15px">some text</Text>
+            </Skeleton>
+          ) : (
+            <Text fontSize="15px">{`${user.resources?.energy} / ${user.resources?.max_energy}`}</Text>
+          )}
         </Box>
       </Flex>
     </Flex>
