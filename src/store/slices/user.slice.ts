@@ -54,12 +54,15 @@ export const userSlice = createSlice({
     },
     setResources: (state, { payload }: { payload: AccountResourcesResponse[] }) => {
       const firstObj = payload[0];
+      const wood = parseInt(firstObj.balances.filter((item) => item.includes("WOOD"))[0].split(" ")[0]);
+      const gold = parseInt(firstObj.balances.filter((item) => item.includes("GOLD"))[0].split(" ")[0]);
+      const food = parseInt(firstObj.balances.filter((item) => item.includes("FOOD"))[0].split(" ")[0]);
       state.resources = {
         account: firstObj.account,
         balances: {
-          wood: parseFloat(firstObj.balances[0].split(" ")[0]),
-          gold: parseFloat(firstObj.balances[1].split(" ")[0]),
-          food: parseFloat(firstObj.balances[2].split(" ")[0]),
+          wood,
+          gold,
+          food,
         },
         energy: firstObj.energy,
         last_mine_tx: firstObj.last_mine_tx,

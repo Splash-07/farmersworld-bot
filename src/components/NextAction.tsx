@@ -23,18 +23,18 @@ const NextAction = () => {
   const color = getTextColor(nextItem?.type!);
 
   useEffect(() => {
-   if (triggerAction) {
-     (async () => {
-       dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-       if (!settings.soundIsDisabled) notificationSound();
-       await handleNextAction(user, settings);
-       await sleep(5000);
-       dispatch(toggleUpdateData(true));
-       await sleep(3000);
-       setTriggerAction(false);
-     })();
-   }
- }, [triggerAction]);
+    if (triggerAction) {
+      (async () => {
+        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+        if (!settings.soundIsDisabled) notificationSound();
+        await handleNextAction(user, settings);
+        await sleep(5000);
+        dispatch(toggleUpdateData(true));
+        await sleep(3000);
+        setTriggerAction(false);
+      })();
+    }
+  }, [triggerAction]);
 
   if (!nextItem)
     return (
