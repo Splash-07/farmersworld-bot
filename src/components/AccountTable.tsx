@@ -12,6 +12,7 @@ import energyIcon from "../assets/icons/energy-icon.png";
 import { pushLog, toggleUpdateData } from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
+import { changeEndpoint } from "../service/wax";
 
 const AccountTable = () => {
   const { user, settings } = useSelector((state: RootState) => state);
@@ -56,6 +57,7 @@ const AccountTable = () => {
             })
             .catch(async (error: any) => {
               console.log("promise failed" + error);
+              changeEndpoint();
               dispatch(toggleUpdateData(false));
               await sleep(4000);
               dispatch(toggleUpdateData(true));
