@@ -1,7 +1,6 @@
 import { Box, Button, Flex, useMediaQuery } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { wax } from "../service/wax";
-import { login } from "../store/slices/user.slice";
+import { useSelector } from "react-redux";
+import { login } from "../service/wax";
 import { RootState } from "../store/store";
 
 import AccountTable from "./AccountTable";
@@ -11,22 +10,13 @@ import Settings from "./Settings";
 import ToolsList from "./ToolsList";
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
-
-  const { username, items } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-
-  async function handleLogin() {
-    try {
-      const username = await wax.login();
-      dispatch(login(username));
-    } catch (error) {}
-  }
+  const { username } = useSelector((state: RootState) => state.user);
 
   if (!username)
     return (
       <Box display={"flex"} alignContent="center" justifyContent="center" gap="20px" marginTop="30px">
         <Button
-          onClick={handleLogin}
+          onClick={login}
           bg={"whiteAlpha.100"}
           color={"orange.50"}
           _hover={{ bg: "whiteAlpha.300", color: "orange.100" }}

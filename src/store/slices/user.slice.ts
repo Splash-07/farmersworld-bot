@@ -38,7 +38,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    login: (state, { payload }) => {
+    handleLogin: (state, { payload }) => {
       state.username = payload;
     },
     setAccount: (state, { payload }: { payload: AccountResponse }) => {
@@ -85,6 +85,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, setResources, setTools, setMbs, setNextAction, setAccount } = userSlice.actions;
+export const { handleLogin, setResources, setTools, setMbs, setNextAction, setAccount } = userSlice.actions;
 
 export default userSlice.reducer;

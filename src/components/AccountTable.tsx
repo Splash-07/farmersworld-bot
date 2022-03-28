@@ -21,10 +21,12 @@ const AccountTable = () => {
   useEffect(() => {
     (async () => {
       dispatch(toggleUpdateData(true));
-      const log = `Logged in. Hello, <strong><span style="color: #feebc8;">${user.username}</span></strong>`;
-      dispatch(pushLog(log));
+      if (user.username) {
+        const log = `Logged in. Hello, <strong><span style="color: #feebc8;">${user.username}</span></strong>`;
+        dispatch(pushLog(log));
+      }
     })();
-  }, []);
+  }, [user.username]);
 
   // Trigger data fetch each 30 sec
   useEffect(() => {
