@@ -57,7 +57,6 @@ export function filterMbsByType(mbs: MbsResponse[], type: string) {
 }
 export const endpoints: string[] = [
   "https://chain.wax.io",
-  "https://wax.eu.eosamsterdam.net",
   "https://wax.pink.gg",
   "https://api.waxsweden.org",
   "https://wax.eosphere.io",
