@@ -59,7 +59,7 @@ const AccountTable = () => {
             })
             .catch(async (error: any) => {
               console.log("promise failed" + error);
-              changeEndpoint();
+              await changeEndpoint();
               dispatch(toggleUpdateData(false));
               await sleep(4000);
               dispatch(toggleUpdateData(true));
