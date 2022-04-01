@@ -1,3 +1,5 @@
+import { colorsMap } from "../store/data";
+
 export function parseStringToNumber(string: string) {
   const splitted = string.split(" ");
   const number = +parseFloat(splitted[0]).toFixed(2);
@@ -5,5 +7,5 @@ export function parseStringToNumber(string: string) {
 }
 
 export function getTextColor(type: string) {
-  return type === "Wood" ? "#4299E1" : type === "Gold" ? "#DD6B20" : "#319795";
+  return colorsMap.get(type);
 }

@@ -29,7 +29,7 @@ const ItemList = () => {
     const toolName = assetNameMap.get(template_id);
     if (!toolName) return;
 
-    const color = "type" in responseItem ? getTextColor(responseItem.type) : "#48BB78";
+    const color = "type" in responseItem ? getTextColor(responseItem.type) : getTextColor("Crops");
     const timer = adjustTime(responseItem, mbs);
     // IF item is not Tool, return without store count
     if (!("durability" in responseItem)) {

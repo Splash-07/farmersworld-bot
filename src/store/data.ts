@@ -51,7 +51,12 @@ export const assetNameMap = new Map([
   ["260644", "Gold Membership Silver"],
   ["260647", "Gold Membership Gold"],
 ]);
-
+export const colorsMap = new Map([
+  ["Wood", "#4299E1"],
+  ["Gold", "#DD6B20"],
+  ["Food", "#319795"],
+  ["Crops", "#48BB78"],
+]);
 // export function getAssetInfo(template_id: string) {
 //   const found = assetsDataInfo.find((asset) => asset.template_id === template_id);
 //   return found;

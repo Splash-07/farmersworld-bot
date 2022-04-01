@@ -20,7 +20,7 @@ const NextAction = () => {
   const [notificationSound] = useSound(notify_sound);
 
   let nextItem = user.items.next;
-  const color = nextItem && "durability" in nextItem ? getTextColor(nextItem.type) : "#48BB78";
+  const color = nextItem && "durability" in nextItem ? getTextColor(nextItem.type) : getTextColor("Crops");
 
   useEffect(() => {
     if (triggerAction) {
