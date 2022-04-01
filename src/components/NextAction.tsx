@@ -1,4 +1,4 @@
-import { Center, Flex, Spinner, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -20,7 +20,7 @@ const NextAction = () => {
   const [notificationSound] = useSound(notify_sound);
 
   let nextItem = user.items.next;
-  const color = getTextColor(nextItem?.type!);
+  const color = nextItem && "durability" in nextItem ? getTextColor(nextItem.type) : "#48BB78";
 
   useEffect(() => {
     if (triggerAction) {
@@ -48,9 +48,9 @@ const NextAction = () => {
         justifyContent="center"
         fontSize="15px"
       >
-        <Center>
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="orange.100" size="xl" />
-        </Center>
+        <Skeleton width="100%">
+          <Box width="100%">dsadasd</Box>
+        </Skeleton>
       </Flex>
     );
 

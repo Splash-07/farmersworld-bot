@@ -1,7 +1,26 @@
-import { setAccount, setMbs, setResources, setTools } from "../store/slices/user.slice";
+import { setAccount, setCrops, setMbs, setResources, setTools } from "../store/slices/user.slice";
 import { store } from "../store/store";
-import { AccountResourcesResponse, AccountResponse, TableRowEnums, ToolsResponse } from "./../types/data.types";
+import {
+  AccountResourcesResponse,
+  AccountResponse,
+  CropsResponse,
+  TableRowEnums,
+  ToolsResponse,
+} from "./../types/data.types";
 import { rpc } from "./wax";
+
+export async function getCropsData(username: string) {
+  try {
+    const cropsResourcesList = await getTableRow<CropsResponse[]>(username, TableRowEnums.crops);
+    if (cropsResourcesList) {
+      store.dispatch(setCrops(cropsResourcesList));
+      return cropsResourcesList;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch crops data: ${error.message}`);
+    return Promise.reject(`Failed to fetch crops data: ${error.message}`);
+  }
+}
 
 export async function getResourcesData(username: string) {
   try {

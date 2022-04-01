@@ -53,13 +53,33 @@ export interface ToolsResponse {
   template_id: number;
   type: string;
 }
+export interface MbsResponse {
+  asset_id: string;
+  next_availability: number;
+  owner: string;
+  template_id: number;
+  type: string;
+  unstaking_time: number;
+}
+
+export interface CropsResponse {
+  asset_id: string;
+  building_id: string;
+  last_claimed: number;
+  name: string;
+  next_availability: number;
+  owner: string;
+  template_id: number;
+  times_claimed: number;
+}
+
 export interface NextToolItem extends ToolsResponse {
   timer_to_action: number;
 }
-export interface MbsResponse extends Omit<ToolsResponse, "current_durability" | "durability"> {
-  unstaking_time: number;
-}
 export interface NextMbsItem extends MbsResponse {
+  timer_to_action: number;
+}
+export interface NextCropsItem extends CropsResponse {
   timer_to_action: number;
 }
 

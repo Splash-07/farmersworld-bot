@@ -7,7 +7,7 @@ import AccountTable from "./AccountTable";
 import Logger from "./Logger";
 import NextAction from "./NextAction";
 import Settings from "./Settings";
-import ToolsList from "./ToolsList";
+import ItemList from "./ItemList";
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
   const { username } = useSelector((state: RootState) => state.user);
@@ -31,7 +31,7 @@ const Home = () => {
     <Flex direction="column" marginTop="30px" gap="30px">
       <AccountTable />
       <Flex justifyContent="center" gap="30px" flexWrap={breakPoint720 ? "unset" : "wrap"}>
-        <ToolsList />
+        <ItemList />
         <Flex
           alignSelf="flex-start"
           flexDir="column"

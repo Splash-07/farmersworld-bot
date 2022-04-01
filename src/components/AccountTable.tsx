@@ -2,7 +2,7 @@ import { Box, Flex, Image, Skeleton, Slider, SliderFilledTrack, SliderTrack, Tex
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getAccountData, getMbsData, getResourcesData, getToolsData } from "../service/fmdata";
+import { getAccountData, getCropsData, getMbsData, getResourcesData, getToolsData } from "../service/fmdata";
 import { RootState } from "../store/store";
 
 import woodIcon from "../assets/icons/wood-icon.png";
@@ -52,6 +52,7 @@ const AccountTable = () => {
             getResourcesData(user.username),
             getToolsData(user.username),
             getMbsData(user.username),
+            getCropsData(user.username),
           ])
             .then(async (result) => {
               console.log(result);

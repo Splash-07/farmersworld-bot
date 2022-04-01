@@ -10,6 +10,10 @@ export const mbsMultiMap = new Map([
   ["260644", 2],
   ["260647", 3],
 ]);
+export const cornsRequiredClaimMap = new Map([
+  ["298595", 42],
+  ["298596", 42],
+]);
 export const assetNameMap = new Map([
   ["318606", "Barley"],
   ["318607", "Corn"],

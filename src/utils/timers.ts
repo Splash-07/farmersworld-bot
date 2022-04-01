@@ -1,3 +1,4 @@
+import { CropsResponse } from "./../types/data.types";
 import { assetNameMap } from "./../store/data";
 import { filterMbsByType, mbsMultiMap } from "../store/data";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
@@ -18,13 +19,13 @@ export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function adjustedTime(tool: ToolsResponse | MbsResponse, mbs: MbsResponse[]) {
-  const itemName = assetNameMap.get(tool.template_id.toString());
-  let timer = tool.next_availability * 1000 - new Date().getTime();
-  // if item is mbs -> return timer
-  if (mbsMultiMap.get(tool.template_id.toString()) !== undefined) return timer;
+export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mbs: MbsResponse[]) {
+  const itemName = assetNameMap.get(item.template_id.toString());
+  let timer = item.next_availability * 1000 - new Date().getTime();
+  // if item is not Tool -> return timer
+  if (!("durability" in item)) return timer;
 
-  const mbsFiltered = filterMbsByType(mbs, tool.type);
+  const mbsFiltered = filterMbsByType(mbs, item.type);
   if (mbsFiltered.length === 0) return timer;
 
   // If item is tool and we have members card, then add additional time, tyo store items (so less operation will occurs -> less CPU usage)
@@ -38,12 +39,12 @@ export function adjustedTime(tool: ToolsResponse | MbsResponse, mbs: MbsResponse
   return timer;
 }
 
-export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[]) {
-  const array = [...tools, ...mbs];
+export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[], crops: CropsResponse[]) {
+  const array = [...tools, ...mbs, ...crops];
   const adjustedTimeArray = array.map((item) => {
     return {
       ...item,
-      next_availability: adjustedTime(item, mbs),
+      next_availability: adjustTime(item, mbs),
     };
   });
   const foundedItem = adjustedTimeArray.reduce((prev, cur) => {

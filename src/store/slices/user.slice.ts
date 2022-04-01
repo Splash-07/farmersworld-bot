@@ -2,7 +2,9 @@ import {
   Account,
   AccountResourcesResponse,
   AccountResponse,
+  CropsResponse,
   MbsResponse,
+  NextCropsItem,
   NextMbsItem,
   NextToolItem,
   Resources,
@@ -19,7 +21,8 @@ export interface UserState {
   items: {
     toolsList: ToolsResponse[];
     mbsList: MbsResponse[];
-    next?: NextToolItem | NextMbsItem;
+    cropsList: CropsResponse[];
+    next?: NextToolItem | NextMbsItem | NextCropsItem;
   };
 }
 
@@ -29,6 +32,7 @@ const initialState: UserState = {
   resources: undefined,
   items: {
     toolsList: [],
+    cropsList: [],
     mbsList: [],
     next: undefined,
   },
@@ -75,8 +79,11 @@ export const userSlice = createSlice({
     setMbs: (state, { payload }) => {
       state.items.mbsList = payload;
     },
+    setCrops: (state, { payload }) => {
+      state.items.cropsList = payload;
+    },
     setNextAction: (state) => {
-      const lowCdItem = findLowestCD(state.items.toolsList, state.items.mbsList);
+      const lowCdItem = findLowestCD(state.items.toolsList, state.items.mbsList, state.items.cropsList);
       state.items.next = {
         ...lowCdItem.item,
         timer_to_action: lowCdItem.timer,
@@ -85,6 +92,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { handleLogin, setResources, setTools, setMbs, setNextAction, setAccount } = userSlice.actions;
+export const { handleLogin, setResources, setTools, setMbs, setCrops, setNextAction, setAccount } = userSlice.actions;
 
 export default userSlice.reducer;

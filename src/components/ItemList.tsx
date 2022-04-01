@@ -1,12 +1,12 @@
 import { Box, Flex, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { assetNameMap, filterMbsByType, mbsMultiMap } from "../store/data";
+import { assetNameMap, cornsRequiredClaimMap, filterMbsByType, mbsMultiMap } from "../store/data";
 import { RootState } from "../store/store";
-import { MbsResponse, ToolsResponse } from "../types/data.types";
-import { adjustedTime, msToTime } from "../utils/timers";
+import { CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
+import { adjustTime, msToTime } from "../utils/timers";
 import { getTextColor } from "../utils/utils";
 
-const ToolsList = () => {
+const ItemList = () => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
   const { items } = useSelector((state: RootState) => state.user);
 
@@ -21,26 +21,18 @@ const ToolsList = () => {
   }
 
   function renderAsset(
-    responseItem: ToolsResponse | MbsResponse,
+    responseItem: ToolsResponse | MbsResponse | CropsResponse,
     template_id: string,
     key: number,
     mbs: MbsResponse[]
   ) {
     const toolName = assetNameMap.get(template_id);
-    if (toolName) {
-      const color = getTextColor(responseItem.type);
-      const timer = adjustedTime(responseItem, mbs);
+    if (!toolName) return;
 
-      // count store/max store
-      const exception = ["Ancient Stone Axe", "Mining Excavator"];
-      const hour = exception.includes(toolName) ? 7200000 : 3600000;
-
-      const filteredMbs = filterMbsByType(mbs, responseItem.type);
-
-      const canBeStored =
-        filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())!), 0) + 1;
-
-      const currentlyStored = canBeStored - Math.ceil(timer / hour);
+    const color = "type" in responseItem ? getTextColor(responseItem.type) : "#48BB78";
+    const timer = adjustTime(responseItem, mbs);
+    // IF item is not Tool, return without store count
+    if (!("durability" in responseItem)) {
       return (
         <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
           <Box overflow="hidden" isTruncated color={color} w="100%">
@@ -49,14 +41,34 @@ const ToolsList = () => {
           <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
             {msToTime(timer)}
           </Flex>
-          {!assetNameMap.get(template_id)?.includes("Membership") ? (
-            <Flex justifyContent="center" w="50%" fontSize="14px">{`${currentlyStored}/${canBeStored}`}</Flex>
+          {"times_claimed" in responseItem ? (
+            <Flex justifyContent="center" w="50%" fontSize="14px">{`${
+              responseItem.times_claimed
+            }/${cornsRequiredClaimMap.get(responseItem.template_id.toString())}`}</Flex>
           ) : (
             <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
           )}
         </GridItem>
       );
     }
+
+    // count store/max store
+    const exception = ["Ancient Stone Axe", "Mining Excavator"];
+    const hour = exception.includes(toolName) ? 7200000 : 3600000;
+    const filteredMbs = filterMbsByType(mbs, responseItem.type);
+    const canBeStored = filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())!), 0) + 1;
+    const currentlyStored = canBeStored - Math.ceil(timer / hour);
+    return (
+      <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+        <Box overflow="hidden" isTruncated color={color} w="100%">
+          {toolName}
+        </Box>
+        <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+          {msToTime(timer)}
+        </Flex>
+        <Flex justifyContent="center" w="50%" fontSize="14px">{`${currentlyStored}/${canBeStored}`}</Flex>
+      </GridItem>
+    );
   }
 
   return (
@@ -101,6 +113,7 @@ const ToolsList = () => {
           sortList(items.toolsList).map((tool, index) =>
             renderAsset(tool, tool.template_id.toString(), index, items.mbsList)
           )}
+        {items.cropsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
         {items.mbsList &&
           items.mbsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
       </Grid>
@@ -108,4 +121,4 @@ const ToolsList = () => {
   );
 };
 
-export default ToolsList;
+export default ItemList;

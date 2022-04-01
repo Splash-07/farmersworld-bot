@@ -18,7 +18,7 @@ export async function actionClaimTool(
       name: "claim",
       authorization: [{ actor: username, permission: "active" }],
       data: {
-        asset_id: asset_id,
+        asset_id,
         owner: username,
       },
     };
@@ -31,7 +31,7 @@ export async function actionClaimTool(
 }
 
 export async function actionClaimMembership(
-  member_id: string,
+  asset_id: string,
   username: string
 ): Promise<{
   status: boolean;
@@ -43,7 +43,7 @@ export async function actionClaimMembership(
       name: "mbsclaim",
       authorization: [{ actor: username, permission: "active" }],
       data: {
-        asset_id: member_id,
+        asset_id: asset_id,
         owner: username,
       },
     };
@@ -54,6 +54,32 @@ export async function actionClaimMembership(
     return { status: false, result: error.message };
   }
 }
+
+export async function actionClaimCrop(
+  asset_id: string,
+  username: string
+): Promise<{
+  status: boolean;
+  result: any;
+}> {
+  try {
+    const payload = {
+      account: "farmersworld",
+      name: "cropclaim",
+      authorization: [{ actor: username, permission: "active" }],
+      data: {
+        crop_id: asset_id,
+        owner: username,
+      },
+    };
+    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    if (response) return { status: true, result: response };
+    else return { status: false, result: response };
+  } catch (error: any) {
+    return { status: false, result: error.message };
+  }
+}
+
 export async function actionEnergyRecovery(
   totalEnergyRecovering: number,
   username: string
@@ -112,8 +138,10 @@ export async function handleNextAction(user: UserState, settings: SettingsState)
   let response;
   if ("durability" in target) {
     response = await actionClaimTool(target.asset_id, user.username!);
-  } else {
+  } else if ("unstaking_time" in target) {
     response = await actionClaimMembership(target.asset_id, user.username!);
+  } else {
+    response = await actionClaimCrop(target.asset_id, user.username!);
   }
   if (response.status === true) {
     const log = `<span style="color: #38A169;">Successfully</span> claimed <span style="color: #feebc8;"><strong>${assetNameMap.get(
