@@ -64,12 +64,6 @@ export const colorsMap = new Map([
 export function filterMbsByType(mbs: MbsResponse[], type: string) {
   return mbs.filter((mbs) => mbs.type === type);
 }
-export const endpoints: string[] = [
-  "https://chain.wax.io",
-  "https://wax.pink.gg",
-  "https://api.waxsweden.org",
-  "https://wax.eosphere.io",
-];
 
 // export const assetsDataInfo: AssetInfoInterface[] = [
 //   {

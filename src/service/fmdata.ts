@@ -18,7 +18,7 @@ export async function getCropsData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch crops data: ${error.message}`);
-    return Promise.reject(`Failed to fetch crops data: ${error.message}`);
+    return Promise.reject();
   }
 }
 
@@ -31,7 +31,7 @@ export async function getResourcesData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch account recourses data: ${error.message}`);
-    return Promise.reject(`Failed to fetch account recourses data: ${error.message}`);
+    return Promise.reject();
   }
 }
 export async function getToolsData(username: string) {
@@ -43,7 +43,7 @@ export async function getToolsData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch tools data: ${error.message}`);
-    return Promise.reject(`Failed to fetch tools data: ${error.message}`);
+    return Promise.reject();
   }
 }
 export async function getMbsData(username: string) {
@@ -55,7 +55,7 @@ export async function getMbsData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch mbs data: ${error.message}`);
-    return Promise.reject(`Failed to fetch mbs data: ${error.message}`);
+    return Promise.reject();
   }
 }
 
@@ -69,7 +69,7 @@ export async function getAccountData(username: string) {
     }
   } catch (error: any) {
     console.log(`Failed to fetch account data: ${error.message}`);
-    return Promise.reject(`Failed to fetch account data: ${error.message}`);
+    return Promise.reject();
   }
 }
 

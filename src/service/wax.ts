@@ -1,31 +1,31 @@
-import * as data from "../store/data";
 import * as waxjs from "@waxio/waxjs/dist";
 import { JsonRpc } from "eosjs";
 import { store } from "../store/store";
 import { pushLog } from "../store/slices/settings.slice";
 import { handleLogin } from "../store/slices/user.slice";
 
-let endpointNum = Math.floor(Math.random() * data.endpoints.length);
-const defaultEndpoint = data.endpoints[endpointNum];
+const endpoints: string[] = [
+  "https://chain.wax.io",
+  "https://wax.pink.gg",
+  "https://api.waxsweden.org",
+  "https://wax.eosphere.io",
+];
+
+let endpointNum = Math.floor(Math.random() * endpoints.length);
+const defaultEndpoint = endpoints[endpointNum];
+const log = `Current RPC endpoint - ${defaultEndpoint}`;
+store.dispatch(pushLog(log));
+
 export let rpc = new JsonRpc(defaultEndpoint);
 export let wax = new waxjs.WaxJS({
   rpcEndpoint: defaultEndpoint,
   tryAutoLogin: false,
 });
-// export function selectEndpoint(newEndpoint: string): void {
-//   const endpoint = newEndpoint;
-//   rpc = new JsonRpc(endpoint);
-//   wax = new waxjs.WaxJS({
-//     rpcEndpoint: endpoint,
-//     tryAutoLogin: false,
-//   });
-//   localStorage.endpoint = endpoint;
-//   console.log(`Connected to new endpoint - ${endpoint}`);
-// }
 
 export async function changeEndpoint() {
-  const newEndpointNum = endpointNum + 1 > data.endpoints.length - 1 ? 0 : endpointNum++;
-  const newEndpoint = data.endpoints[newEndpointNum];
+  const newEndpointNum = endpointNum + 1 >= endpoints.length ? 0 : endpointNum + 1;
+  console.log(endpointNum, newEndpointNum);
+  const newEndpoint = endpoints[newEndpointNum];
   const endpoint = newEndpoint;
   rpc = new JsonRpc(endpoint);
   wax = new waxjs.WaxJS({
@@ -33,7 +33,7 @@ export async function changeEndpoint() {
     tryAutoLogin: true,
   });
   await autoLogin();
-  const log = `Failed to fetch some data. Endpoint has been changed to new one - ${endpoint}. Refetch in 4 seconds.`;
+  const log = `Failed to fetch some data. Endpoint has been changed to new one - ${endpoint}. Refetch in 2 seconds.`;
   store.dispatch(pushLog(log));
 }
 
