@@ -4,7 +4,7 @@ import { store } from "../store/store";
 import { pushLog } from "../store/slices/settings.slice";
 import { handleLogin } from "../store/slices/user.slice";
 
-export const endpoints: string[] = [
+const endpoints: string[] = [
   "https://chain.wax.io",
   "https://wax.pink.gg",
   "https://api.waxsweden.org",
@@ -23,8 +23,8 @@ export let wax = new waxjs.WaxJS({
 });
 
 export async function changeEndpoint() {
-  endpointNum = endpointNum + 1 >= endpoints.length ? 0 : endpointNum + 1;
-  const newEndpoint = endpoints[endpointNum];
+  const newEndpointNum = endpointNum + 1 >= endpoints.length ? 0 : endpointNum + 1;
+  const newEndpoint = endpoints[newEndpointNum];
   const endpoint = newEndpoint;
   rpc = new JsonRpc(endpoint);
   wax = new waxjs.WaxJS({
