@@ -22,19 +22,19 @@ const NextAction = () => {
   let nextItem = user.items.next;
   const color = nextItem && "durability" in nextItem ? getTextColor(nextItem.type) : getTextColor("Crops");
 
-  // useEffect(() => {
-  //   if (triggerAction) {
-  //     (async () => {
-  //       dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-  //       if (!settings.soundIsDisabled) notificationSound();
-  //       await handleNextAction(user, settings);
-  //       await sleep(5000);
-  //       dispatch(toggleUpdateData(true));
-  //       await sleep(3000);
-  //       setTriggerAction(false);
-  //     })();
-  //   }
-  // }, [triggerAction]);
+  useEffect(() => {
+    if (triggerAction) {
+      (async () => {
+        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+        if (!settings.soundIsDisabled) notificationSound();
+        await handleNextAction(user, settings);
+        await sleep(5000);
+        dispatch(toggleUpdateData(true));
+        await sleep(3000);
+        setTriggerAction(false);
+      })();
+    }
+  }, [triggerAction]);
 
   if (!nextItem)
     return (
