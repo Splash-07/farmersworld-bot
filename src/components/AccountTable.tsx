@@ -64,7 +64,7 @@ const AccountTable = () => {
           ])
             .then(async (result) => {
               console.log(result);
-              dispatch(setNextAction());
+              dispatch(setNextAction(settings));
             })
             .catch(async (error: any) => {
               console.log("promise failed" + error);

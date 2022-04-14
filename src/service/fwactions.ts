@@ -228,9 +228,11 @@ export async function handleNextAction(user: UserState, settings: SettingsState)
   } else {
     const log = `<span style="color: #E53E3E;">Failed</span> to claim <span style="color: #feebc8;"><strong>${
       assetMap.get(nextItem!.template_id)?.name
-    }</strong></span>. (${response?.result})`;
+    }</strong></span> (asset id: ${nextItem.asset_id}). (${response?.result})`;
     store.dispatch(pushLog(log));
-    changeEndpoint();
+
+    if (response.result.includes("Failed to fetch")) changeEndpoint();
+
     console.log("Claim action FAILED", response?.result);
   }
 }

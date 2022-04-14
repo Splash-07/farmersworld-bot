@@ -13,7 +13,12 @@ export function getTextColor(type: string) {
   return colorsMap.get(type);
 }
 
-export function filterAnimalsList(animals: AnimalsResponse[], assetsInStash: AssetsInStash) {
+export function filterAnimalsList(
+  animals: AnimalsResponse[],
+  assetsInStash: AssetsInStash,
+  feedChickenIsDisabled: boolean,
+  feedDairyCowIsDisabled: boolean
+) {
   const filteredList = animals.filter((animal) => {
     // if (settings.feedDairyCowIsDisabled) return false;
     const { template_id, day_claims_at } = animal;
@@ -26,7 +31,7 @@ export function filterAnimalsList(animals: AnimalsResponse[], assetsInStash: Ass
     // if chick or chicken
     if (template_id === 298613 || template_id === 298614) {
       // Dont feed chiken if disabled
-      // if (template_id === 298614 && settings.feedChickenIsDisabled) return false;
+      if (template_id === 298614 && feedChickenIsDisabled) return false;
       if (assetsInStash.barley.length === 0) return false;
       if (dailyLimit && day_claims_at.length === dailyLimit) return false;
     }
@@ -38,7 +43,7 @@ export function filterAnimalsList(animals: AnimalsResponse[], assetsInStash: Ass
     // if Female Calf, Male Calf, Dairy Cow, Bull
     if (template_id === 298599 || template_id === 298600 || template_id === 298607 || template_id === 298611) {
       // Dont feed Dairy Cow
-      // if (template_id === 298607 && settings.feedDairyCowIsDisabled) return false;
+      if (template_id === 298607 && feedDairyCowIsDisabled) return false;
       if (assetsInStash.barley.length === 0) return false;
       if (dailyLimit && day_claims_at.length === dailyLimit) return false;
     }

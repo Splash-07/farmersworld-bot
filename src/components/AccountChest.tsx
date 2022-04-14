@@ -21,7 +21,7 @@ const AccountChest = () => {
       justifyContent="center"
       fontSize="15px"
     >
-      <Flex gap="20px" flexDir={"column"} flexWrap="wrap">
+      <Flex gap="10px" flexDir={"column"} flexWrap="wrap">
         <Text textAlign="center" textTransform="uppercase" fontWeight="semibold">
           Account Chest
         </Text>

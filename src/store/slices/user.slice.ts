@@ -18,6 +18,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { findLowestCD } from "../../utils/timers";
 import { filterAnimalsList, parseStringToNumber } from "../../utils/utils";
 import { animalsDailyClaimLimitMap } from "../data";
+import { SettingsState } from "./settings.slice";
 
 export interface UserState {
   username: string | null;
@@ -145,8 +146,14 @@ export const userSlice = createSlice({
       });
       state.items.assetsInStash = assetsInStash;
     },
-    setNextAction: (state) => {
-      const filteredAnimalList = filterAnimalsList(state.items.animalsList, state.items.assetsInStash);
+    setNextAction: (state, { payload }: { payload: SettingsState }) => {
+      const { feedChickenIsDisabled, feedDairyCowIsDisabled } = payload;
+      const filteredAnimalList = filterAnimalsList(
+        state.items.animalsList,
+        state.items.assetsInStash,
+        feedChickenIsDisabled,
+        feedDairyCowIsDisabled
+      );
       const lowCdItem = findLowestCD(
         state.items.toolsList,
         state.items.mbsList,
