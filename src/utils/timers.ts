@@ -20,7 +20,8 @@ export function sleep(ms: number) {
 }
 
 export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mbs: MbsResponse[]) {
-  const itemName = assetMap.get(item.template_id.toString())?.name;
+  const delay = 7000;
+  const itemName = assetMap.get(item.template_id)?.name;
   let timer = item.next_availability * 1000 - new Date().getTime();
   // if item is not Tool -> return timer
   if (!("durability" in item)) return timer;
@@ -31,11 +32,8 @@ export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mb
   // If item is tool and we have members card, then add additional time, tyo store items (so less operation will occurs -> less CPU usage)
   const exception = ["Ancient Stone Axe", "Mining Excavator"];
   const hour = exception.includes(itemName!) ? 7200000 : 3600000;
-  const additiveTime = mbsFiltered.reduce(
-    (acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())! * hour),
-    0
-  );
-  timer += additiveTime;
+  const additiveTime = mbsFiltered.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id)! * hour), 0);
+  timer += additiveTime + delay;
   return timer;
 }
 

@@ -1,8 +1,9 @@
-import { isAnimal, isMbs, isTool, isCrops } from "./../types/data.typeguards";
+import { NextAnimalItem } from "./../types/data.types";
+import { isAnimal, isMbs, isTool } from "./../types/data.typeguards";
 import { assetMap } from "./../store/data";
 import { pushLog, SettingsState } from "../store/slices/settings.slice";
 import { store } from "./../store/store";
-import { wax } from "./wax";
+import { changeEndpoint, wax } from "./wax";
 import { UserState } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
 
@@ -82,8 +83,8 @@ export async function actionClaimCrop(
 }
 export async function actionFeedAnimal(
   asset_id: string,
-  food_id: string,
-  username: string
+  username: string,
+  food_id: string
 ): Promise<{
   status: boolean;
   result: any;
@@ -107,7 +108,7 @@ export async function actionFeedAnimal(
     return { status: false, result: error.message };
   }
 }
-export async function actionPetEggs(
+export async function actionHatchEggs(
   asset_id: string,
   username: string
 ): Promise<{
@@ -182,43 +183,54 @@ export async function actionRepair(
   }
 }
 export async function handleAnimals(
-  username: string,
-  asset_id: string,
-  food_id?: string
+  nextItem: NextAnimalItem,
+  user: UserState
 ): Promise<{
   status: boolean;
   result: any;
 }> {
-  let response;
-  //  яица просто выращивать, животныз надо еще и кормить
-  response = await actionPetEggs(asset_id, username);
+  const { username, items } = user;
+  const { assetsInStash } = items;
+  const { template_id, asset_id } = nextItem;
 
+  let response;
+  //  hatch eggs
+  if (template_id === 298612) {
+    response = await actionHatchEggs(asset_id, username!);
+  } else {
+    let food_id;
+    // if baby calf
+    if (template_id === 298597) {
+      food_id = assetsInStash.milk[0];
+    } else {
+      food_id = assetsInStash.barley[0];
+    }
+    response = await actionFeedAnimal(asset_id, username!, food_id);
+  }
   return response;
 }
 export async function handleNextAction(user: UserState, settings: SettingsState) {
-  const item = user.items.next!;
+  const nextItem = user.items.next!;
   await handleToolRepair(user, settings);
   await handleEnergyRestore(user, settings);
-
   let response;
-  if (isTool(item)) response = await actionClaimTool(item.asset_id, user.username!);
 
-  if (isMbs(item)) response = await actionClaimMembership(item.asset_id, user.username!);
-
-  if (isCrops(item)) response = await actionClaimCrop(item.asset_id, user.username!);
-
-  if (isAnimal(item)) response = await handleAnimals(item.asset_id, user.username!);
+  if (isTool(nextItem)) response = await actionClaimTool(nextItem.asset_id, user.username!);
+  else if (isMbs(nextItem)) response = await actionClaimMembership(nextItem.asset_id, user.username!);
+  else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, user);
+  else response = await actionClaimCrop(nextItem.asset_id, user.username!);
 
   if (response?.status === true) {
     const log = `<span style="color: #38A169;">Successfully</span> claimed <span style="color: #feebc8;"><strong>${
-      assetMap.get(item!.template_id.toString())?.name
+      assetMap.get(nextItem!.template_id)?.name
     }</strong></span>.`;
     store.dispatch(pushLog(log));
   } else {
     const log = `<span style="color: #E53E3E;">Failed</span> to claim <span style="color: #feebc8;"><strong>${
-      assetMap.get(item!.template_id.toString())?.name
+      assetMap.get(nextItem!.template_id)?.name
     }</strong></span>. (${response?.result})`;
     store.dispatch(pushLog(log));
+    changeEndpoint();
     console.log("Claim action FAILED", response?.result);
   }
 }
@@ -230,16 +242,16 @@ export async function handleToolRepair(user: UserState, settings: SettingsState)
     const res = await actionRepair(tool.asset_id, user.username!);
     if (res.status === true) {
       const log = `<span style="color: #38A169;">Successfully</span> repaired <span style="color: #feebc8;"><strong>${
-        assetMap.get(tool.template_id.toString())?.name
+        assetMap.get(tool.template_id)?.name
       }</strong></span>.`;
       store.dispatch(pushLog(log));
       await sleep(2000);
     } else {
       const log = `<span style="color: #E53E3E;">Failed</span> to repair <span style="color: #feebc8;"><strong>${
-        assetMap.get(tool.template_id.toString())?.name
+        assetMap.get(tool.template_id)?.name
       }</strong></span>. (${res.result})`;
       store.dispatch(pushLog(log));
-      console.log(`Failed to repair ${assetMap.get(tool.template_id.toString())?.name}`, res.result);
+      console.log(`Failed to repair ${assetMap.get(tool.template_id)?.name}`, res.result);
     }
   }
 }

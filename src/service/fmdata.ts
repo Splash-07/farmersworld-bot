@@ -1,6 +1,7 @@
 import {
   setAccount,
   setAnimals,
+  setAssetsInStash,
   setBreedings,
   setCrops,
   setMbs,
@@ -11,6 +12,7 @@ import { store } from "../store/store";
 import {
   AccountResourcesResponse,
   AccountResponse,
+  AssetsInStashResponse,
   CropsResponse,
   TableRowEnums,
   ToolsResponse,
@@ -106,6 +108,18 @@ export async function getAccountData(username: string) {
   }
 }
 
+export async function getAssetsInStash(username: string) {
+  try {
+    const assetsInStashList = await getTableRowStash<AssetsInStashResponse>(username);
+    if (assetsInStashList) {
+      store.dispatch(setAssetsInStash(assetsInStashList));
+      return assetsInStashList;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch stash data: ${error.message}`);
+    return Promise.reject();
+  }
+}
 export async function getTableRow<Type>(userAccount: string, table: TableRowEnums): Promise<false | Type[]> {
   const index = {
     accounts: 1,
@@ -134,6 +148,24 @@ export async function getTableRow<Type>(userAccount: string, table: TableRowEnum
     return data.rows;
   } catch (error: any) {
     console.log(`Failed to fetch ${table} data: ${error.message}`);
+    return false;
+  }
+}
+
+export async function getTableRowStash<Type>(userAccount: string): Promise<false | Type[]> {
+  try {
+    const data = await rpc.get_table_rows({
+      json: true,
+      code: "atomicassets",
+      scope: userAccount,
+      table: "assets",
+      limit: 1000,
+      reverse: false,
+      show_payer: false,
+    });
+    return data.rows;
+  } catch (error: any) {
+    console.log(`Failed to fetch stash data: ${error.message}`);
     return false;
   }
 }

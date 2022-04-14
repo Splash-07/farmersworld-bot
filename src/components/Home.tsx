@@ -8,6 +8,9 @@ import Logger from "./Logger";
 import NextAction from "./NextAction";
 import Settings from "./Settings";
 import ItemList from "./ItemList";
+import AccountChest from "./AccountChest";
+import AccountResources from "./AccountResources";
+import Ad from "./Ad";
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
   const { username } = useSelector((state: RootState) => state.user);
@@ -28,23 +31,33 @@ const Home = () => {
       </Box>
     );
   return (
-    <Flex direction="column" marginTop="30px" gap="30px">
-      <AccountTable />
+    <Flex direction="column" marginTop="20px" gap="30px">
+      <Flex gap="10px" flexDir="column">
+        <Flex gap="10px">
+          <AccountTable />
+          <AccountChest />
+        </Flex>
+        <AccountResources />
+      </Flex>
       <Flex justifyContent="center" gap="30px" flexWrap={breakPoint720 ? "unset" : "wrap"}>
         <ItemList />
-        <Flex
-          alignSelf="flex-start"
-          flexDir="column"
-          gap="20px"
-          width="100%"
-          alignItems={breakPoint720 ? "unset" : "center"}
-        >
+        <Flex flexDir="column" alignContent="flex-start" gap="20px" width="100%">
           <NextAction />
-          <Settings />
+          <Flex gap="20px">
+            <Settings />
+            <Ad />
+          </Flex>
+          <Flex
+            gap="20px"
+            direction="column"
+            backgroundColor="whiteAlpha.100"
+            borderRadius="md"
+            padding="3"
+            boxShadow="md"
+          >
+            <Logger />
+          </Flex>
         </Flex>
-      </Flex>
-      <Flex gap="20px" direction="column" backgroundColor="whiteAlpha.100" borderRadius="md" padding="3" boxShadow="md">
-        <Logger />
       </Flex>
     </Flex>
   );

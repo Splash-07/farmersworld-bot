@@ -3,6 +3,8 @@ import {
   AccountResourcesResponse,
   AccountResponse,
   AnimalsResponse,
+  AssetsInStash,
+  AssetsInStashResponse,
   CropsResponse,
   MbsResponse,
   NextAnimalItem,
@@ -14,7 +16,8 @@ import {
 } from "./../../types/data.types";
 import { createSlice } from "@reduxjs/toolkit";
 import { findLowestCD } from "../../utils/timers";
-import { parseStringToNumber } from "../../utils/utils";
+import { filterAnimalsList, parseStringToNumber } from "../../utils/utils";
+import { animalsDailyClaimLimitMap } from "../data";
 
 export interface UserState {
   username: string | null;
@@ -26,6 +29,7 @@ export interface UserState {
     cropsList: CropsResponse[];
     breedingsList: any[];
     animalsList: AnimalsResponse[];
+    assetsInStash: AssetsInStash;
     next?: NextToolItem | NextMbsItem | NextCropsItem | NextAnimalItem;
   };
 }
@@ -40,6 +44,13 @@ const initialState: UserState = {
     mbsList: [],
     breedingsList: [],
     animalsList: [],
+    assetsInStash: {
+      milk: [],
+      barley: [],
+      corn: [],
+      eggs: [],
+      coins: [],
+    },
     next: undefined,
   },
 };
@@ -94,12 +105,53 @@ export const userSlice = createSlice({
     setAnimals: (state, { payload }) => {
       state.items.animalsList = payload;
     },
+    setAssetsInStash: (state, { payload }: { payload: AssetsInStashResponse[] }) => {
+      const assetsInStash: AssetsInStash = {
+        milk: [],
+        barley: [],
+        corn: [],
+        eggs: [],
+        coins: [],
+      };
+      payload.forEach((asset) => {
+        const { template_id, asset_id } = asset;
+        switch (template_id) {
+          case 298593:
+            if (!assetsInStash.milk.includes(asset_id)) {
+              assetsInStash.milk.push(asset_id);
+            }
+            break;
+          case 318606:
+            if (!assetsInStash.barley.includes(asset_id)) {
+              assetsInStash.barley.push(asset_id);
+            }
+            break;
+          case 318607:
+            if (!assetsInStash.corn.includes(asset_id)) {
+              assetsInStash.corn.push(asset_id);
+            }
+            break;
+          case 298612:
+            if (!assetsInStash.eggs.includes(asset_id)) {
+              assetsInStash.eggs.push(asset_id);
+            }
+            break;
+          case 260676:
+            if (!assetsInStash.coins.includes(asset_id)) {
+              assetsInStash.coins.push(asset_id);
+            }
+            break;
+        }
+      });
+      state.items.assetsInStash = assetsInStash;
+    },
     setNextAction: (state) => {
+      const filteredAnimalList = filterAnimalsList(state.items.animalsList, state.items.assetsInStash);
       const lowCdItem = findLowestCD(
         state.items.toolsList,
         state.items.mbsList,
         state.items.cropsList,
-        state.items.animalsList
+        filteredAnimalList
       );
       state.items.next = {
         ...lowCdItem.item,
@@ -119,6 +171,7 @@ export const {
   setAccount,
   setBreedings,
   setAnimals,
+  setAssetsInStash,
 } = userSlice.actions;
 
 export default userSlice.reducer;

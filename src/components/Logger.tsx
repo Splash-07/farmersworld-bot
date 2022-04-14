@@ -20,7 +20,7 @@ const Logger = () => {
       </Text>
       <Flex
         ref={log}
-        height="200px"
+        height="350px"
         direction="column"
         backgroundColor="whiteAlpha.100"
         borderRadius="md"

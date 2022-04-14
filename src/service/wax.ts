@@ -23,8 +23,8 @@ export let wax = new waxjs.WaxJS({
 });
 
 export async function changeEndpoint() {
-  const newEndpointNum = endpointNum + 1 >= endpoints.length ? 0 : endpointNum + 1;
-  const newEndpoint = endpoints[newEndpointNum];
+  endpointNum = endpointNum + 1 >= endpoints.length ? 0 : endpointNum + 1;
+  const newEndpoint = endpoints[endpointNum];
   const endpoint = newEndpoint;
   rpc = new JsonRpc(endpoint);
   wax = new waxjs.WaxJS({
