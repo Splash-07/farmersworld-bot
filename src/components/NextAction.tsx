@@ -61,12 +61,13 @@ const NextAction = () => {
       fontSize="15px"
     >
       <Countdown setTriggerAction={setTriggerAction} timer={nextItem.timer_to_action} />
-      <Flex gap="3px" alignItems="center">
+      <Flex gap="5px" alignItems="center">
         <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>
           {assetMap.get(nextItem.template_id)?.name}
         </Text>
         <Text>{`${"durability" in nextItem ? `(${nextItem.current_durability}/${nextItem.durability})` : ""}`}</Text>
+        <Text>{`[id:${nextItem.asset_id}]`}</Text>
       </Flex>
     </Flex>
   );
