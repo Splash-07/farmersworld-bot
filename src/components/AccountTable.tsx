@@ -2,7 +2,15 @@ import { Box, Flex, Image, Skeleton, Slider, SliderFilledTrack, SliderTrack, Tex
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getAccountData, getCropsData, getMbsData, getResourcesData, getToolsData } from "../service/fmdata";
+import {
+  getAccountData,
+  getAnimalsData,
+  getBreedingsData,
+  getCropsData,
+  getMbsData,
+  getResourcesData,
+  getToolsData,
+} from "../service/fmdata";
 import { RootState } from "../store/store";
 
 import woodIcon from "../assets/icons/wood-icon.png";
@@ -53,6 +61,8 @@ const AccountTable = () => {
             getToolsData(user.username),
             getMbsData(user.username),
             getCropsData(user.username),
+            getBreedingsData(user.username),
+            getAnimalsData(user.username),
           ])
             .then(async (result) => {
               console.log(result);
@@ -62,7 +72,7 @@ const AccountTable = () => {
               console.log("promise failed" + error);
               await changeEndpoint();
               dispatch(toggleUpdateData(false));
-              await sleep(4000);
+              await sleep(2000);
               dispatch(toggleUpdateData(true));
             });
         }

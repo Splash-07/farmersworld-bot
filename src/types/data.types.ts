@@ -72,6 +72,19 @@ export interface CropsResponse {
   template_id: number;
   times_claimed: number;
 }
+export interface AnimalsResponse {
+  asset_id: string;
+  building_id: string;
+  day_claims_at: any[];
+  gender: number;
+  last_claimed: number;
+  name: string;
+  next_availability: number;
+  owner: string;
+  partner_id: number;
+  template_id: number;
+  times_claimed: number;
+}
 
 export interface NextToolItem extends ToolsResponse {
   timer_to_action: number;
@@ -80,6 +93,9 @@ export interface NextMbsItem extends MbsResponse {
   timer_to_action: number;
 }
 export interface NextCropsItem extends CropsResponse {
+  timer_to_action: number;
+}
+export interface NextAnimalItem extends CropsResponse {
   timer_to_action: number;
 }
 

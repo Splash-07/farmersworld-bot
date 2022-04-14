@@ -1,8 +1,9 @@
 import { Box, Flex, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { assetNameMap, cornsRequiredClaimMap, filterMbsByType, mbsMultiMap } from "../store/data";
+import { assetMap, filterMbsByType, itemsClaimRequiredMap, mbsMultiMap } from "../store/data";
 import { RootState } from "../store/store";
-import { CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
+import { isTool } from "../types/data.typeguards";
+import { AnimalsResponse, CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
 import { adjustTime, msToTime } from "../utils/timers";
 import { getTextColor } from "../utils/utils";
 
@@ -21,22 +22,22 @@ const ItemList = () => {
   }
 
   function renderAsset(
-    responseItem: ToolsResponse | MbsResponse | CropsResponse,
+    responseItem: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse,
     template_id: string,
     key: number,
     mbs: MbsResponse[]
   ) {
-    const toolName = assetNameMap.get(template_id);
-    if (!toolName) return;
-
-    const color = "type" in responseItem ? getTextColor(responseItem.type) : getTextColor("Crops");
+    const tool = assetMap.get(template_id);
+    if (!tool) return;
+    const { name, type } = tool;
+    const color = getTextColor(type);
     const timer = adjustTime(responseItem, mbs);
     // IF item is not Tool, return without store count
-    if (!("durability" in responseItem)) {
+    if (!isTool(responseItem)) {
       return (
         <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
           <Box overflow="hidden" isTruncated color={color} w="100%">
-            {toolName}
+            {name}
           </Box>
           <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
             {msToTime(timer)}
@@ -44,7 +45,7 @@ const ItemList = () => {
           {"times_claimed" in responseItem ? (
             <Flex justifyContent="center" w="50%" fontSize="14px">{`${
               responseItem.times_claimed
-            }/${cornsRequiredClaimMap.get(responseItem.template_id.toString())}`}</Flex>
+            }/${itemsClaimRequiredMap.get(responseItem.template_id.toString())}`}</Flex>
           ) : (
             <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
           )}
@@ -54,14 +55,14 @@ const ItemList = () => {
 
     // count store/max store
     const exception = ["Ancient Stone Axe", "Mining Excavator"];
-    const hour = exception.includes(toolName) ? 7200000 : 3600000;
+    const hour = exception.includes(name) ? 7200000 : 3600000;
     const filteredMbs = filterMbsByType(mbs, responseItem.type);
     const canBeStored = filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())!), 0) + 1;
     const currentlyStored = canBeStored - Math.ceil(timer / hour);
     return (
       <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
         <Box overflow="hidden" isTruncated color={color} w="100%">
-          {toolName}
+          {name}
         </Box>
         <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
           {msToTime(timer)}
@@ -113,9 +114,12 @@ const ItemList = () => {
           sortList(items.toolsList).map((tool, index) =>
             renderAsset(tool, tool.template_id.toString(), index, items.mbsList)
           )}
-        {items.cropsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
+        {items.animalsList.map((animal, index) =>
+          renderAsset(animal, animal.template_id.toString(), index, items.mbsList)
+        )}
+        {items.cropsList.map((crop, index) => renderAsset(crop, crop.template_id.toString(), index, items.mbsList))}
         {items.mbsList &&
-          items.mbsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
+          items.mbsList.map((mbs, index) => renderAsset(mbs, mbs.template_id.toString(), index, items.mbsList))}
       </Grid>
     </Grid>
   );

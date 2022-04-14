@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { sleep } from "../utils/timers";
 import { handleNextAction } from "../service/fwactions";
-import { assetNameMap } from "../store/data";
 import Countdown from "./Countdown";
 import useSound from "use-sound";
 import { toggleUpdateData } from "../store/slices/settings.slice";
 import { getTextColor } from "../utils/utils";
+import { assetMap } from "../store/data";
 const notify_sound = require("../assets/notify_sound.mp3");
 
 const NextAction = () => {
@@ -53,7 +53,6 @@ const NextAction = () => {
         </Skeleton>
       </Flex>
     );
-
   return (
     <Flex
       gap={"5px"}
@@ -69,7 +68,7 @@ const NextAction = () => {
       <Flex gap="3px" alignItems="center">
         <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>
-          {assetNameMap.get(nextItem.template_id.toString())}
+          {assetMap.get(nextItem.template_id.toString())?.name}
         </Text>
         <Text>{`${"durability" in nextItem ? `(${nextItem.current_durability}/${nextItem.durability})` : ""}`}</Text>
       </Flex>

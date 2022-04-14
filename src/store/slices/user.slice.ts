@@ -2,8 +2,10 @@ import {
   Account,
   AccountResourcesResponse,
   AccountResponse,
+  AnimalsResponse,
   CropsResponse,
   MbsResponse,
+  NextAnimalItem,
   NextCropsItem,
   NextMbsItem,
   NextToolItem,
@@ -22,7 +24,9 @@ export interface UserState {
     toolsList: ToolsResponse[];
     mbsList: MbsResponse[];
     cropsList: CropsResponse[];
-    next?: NextToolItem | NextMbsItem | NextCropsItem;
+    breedingsList: any[];
+    animalsList: AnimalsResponse[];
+    next?: NextToolItem | NextMbsItem | NextCropsItem | NextAnimalItem;
   };
 }
 
@@ -34,6 +38,8 @@ const initialState: UserState = {
     toolsList: [],
     cropsList: [],
     mbsList: [],
+    breedingsList: [],
+    animalsList: [],
     next: undefined,
   },
 };
@@ -82,8 +88,19 @@ export const userSlice = createSlice({
     setCrops: (state, { payload }) => {
       state.items.cropsList = payload;
     },
+    setBreedings: (state, { payload }) => {
+      state.items.breedingsList = payload;
+    },
+    setAnimals: (state, { payload }) => {
+      state.items.animalsList = payload;
+    },
     setNextAction: (state) => {
-      const lowCdItem = findLowestCD(state.items.toolsList, state.items.mbsList, state.items.cropsList);
+      const lowCdItem = findLowestCD(
+        state.items.toolsList,
+        state.items.mbsList,
+        state.items.cropsList,
+        state.items.animalsList
+      );
       state.items.next = {
         ...lowCdItem.item,
         timer_to_action: lowCdItem.timer,
@@ -92,6 +109,16 @@ export const userSlice = createSlice({
   },
 });
 
-export const { handleLogin, setResources, setTools, setMbs, setCrops, setNextAction, setAccount } = userSlice.actions;
+export const {
+  handleLogin,
+  setResources,
+  setTools,
+  setMbs,
+  setCrops,
+  setNextAction,
+  setAccount,
+  setBreedings,
+  setAnimals,
+} = userSlice.actions;
 
 export default userSlice.reducer;

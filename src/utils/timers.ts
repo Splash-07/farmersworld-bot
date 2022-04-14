@@ -1,5 +1,5 @@
-import { CropsResponse } from "./../types/data.types";
-import { assetNameMap } from "./../store/data";
+import { assetMap } from "./../store/data";
+import { AnimalsResponse, CropsResponse } from "./../types/data.types";
 import { filterMbsByType, mbsMultiMap } from "../store/data";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
 
@@ -20,7 +20,7 @@ export function sleep(ms: number) {
 }
 
 export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mbs: MbsResponse[]) {
-  const itemName = assetNameMap.get(item.template_id.toString());
+  const itemName = assetMap.get(item.template_id.toString())?.name;
   let timer = item.next_availability * 1000 - new Date().getTime();
   // if item is not Tool -> return timer
   if (!("durability" in item)) return timer;
@@ -39,8 +39,13 @@ export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mb
   return timer;
 }
 
-export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[], crops: CropsResponse[]) {
-  const array = [...tools, ...mbs, ...crops];
+export function findLowestCD(
+  tools: ToolsResponse[],
+  mbs: MbsResponse[],
+  crops: CropsResponse[],
+  animals: AnimalsResponse[]
+) {
+  const array = [...tools, ...mbs, ...crops, ...animals];
   const adjustedTimeArray = array.map((item) => {
     return {
       ...item,
