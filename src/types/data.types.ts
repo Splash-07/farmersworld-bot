@@ -103,19 +103,6 @@ export interface AssetsInStash {
   coins: string[];
 }
 
-export interface NextToolItem extends ToolsResponse {
-  timer_to_action: number;
-}
-export interface NextMbsItem extends MbsResponse {
-  timer_to_action: number;
-}
-export interface NextCropsItem extends CropsResponse {
-  timer_to_action: number;
-}
-export interface NextAnimalItem extends CropsResponse {
-  timer_to_action: number;
-}
-
 export interface DataInfoInterface {
   name: string;
   template_id: string;

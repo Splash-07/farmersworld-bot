@@ -1,4 +1,3 @@
-import { NextAnimalItem } from "./../types/data.types";
 import { isAnimal, isMbs, isTool } from "./../types/data.typeguards";
 import { assetMap } from "./../store/data";
 import { pushLog, SettingsState } from "../store/slices/settings.slice";
@@ -6,6 +5,7 @@ import { store } from "./../store/store";
 import { changeEndpoint, wax } from "./wax";
 import { UserState } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
+import { AnimalsResponse } from "../types/data.types";
 
 export async function actionClaimTool(
   asset_id: string,
@@ -183,7 +183,7 @@ export async function actionRepair(
   }
 }
 export async function handleAnimals(
-  nextItem: NextAnimalItem,
+  nextItem: AnimalsResponse,
   user: UserState
 ): Promise<{
   status: boolean;

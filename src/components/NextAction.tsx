@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { sleep } from "../utils/timers";
 import { handleNextAction } from "../service/fwactions";
-import Countdown from "./Countdown";
+import { MemoisedCountdown } from "./Countdown";
 import { toggleUpdateData } from "../store/slices/settings.slice";
 import { getTextColor } from "../utils/utils";
 import { assetMap } from "../store/data";
@@ -22,7 +22,7 @@ const NextAction = () => {
       (async () => {
         dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
         await handleNextAction(user, settings);
-        await sleep(5000);
+        await sleep(10000);
         dispatch(toggleUpdateData(true));
       })();
     }
@@ -57,7 +57,7 @@ const NextAction = () => {
       justifyContent="center"
       fontSize="15px"
     >
-      <Countdown timer={nextItem.timer_to_action} />
+      <MemoisedCountdown timer={nextItem.next_availability} />
       <Flex gap="5px" alignItems="center">
         <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>

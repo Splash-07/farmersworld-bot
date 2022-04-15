@@ -7,10 +7,6 @@ import {
   AssetsInStashResponse,
   CropsResponse,
   MbsResponse,
-  NextAnimalItem,
-  NextCropsItem,
-  NextMbsItem,
-  NextToolItem,
   Resources,
   ToolsResponse,
 } from "./../../types/data.types";
@@ -31,7 +27,7 @@ export interface UserState {
     breedingsList: any[];
     animalsList: AnimalsResponse[];
     assetsInStash: AssetsInStash;
-    next?: NextToolItem | NextMbsItem | NextCropsItem | NextAnimalItem;
+    next?: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse;
   };
 }
 
@@ -160,10 +156,7 @@ export const userSlice = createSlice({
         state.items.cropsList,
         filteredAnimalList
       );
-      state.items.next = {
-        ...lowCdItem.item,
-        timer_to_action: lowCdItem.timer,
-      };
+      state.items.next = lowCdItem;
     },
   },
 });

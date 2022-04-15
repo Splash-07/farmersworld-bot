@@ -24,8 +24,8 @@ export function filterDailyLimits(dayClaimList: number[]) {
   return dayClaimList.filter((time) => new Date().getTime() - time * 1000 > dayInMs);
 }
 
-export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mbs: MbsResponse[]) {
-  const delay = 4000;
+export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse, mbs: MbsResponse[]) {
+  const delay = 10000;
   const itemName = assetMap.get(item.template_id)?.name;
   let timer = item.next_availability * 1000 - new Date().getTime();
   // if item is not Tool -> return timer
@@ -59,5 +59,5 @@ export function findLowestCD(
     return prev.next_availability < cur.next_availability ? prev : cur;
   });
 
-  return { item: foundedItem, timer: foundedItem.next_availability };
+  return foundedItem;
 }
