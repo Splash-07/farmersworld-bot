@@ -2,17 +2,19 @@ import {
   Account,
   AccountResourcesResponse,
   AccountResponse,
+  AnimalsResponse,
+  AssetsInStash,
+  AssetsInStashResponse,
   CropsResponse,
   MbsResponse,
-  NextCropsItem,
-  NextMbsItem,
-  NextToolItem,
   Resources,
   ToolsResponse,
 } from "./../../types/data.types";
 import { createSlice } from "@reduxjs/toolkit";
 import { findLowestCD } from "../../utils/timers";
 import { parseStringToNumber } from "../../utils/utils";
+import { SettingsState } from "./settings.slice";
+import { filterAnimalList } from "../data";
 
 export interface UserState {
   username: string | null;
@@ -22,7 +24,10 @@ export interface UserState {
     toolsList: ToolsResponse[];
     mbsList: MbsResponse[];
     cropsList: CropsResponse[];
-    next?: NextToolItem | NextMbsItem | NextCropsItem;
+    breedingsList: any[];
+    animalsList: AnimalsResponse[];
+    assetsInStash: AssetsInStash;
+    next?: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse;
   };
 }
 
@@ -34,6 +39,15 @@ const initialState: UserState = {
     toolsList: [],
     cropsList: [],
     mbsList: [],
+    breedingsList: [],
+    animalsList: [],
+    assetsInStash: {
+      milk: [],
+      barley: [],
+      corn: [],
+      eggs: [],
+      coins: [],
+    },
     next: undefined,
   },
 };
@@ -82,16 +96,82 @@ export const userSlice = createSlice({
     setCrops: (state, { payload }) => {
       state.items.cropsList = payload;
     },
-    setNextAction: (state) => {
-      const lowCdItem = findLowestCD(state.items.toolsList, state.items.mbsList, state.items.cropsList);
-      state.items.next = {
-        ...lowCdItem.item,
-        timer_to_action: lowCdItem.timer,
+    setBreedings: (state, { payload }) => {
+      state.items.breedingsList = payload;
+    },
+    setAnimals: (state, { payload }) => {
+      state.items.animalsList = payload;
+    },
+    setAssetsInStash: (state, { payload }: { payload: AssetsInStashResponse[] }) => {
+      const assetsInStash: AssetsInStash = {
+        milk: [],
+        barley: [],
+        corn: [],
+        eggs: [],
+        coins: [],
       };
+      payload.forEach((asset) => {
+        const { template_id, asset_id } = asset;
+        switch (template_id) {
+          case 298593:
+            if (!assetsInStash.milk.includes(asset_id)) {
+              assetsInStash.milk.push(asset_id);
+            }
+            break;
+          case 318606:
+            if (!assetsInStash.barley.includes(asset_id)) {
+              assetsInStash.barley.push(asset_id);
+            }
+            break;
+          case 318607:
+            if (!assetsInStash.corn.includes(asset_id)) {
+              assetsInStash.corn.push(asset_id);
+            }
+            break;
+          case 298612:
+            if (!assetsInStash.eggs.includes(asset_id)) {
+              assetsInStash.eggs.push(asset_id);
+            }
+            break;
+          case 260676:
+            if (!assetsInStash.coins.includes(asset_id)) {
+              assetsInStash.coins.push(asset_id);
+            }
+            break;
+        }
+      });
+      state.items.assetsInStash = assetsInStash;
+    },
+    setNextAction: (state, { payload }: { payload: SettingsState }) => {
+      const { feedChickenIsDisabled, feedDairyCowIsDisabled } = payload;
+      const filteredAnimalList = filterAnimalList(
+        state.items.animalsList,
+        state.items.assetsInStash,
+        feedChickenIsDisabled,
+        feedDairyCowIsDisabled
+      );
+      const lowCdItem = findLowestCD(
+        state.items.toolsList,
+        state.items.mbsList,
+        state.items.cropsList,
+        filteredAnimalList
+      );
+      state.items.next = lowCdItem;
     },
   },
 });
 
-export const { handleLogin, setResources, setTools, setMbs, setCrops, setNextAction, setAccount } = userSlice.actions;
+export const {
+  handleLogin,
+  setResources,
+  setTools,
+  setMbs,
+  setCrops,
+  setNextAction,
+  setAccount,
+  setBreedings,
+  setAnimals,
+  setAssetsInStash,
+} = userSlice.actions;
 
 export default userSlice.reducer;

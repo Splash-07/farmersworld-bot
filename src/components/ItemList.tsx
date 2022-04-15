@@ -1,9 +1,16 @@
-import { Box, Flex, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Text, useMediaQuery } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { assetNameMap, cornsRequiredClaimMap, filterMbsByType, mbsMultiMap } from "../store/data";
+import {
+  animalsDailyClaimLimitMap,
+  assetMap,
+  filterMbsByType,
+  itemsClaimRequiredMap,
+  mbsMultiMap,
+} from "../store/data";
 import { RootState } from "../store/store";
-import { CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
-import { adjustTime, msToTime } from "../utils/timers";
+import { isAnimal, isTool } from "../types/data.typeguards";
+import { AnimalsResponse, CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
+import { adjustTime, filterDailyLimits, msToTime } from "../utils/timers";
 import { getTextColor } from "../utils/utils";
 
 const ItemList = () => {
@@ -21,47 +28,73 @@ const ItemList = () => {
   }
 
   function renderAsset(
-    responseItem: ToolsResponse | MbsResponse | CropsResponse,
-    template_id: string,
+    responseItem: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse,
+    template_id: number,
     key: number,
     mbs: MbsResponse[]
   ) {
-    const toolName = assetNameMap.get(template_id);
-    if (!toolName) return;
-
-    const color = "type" in responseItem ? getTextColor(responseItem.type) : getTextColor("Crops");
+    const asset = assetMap.get(template_id);
+    if (!asset) return;
+    const { name, type } = asset;
+    const color = getTextColor(type);
     const timer = adjustTime(responseItem, mbs);
     // IF item is not Tool, return without store count
-    if (!("durability" in responseItem)) {
-      return (
-        <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
-          <Box overflow="hidden" isTruncated color={color} w="100%">
-            {toolName}
-          </Box>
-          <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
-            {msToTime(timer)}
-          </Flex>
-          {"times_claimed" in responseItem ? (
-            <Flex justifyContent="center" w="50%" fontSize="14px">{`${
-              responseItem.times_claimed
-            }/${cornsRequiredClaimMap.get(responseItem.template_id.toString())}`}</Flex>
-          ) : (
-            <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
-          )}
-        </GridItem>
-      );
+    if (!isTool(responseItem)) {
+      if (isAnimal(responseItem)) {
+        const { day_claims_at, template_id } = responseItem;
+        const dayLimit = animalsDailyClaimLimitMap.get(template_id);
+        return (
+          <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+            <Box overflow="hidden" isTruncated color={color} w="100%">
+              {name}
+            </Box>
+            {dayLimit && filterDailyLimits(day_claims_at).length === 0 ? (
+              <Flex justifyContent="center" w="100%" fontSize="14px" color="tomato">
+                Reached daily claim limit
+              </Flex>
+            ) : (
+              <>
+                <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+                  {msToTime(timer)}
+                </Flex>
+                <Flex justifyContent="center" w="50%" fontSize="14px">{`${
+                  responseItem.times_claimed
+                }/${itemsClaimRequiredMap.get(template_id)}`}</Flex>
+              </>
+            )}
+          </GridItem>
+        );
+      } else {
+        return (
+          <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+            <Box overflow="hidden" isTruncated color={color} w="100%">
+              {name}
+            </Box>
+            <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+              {msToTime(timer)}
+            </Flex>
+            {"times_claimed" in responseItem ? (
+              <Flex justifyContent="center" w="50%" fontSize="14px">{`${
+                responseItem.times_claimed
+              }/${itemsClaimRequiredMap.get(responseItem.template_id)}`}</Flex>
+            ) : (
+              <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
+            )}
+          </GridItem>
+        );
+      }
     }
 
     // count store/max store
     const exception = ["Ancient Stone Axe", "Mining Excavator"];
-    const hour = exception.includes(toolName) ? 7200000 : 3600000;
+    const hour = exception.includes(name) ? 7200000 : 3600000;
     const filteredMbs = filterMbsByType(mbs, responseItem.type);
-    const canBeStored = filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())!), 0) + 1;
+    const canBeStored = filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id)!), 0) + 1;
     const currentlyStored = canBeStored - Math.ceil(timer / hour);
     return (
       <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
         <Box overflow="hidden" isTruncated color={color} w="100%">
-          {toolName}
+          {name}
         </Box>
         <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
           {msToTime(timer)}
@@ -81,7 +114,7 @@ const ItemList = () => {
       boxShadow="md"
       overflowX="auto"
       w="100%"
-      maxWidth="400px"
+      maxWidth="450px"
     >
       <GridItem display="flex" alignItems="center" justifyContent="space-between" w="100%" textAlign={"center"}>
         <Flex w="100%" justifyContent="center">
@@ -95,8 +128,8 @@ const ItemList = () => {
         </Flex>
       </GridItem>
       <Grid
-        gap="1px"
-        maxHeight="300px"
+        marginTop="10px"
+        gap="10px"
         overflowY="auto"
         sx={{
           "&::-webkit-scrollbar": {
@@ -109,13 +142,75 @@ const ItemList = () => {
           },
         }}
       >
-        {items.toolsList &&
-          sortList(items.toolsList).map((tool, index) =>
-            renderAsset(tool, tool.template_id.toString(), index, items.mbsList)
-          )}
-        {items.cropsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
-        {items.mbsList &&
-          items.mbsList.map((tool, index) => renderAsset(tool, tool.template_id.toString(), index, items.mbsList))}
+        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+          <Text
+            textAlign="center"
+            textTransform="uppercase"
+            paddingTop="1"
+            paddingBottom="1"
+            paddingLeft="4"
+            paddingRight="4"
+            borderRadius="md"
+            boxShadow="md"
+            backgroundColor="whiteAlpha.100"
+            marginBottom="10px"
+          >
+            Tools
+          </Text>
+          {items.toolsList &&
+            sortList(items.toolsList).map((tool, index) => renderAsset(tool, tool.template_id, index, items.mbsList))}
+        </GridItem>
+        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+          <Text
+            textAlign="center"
+            textTransform="uppercase"
+            paddingTop="1"
+            paddingBottom="1"
+            paddingLeft="4"
+            paddingRight="4"
+            borderRadius="md"
+            boxShadow="md"
+            backgroundColor="whiteAlpha.100"
+            marginBottom="10px"
+          >
+            Crops
+          </Text>
+          {items.cropsList.map((crop, index) => renderAsset(crop, crop.template_id, index, items.mbsList))}
+        </GridItem>
+        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+          <Text
+            textAlign="center"
+            textTransform="uppercase"
+            paddingTop="1"
+            paddingBottom="1"
+            paddingLeft="4"
+            paddingRight="4"
+            borderRadius="md"
+            boxShadow="md"
+            backgroundColor="whiteAlpha.100"
+            marginBottom="10px"
+          >
+            Animals
+          </Text>
+          {items.animalsList.map((animal, index) => renderAsset(animal, animal.template_id, index, items.mbsList))}
+        </GridItem>
+        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+          <Text
+            textAlign="center"
+            textTransform="uppercase"
+            paddingTop="1"
+            paddingBottom="1"
+            paddingLeft="4"
+            paddingRight="4"
+            borderRadius="md"
+            boxShadow="md"
+            backgroundColor="whiteAlpha.100"
+            marginBottom="10px"
+          >
+            Memberships
+          </Text>
+          {items.mbsList && items.mbsList.map((mbs, index) => renderAsset(mbs, mbs.template_id, index, items.mbsList))}
+        </GridItem>
       </Grid>
     </Grid>
   );

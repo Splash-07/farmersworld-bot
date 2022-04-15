@@ -5,23 +5,26 @@ export interface SettingsState {
   minRepair: number;
   minEnergy: number;
   minFood: number;
+  loggerArray: string[];
   updateData: boolean;
-  additionalTimer: number;
+  triggerNextAction: boolean;
   repairIsDisabled: boolean;
   energyIsDisabled: boolean;
-  loggerArray: string[];
-  soundIsDisabled: boolean;
+  feedChickenIsDisabled: boolean;
+  feedDairyCowIsDisabled: boolean;
 }
 const initialState: SettingsState = {
   minRepair: 50,
   minEnergy: 200,
   minFood: 100,
-  additionalTimer: 10000,
+  loggerArray: [],
+  updateData: false,
+  triggerNextAction: false,
   repairIsDisabled: false,
   energyIsDisabled: false,
-  loggerArray: [],
-  soundIsDisabled: true,
-  updateData: false,
+
+  feedChickenIsDisabled: true,
+  feedDairyCowIsDisabled: true,
 };
 
 export const settingsSlice = createSlice({
@@ -67,15 +70,29 @@ export const settingsSlice = createSlice({
       state.energyIsDisabled = !state.energyIsDisabled;
       state.loggerArray.push(log);
     },
-    toggleSoundNotification: (state) => {
+
+    toggleFeedDairyCows: (state) => {
       const log = logger(
-        `Sound notification has been <span style="color: #feebc8;"><strong>${
-          !state.soundIsDisabled ? "disabled" : "enabled"
+        `Dairy cow feeding has been <span style="color: #feebc8;"><strong>${
+          !state.feedDairyCowIsDisabled ? "disabled" : "enabled"
         }</strong></span>.`
       );
-      state.soundIsDisabled = !state.soundIsDisabled;
+      state.feedDairyCowIsDisabled = !state.feedDairyCowIsDisabled;
       state.loggerArray.push(log);
     },
+    toggleFeedChickens: (state) => {
+      const log = logger(
+        `Chicken feeding has been <span style="color: #feebc8;"><strong>${
+          !state.feedChickenIsDisabled ? "disabled" : "enabled"
+        }</strong></span>.`
+      );
+      state.feedChickenIsDisabled = !state.feedChickenIsDisabled;
+      state.loggerArray.push(log);
+    },
+    triggerNextAction: (state, { payload }) => {
+      state.triggerNextAction = payload;
+    },
+
     pushLog: (state, { payload }) => {
       const log = logger(payload);
       state.loggerArray.push(log);
@@ -84,13 +101,15 @@ export const settingsSlice = createSlice({
 });
 
 export const {
-  toggleSoundNotification,
   setMinRepair,
   setMinEnergy,
   setMinFood,
   toggleUpdateData,
+  triggerNextAction,
   toggleRepair,
   toggleEnergy,
+  toggleFeedChickens,
+  toggleFeedDairyCows,
   pushLog,
 } = settingsSlice.actions;
 

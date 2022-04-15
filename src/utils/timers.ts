@@ -1,5 +1,5 @@
-import { CropsResponse } from "./../types/data.types";
-import { assetNameMap } from "./../store/data";
+import { assetMap } from "./../store/data";
+import { AnimalsResponse, CropsResponse } from "./../types/data.types";
 import { filterMbsByType, mbsMultiMap } from "../store/data";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
 
@@ -18,29 +18,37 @@ export function msToTime(ms: number) {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+export function filterDailyLimits(dayClaimList: number[]) {
+  const dayInMs = 86832000; // ~=  1 day 7 min. 12 sec.
 
-export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mbs: MbsResponse[]) {
-  const itemName = assetNameMap.get(item.template_id.toString());
+  return dayClaimList.filter((time) => new Date().getTime() - time * 1000 > dayInMs);
+}
+
+export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse, mbs: MbsResponse[]) {
+  const delay = 10000;
+  const itemName = assetMap.get(item.template_id)?.name;
   let timer = item.next_availability * 1000 - new Date().getTime();
   // if item is not Tool -> return timer
-  if (!("durability" in item)) return timer;
+  if (!("durability" in item)) return timer + delay;
 
   const mbsFiltered = filterMbsByType(mbs, item.type);
-  if (mbsFiltered.length === 0) return timer;
+  if (mbsFiltered.length === 0) return timer + delay;
 
   // If item is tool and we have members card, then add additional time, tyo store items (so less operation will occurs -> less CPU usage)
   const exception = ["Ancient Stone Axe", "Mining Excavator"];
   const hour = exception.includes(itemName!) ? 7200000 : 3600000;
-  const additiveTime = mbsFiltered.reduce(
-    (acc, cur) => (acc += mbsMultiMap.get(cur.template_id.toString())! * hour),
-    0
-  );
+  const additiveTime = mbsFiltered.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id)! * hour), 0);
   timer += additiveTime;
-  return timer;
+  return timer + delay;
 }
 
-export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[], crops: CropsResponse[]) {
-  const array = [...tools, ...mbs, ...crops];
+export function findLowestCD(
+  tools: ToolsResponse[],
+  mbs: MbsResponse[],
+  crops: CropsResponse[],
+  animals: AnimalsResponse[]
+) {
+  const array = [...tools, ...mbs, ...crops, ...animals];
   const adjustedTimeArray = array.map((item) => {
     return {
       ...item,
@@ -51,5 +59,5 @@ export function findLowestCD(tools: ToolsResponse[], mbs: MbsResponse[], crops: 
     return prev.next_availability < cur.next_availability ? prev : cur;
   });
 
-  return { item: foundedItem, timer: foundedItem.next_availability };
+  return foundedItem;
 }

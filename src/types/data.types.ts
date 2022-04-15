@@ -72,15 +72,35 @@ export interface CropsResponse {
   template_id: number;
   times_claimed: number;
 }
-
-export interface NextToolItem extends ToolsResponse {
-  timer_to_action: number;
+export interface AnimalsResponse {
+  asset_id: string;
+  building_id: string;
+  day_claims_at: number[];
+  gender: number;
+  last_claimed: number;
+  name: string;
+  next_availability: number;
+  owner: string;
+  partner_id: number;
+  template_id: number;
+  times_claimed: number;
 }
-export interface NextMbsItem extends MbsResponse {
-  timer_to_action: number;
+export interface AssetsInStashResponse {
+  asset_id: string;
+  backed_tokens: any[];
+  collection_name: string;
+  immutable_serialized_data: any[];
+  mutable_serialized_data: any[];
+  ram_payer: string;
+  schema_name: string;
+  template_id: number;
 }
-export interface NextCropsItem extends CropsResponse {
-  timer_to_action: number;
+export interface AssetsInStash {
+  milk: string[];
+  barley: string[];
+  corn: string[];
+  eggs: string[];
+  coins: string[];
 }
 
 export interface DataInfoInterface {

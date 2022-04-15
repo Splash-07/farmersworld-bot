@@ -4,8 +4,9 @@ import {
   setMinEnergy,
   setMinRepair,
   toggleEnergy,
+  toggleFeedChickens,
+  toggleFeedDairyCows,
   toggleRepair,
-  toggleSoundNotification,
 } from "../store/slices/settings.slice";
 import { RootState } from "../store/store";
 import CustomInput from "./CustomInput";
@@ -15,7 +16,6 @@ const Settings = () => {
   const { user, settings } = useSelector((state: RootState) => state);
   return (
     <Flex
-      w="100%"
       justifyContent="center"
       backgroundColor="whiteAlpha.100"
       borderRadius="md"
@@ -23,12 +23,13 @@ const Settings = () => {
       boxShadow="md"
       flexDir="column"
       gap="15px"
+      w="50%"
     >
       <Text textTransform="uppercase" alignSelf="center" fontWeight="semibold">
         Settings
       </Text>
       <Wrap flexDir="column">
-        <WrapItem width="100%">
+        <WrapItem w="100%">
           <SettingBar dispatchToggle={toggleRepair} isDisabled={settings.repairIsDisabled}>
             <CustomInput
               isDisabled={settings.repairIsDisabled}
@@ -39,7 +40,7 @@ const Settings = () => {
             />
           </SettingBar>
         </WrapItem>
-        <WrapItem width="100%">
+        <WrapItem w="100%">
           <SettingBar dispatchToggle={toggleEnergy} isDisabled={settings.energyIsDisabled}>
             <CustomInput
               isDisabled={settings.energyIsDisabled}
@@ -50,11 +51,11 @@ const Settings = () => {
             />
           </SettingBar>
         </WrapItem>
-        <WrapItem width="100%">
-          <SettingBar dispatchToggle={toggleSoundNotification} isDisabled={settings.soundIsDisabled}>
+        <WrapItem w="100%">
+          <SettingBar dispatchToggle={toggleFeedDairyCows} isDisabled={settings.feedDairyCowIsDisabled}>
             <Box
               backgroundColor="whiteAlpha.100"
-              color={settings.soundIsDisabled ? "whiteAlpha.400" : "orange.50"}
+              color={settings.feedDairyCowIsDisabled ? "whiteAlpha.400" : "orange.50"}
               padding="0 12px"
               border="1px solid"
               backdropBlur="lg"
@@ -62,8 +63,27 @@ const Settings = () => {
               boxShadow="md"
               lineHeight="30px"
               fontSize="14px"
+              minW="175px"
             >
-              Sound notifications
+              Feed Chickens
+            </Box>
+          </SettingBar>
+        </WrapItem>
+        <WrapItem w="100%">
+          <SettingBar dispatchToggle={toggleFeedChickens} isDisabled={settings.feedChickenIsDisabled}>
+            <Box
+              backgroundColor="whiteAlpha.100"
+              color={settings.feedChickenIsDisabled ? "whiteAlpha.400" : "orange.50"}
+              padding="0 12px"
+              border="1px solid"
+              backdropBlur="lg"
+              borderColor="whiteAlpha.100"
+              boxShadow="md"
+              lineHeight="30px"
+              fontSize="14px"
+              minW="175px"
+            >
+              Feed Dairy Cows
             </Box>
           </SettingBar>
         </WrapItem>

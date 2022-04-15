@@ -42,6 +42,7 @@ const CustomInput: FC<CustomInputInterface> = ({ isDisabled, initialValue, type,
           width={breakPoint480 ? "unset" : "100px"}
           minWidth={breakPoint480 ? "158px" : "unset"}
           isTruncated
+          minW="175px"
         />
         <Input
           focusBorderColor="orange.100"
@@ -51,6 +52,7 @@ const CustomInput: FC<CustomInputInterface> = ({ isDisabled, initialValue, type,
           placeholder="0"
           isDisabled={isDisabled}
           value={value}
+          maxW="15ch"
           onChange={(e) => {
             const value = e.target.value;
             if (value.length === 0) return setValue(value);

@@ -2,14 +2,19 @@ import { Box, Flex, Image, Skeleton, Slider, SliderFilledTrack, SliderTrack, Tex
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getAccountData, getCropsData, getMbsData, getResourcesData, getToolsData } from "../service/fmdata";
+import {
+  getAccountData,
+  getAnimalsData,
+  getAssetsInStash,
+  getBreedingsData,
+  getCropsData,
+  getMbsData,
+  getResourcesData,
+  getToolsData,
+} from "../service/fmdata";
 import { RootState } from "../store/store";
 
-import woodIcon from "../assets/icons/wood-icon.png";
-import meatIcon from "../assets/icons/meat-icon.png";
-import goldIcon from "../assets/icons/gold-icon.png";
-import energyIcon from "../assets/icons/energy-icon.png";
-import { pushLog, toggleUpdateData } from "../store/slices/settings.slice";
+import { pushLog, triggerNextAction, toggleUpdateData } from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
 import { changeEndpoint } from "../service/wax";
@@ -39,7 +44,7 @@ const AccountTable = () => {
         clearInterval(updateDataInterval);
       };
     }
-  }, [settings.updateData]);
+  }, [settings.updateData, dispatch]);
 
   // fetch data on updateFarm toggle
   useEffect(() => {
@@ -53,13 +58,18 @@ const AccountTable = () => {
             getToolsData(user.username),
             getMbsData(user.username),
             getCropsData(user.username),
+            getBreedingsData(user.username),
+            getAnimalsData(user.username),
+            getAssetsInStash(user.username),
           ])
             .then(async (result) => {
               console.log(result);
-              dispatch(setNextAction());
+              dispatch(setNextAction(settings));
+              await sleep(3000);
+              dispatch(triggerNextAction(false));
             })
             .catch(async (error: any) => {
-              console.log("promise failed" + error);
+              console.log("Some of data fetch functions has been rejected, changing server");
               await changeEndpoint();
               dispatch(toggleUpdateData(false));
               await sleep(1000);
@@ -80,6 +90,7 @@ const AccountTable = () => {
       borderRadius="md"
       padding="3"
       boxShadow="md"
+      w="65%"
     >
       <Flex gap="5px">
         <Text>Logged in as</Text>
@@ -115,48 +126,6 @@ const AccountTable = () => {
             <SliderFilledTrack />
           </SliderTrack>
         </Slider>
-      </Flex>
-      <Flex gap="20px" justifyContent="space-evenly" w="100%" flexWrap="wrap">
-        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
-          <Image w="32px" src={woodIcon} />
-          {!user.resources ? (
-            <Skeleton>
-              <Text fontSize="15px">some text</Text>
-            </Skeleton>
-          ) : (
-            <Text fontSize="15px">{`${user.resources?.balances.wood.toFixed(2)}`}</Text>
-          )}
-        </Box>
-        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
-          <Image w="32px" src={goldIcon} />
-          {!user.resources ? (
-            <Skeleton>
-              <Text fontSize="15px">some text</Text>
-            </Skeleton>
-          ) : (
-            <Text fontSize="15px">{`${user.resources?.balances.gold.toFixed(2)}`}</Text>
-          )}
-        </Box>
-        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
-          <Image w="32px" src={meatIcon} />
-          {!user.resources ? (
-            <Skeleton>
-              <Text fontSize="15px">some text</Text>
-            </Skeleton>
-          ) : (
-            <Text fontSize="15px">{`${user.resources?.balances.food.toFixed(2)}`}</Text>
-          )}
-        </Box>
-        <Box display="flex" gap="15px" alignContent="center" alignItems="center">
-          <Image w="32px" src={energyIcon} />
-          {!user.resources ? (
-            <Skeleton>
-              <Text fontSize="15px">some text</Text>
-            </Skeleton>
-          ) : (
-            <Text fontSize="15px">{`${user.resources?.energy} / ${user.resources?.max_energy}`}</Text>
-          )}
-        </Box>
       </Flex>
     </Flex>
   );
