@@ -5,12 +5,11 @@ export interface SettingsState {
   minRepair: number;
   minEnergy: number;
   minFood: number;
+  loggerArray: string[];
   updateData: boolean;
-  additionalTimer: number;
+  triggerNextAction: boolean;
   repairIsDisabled: boolean;
   energyIsDisabled: boolean;
-  loggerArray: string[];
-
   feedChickenIsDisabled: boolean;
   feedDairyCowIsDisabled: boolean;
 }
@@ -18,9 +17,9 @@ const initialState: SettingsState = {
   minRepair: 50,
   minEnergy: 200,
   minFood: 100,
-  additionalTimer: 10000,
   loggerArray: [],
   updateData: false,
+  triggerNextAction: false,
   repairIsDisabled: false,
   energyIsDisabled: false,
 
@@ -90,6 +89,9 @@ export const settingsSlice = createSlice({
       state.feedChickenIsDisabled = !state.feedChickenIsDisabled;
       state.loggerArray.push(log);
     },
+    triggerNextAction: (state, { payload }) => {
+      state.triggerNextAction = payload;
+    },
 
     pushLog: (state, { payload }) => {
       const log = logger(payload);
@@ -103,6 +105,7 @@ export const {
   setMinEnergy,
   setMinFood,
   toggleUpdateData,
+  triggerNextAction,
   toggleRepair,
   toggleEnergy,
   toggleFeedChickens,

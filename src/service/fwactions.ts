@@ -214,7 +214,7 @@ export async function handleNextAction(user: UserState, settings: SettingsState)
   await handleToolRepair(user, settings);
   await handleEnergyRestore(user, settings);
   let response;
-
+  console.log(nextItem.asset_id);
   if (isTool(nextItem)) response = await actionClaimTool(nextItem.asset_id, user.username!);
   else if (isMbs(nextItem)) response = await actionClaimMembership(nextItem.asset_id, user.username!);
   else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, user);
@@ -223,7 +223,7 @@ export async function handleNextAction(user: UserState, settings: SettingsState)
   if (response?.status === true) {
     const log = `<span style="color: #38A169;">Successfully</span> claimed <span style="color: #feebc8;"><strong>${
       assetMap.get(nextItem!.template_id)?.name
-    }</strong></span>.`;
+    }</strong></span> (asset id: ${nextItem.asset_id}).`;
     store.dispatch(pushLog(log));
   } else {
     const log = `<span style="color: #E53E3E;">Failed</span> to claim <span style="color: #feebc8;"><strong>${
@@ -238,20 +238,20 @@ export async function handleNextAction(user: UserState, settings: SettingsState)
 }
 
 export async function handleToolRepair(user: UserState, settings: SettingsState) {
-  const tool = user.items.next;
-  if (!("current_durability" in tool!)) return;
+  const tool = user.items.next!;
+  if (!("current_durability" in tool)) return;
   if (!settings.repairIsDisabled && (tool.current_durability / tool.durability) * 100 <= settings.minRepair) {
     const res = await actionRepair(tool.asset_id, user.username!);
     if (res.status === true) {
       const log = `<span style="color: #38A169;">Successfully</span> repaired <span style="color: #feebc8;"><strong>${
         assetMap.get(tool.template_id)?.name
-      }</strong></span>.`;
+      }</strong></span> (asset id: ${tool.asset_id}).`;
       store.dispatch(pushLog(log));
       await sleep(2000);
     } else {
       const log = `<span style="color: #E53E3E;">Failed</span> to repair <span style="color: #feebc8;"><strong>${
         assetMap.get(tool.template_id)?.name
-      }</strong></span>. (${res.result})`;
+      }</strong></span> (asset id: ${tool.asset_id}). (${res.result})`;
       store.dispatch(pushLog(log));
       console.log(`Failed to repair ${assetMap.get(tool.template_id)?.name}`, res.result);
     }

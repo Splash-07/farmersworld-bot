@@ -16,9 +16,9 @@ import {
 } from "./../../types/data.types";
 import { createSlice } from "@reduxjs/toolkit";
 import { findLowestCD } from "../../utils/timers";
-import { filterAnimalsList, parseStringToNumber } from "../../utils/utils";
-import { animalsDailyClaimLimitMap } from "../data";
+import { parseStringToNumber } from "../../utils/utils";
 import { SettingsState } from "./settings.slice";
+import { filterAnimalList } from "../data";
 
 export interface UserState {
   username: string | null;
@@ -148,7 +148,7 @@ export const userSlice = createSlice({
     },
     setNextAction: (state, { payload }: { payload: SettingsState }) => {
       const { feedChickenIsDisabled, feedDairyCowIsDisabled } = payload;
-      const filteredAnimalList = filterAnimalsList(
+      const filteredAnimalList = filterAnimalList(
         state.items.animalsList,
         state.items.assetsInStash,
         feedChickenIsDisabled,

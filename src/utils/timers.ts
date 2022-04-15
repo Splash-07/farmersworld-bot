@@ -18,23 +18,28 @@ export function msToTime(ms: number) {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+export function filterDailyLimits(dayClaimList: number[]) {
+  const dayInMs = 86832000; // ~=  1 day 7 min. 12 sec.
+
+  return dayClaimList.filter((time) => new Date().getTime() - time * 1000 > dayInMs);
+}
 
 export function adjustTime(item: ToolsResponse | MbsResponse | CropsResponse, mbs: MbsResponse[]) {
-  const delay = 7000;
+  const delay = 4000;
   const itemName = assetMap.get(item.template_id)?.name;
   let timer = item.next_availability * 1000 - new Date().getTime();
   // if item is not Tool -> return timer
-  if (!("durability" in item)) return timer;
+  if (!("durability" in item)) return timer + delay;
 
   const mbsFiltered = filterMbsByType(mbs, item.type);
-  if (mbsFiltered.length === 0) return timer;
+  if (mbsFiltered.length === 0) return timer + delay;
 
   // If item is tool and we have members card, then add additional time, tyo store items (so less operation will occurs -> less CPU usage)
   const exception = ["Ancient Stone Axe", "Mining Excavator"];
   const hour = exception.includes(itemName!) ? 7200000 : 3600000;
   const additiveTime = mbsFiltered.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id)! * hour), 0);
-  timer += additiveTime + delay;
-  return timer;
+  timer += additiveTime;
+  return timer + delay;
 }
 
 export function findLowestCD(

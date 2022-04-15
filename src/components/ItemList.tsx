@@ -10,7 +10,7 @@ import {
 import { RootState } from "../store/store";
 import { isAnimal, isTool } from "../types/data.typeguards";
 import { AnimalsResponse, CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
-import { adjustTime, msToTime } from "../utils/timers";
+import { adjustTime, filterDailyLimits, msToTime } from "../utils/timers";
 import { getTextColor } from "../utils/utils";
 
 const ItemList = () => {
@@ -48,7 +48,7 @@ const ItemList = () => {
             <Box overflow="hidden" isTruncated color={color} w="100%">
               {name}
             </Box>
-            {dayLimit && day_claims_at.length === dayLimit ? (
+            {dayLimit && filterDailyLimits(day_claims_at).length === 0 ? (
               <Flex justifyContent="center" w="100%" fontSize="14px" color="tomato">
                 Reached daily claim limit
               </Flex>

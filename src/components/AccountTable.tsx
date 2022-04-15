@@ -14,7 +14,7 @@ import {
 } from "../service/fmdata";
 import { RootState } from "../store/store";
 
-import { pushLog, toggleUpdateData } from "../store/slices/settings.slice";
+import { pushLog, triggerNextAction, toggleUpdateData } from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
 import { changeEndpoint } from "../service/wax";
@@ -44,7 +44,7 @@ const AccountTable = () => {
         clearInterval(updateDataInterval);
       };
     }
-  }, [settings.updateData]);
+  }, [settings.updateData, dispatch]);
 
   // fetch data on updateFarm toggle
   useEffect(() => {
@@ -65,12 +65,14 @@ const AccountTable = () => {
             .then(async (result) => {
               console.log(result);
               dispatch(setNextAction(settings));
+              await sleep(3000);
+              dispatch(triggerNextAction(false));
             })
             .catch(async (error: any) => {
-              console.log("promise failed" + error);
+              console.log("Some of data fetch functions has been rejected, changing server");
               await changeEndpoint();
               dispatch(toggleUpdateData(false));
-              await sleep(2000);
+              await sleep(1000);
               dispatch(toggleUpdateData(true));
             });
         }

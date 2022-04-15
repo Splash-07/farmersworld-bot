@@ -1,5 +1,5 @@
 import { Box, Flex, Skeleton, Text, useMediaQuery } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { sleep } from "../utils/timers";
@@ -11,25 +11,22 @@ import { assetMap } from "../store/data";
 
 const NextAction = () => {
   const { user, settings } = useSelector((state: RootState) => state);
-  const [triggerAction, setTriggerAction] = useState(false);
   const dispatch = useDispatch();
 
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
 
   let nextItem = user.items.next;
+
   useEffect(() => {
-    console.log(triggerAction);
-    if (triggerAction) {
+    if (settings.triggerNextAction) {
       (async () => {
         dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
         await handleNextAction(user, settings);
         await sleep(5000);
         dispatch(toggleUpdateData(true));
-        setTriggerAction(false);
-        await sleep(2000);
       })();
     }
-  }, [triggerAction]);
+  }, [settings.triggerNextAction]);
 
   if (!nextItem)
     return (
@@ -60,7 +57,7 @@ const NextAction = () => {
       justifyContent="center"
       fontSize="15px"
     >
-      <Countdown setTriggerAction={setTriggerAction} timer={nextItem.timer_to_action} />
+      <Countdown timer={nextItem.timer_to_action} />
       <Flex gap="5px" alignItems="center">
         <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>

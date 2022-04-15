@@ -20,107 +20,73 @@ import {
 import { rpc } from "./wax";
 
 export async function getBreedingsData(username: string) {
-  try {
-    const breedingsResponseList = await getTableRow<CropsResponse[]>(username, TableRowEnums.breedings);
-    if (breedingsResponseList) {
-      store.dispatch(setBreedings(breedingsResponseList));
-      return breedingsResponseList;
-    }
-  } catch (error: any) {
-    console.log(`Failed to breedings data: ${error.message}`);
+  const { status, response } = await getTableRow<CropsResponse[]>(username, TableRowEnums.breedings);
+
+  if (status === true) {
+    store.dispatch(setBreedings(response));
+    return response;
+  } else {
+    console.log(`Failed to breedings data: ${response}`);
     return Promise.reject();
   }
 }
 export async function getAnimalsData(username: string) {
-  try {
-    const animalsList = await getTableRow<CropsResponse[]>(username, TableRowEnums.animals);
-    if (animalsList) {
-      store.dispatch(setAnimals(animalsList));
-      return animalsList;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch animals data: ${error.message}`);
+  const { status, response } = await getTableRow<CropsResponse[]>(username, TableRowEnums.animals);
+  if (status === true) {
+    store.dispatch(setAnimals(response));
+    return response;
+  } else {
+    console.log(`Failed to fetch animals data: ${response}`);
     return Promise.reject();
   }
 }
 
 export async function getCropsData(username: string) {
-  try {
-    const cropsResourcesList = await getTableRow<CropsResponse[]>(username, TableRowEnums.crops);
-    if (cropsResourcesList) {
-      store.dispatch(setCrops(cropsResourcesList));
-      return cropsResourcesList;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch crops data: ${error.message}`);
+  const { status, response } = await getTableRow<CropsResponse[]>(username, TableRowEnums.crops);
+  if (status === true) {
+    store.dispatch(setCrops(response));
+    return response;
+  } else {
+    console.log(`Failed to fetch crops data: ${response}`);
     return Promise.reject();
   }
 }
 
 export async function getResourcesData(username: string) {
-  try {
-    const accountResourcesList = await getTableRow<AccountResourcesResponse>(username, TableRowEnums.accounts);
-    if (accountResourcesList) {
-      store.dispatch(setResources(accountResourcesList));
-      return accountResourcesList;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch account recourses data: ${error.message}`);
+  const { status, response } = await getTableRow<AccountResourcesResponse>(username, TableRowEnums.accounts);
+  if (status === true) {
+    store.dispatch(setResources(response));
+    return response;
+  } else {
+    console.log(`Failed to fetch account recourses data: ${response}`);
     return Promise.reject();
   }
 }
 export async function getToolsData(username: string) {
-  try {
-    const tools = await getTableRow<ToolsResponse>(username, TableRowEnums.tools);
-    if (tools) {
-      store.dispatch(setTools(tools));
-      return tools;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch tools data: ${error.message}`);
+  const { status, response } = await getTableRow<ToolsResponse>(username, TableRowEnums.tools);
+  if (status === true) {
+    store.dispatch(setTools(response));
+    return response;
+  } else {
+    console.log(`Failed to fetch tools data: ${response}`);
     return Promise.reject();
   }
 }
 export async function getMbsData(username: string) {
-  try {
-    const mbs = await getTableRow<ToolsResponse>(username, TableRowEnums.mbs);
-    if (mbs) {
-      store.dispatch(setMbs(mbs));
-      return mbs;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch mbs data: ${error.message}`);
+  const mbs = await getTableRow<ToolsResponse>(username, TableRowEnums.mbs);
+  if (mbs.status === true) {
+    store.dispatch(setMbs(mbs.response));
+    return mbs;
+  } else {
+    console.log(`Failed to fetch mbs data: ${mbs.response}`);
     return Promise.reject();
   }
 }
 
-export async function getAccountData(username: string) {
-  try {
-    const accountData = await rpc.get_account(username);
-    // console.log(accountData);
-    if (accountData) {
-      store.dispatch(setAccount(accountData as AccountResponse));
-      return accountData;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch account data: ${error.message}`);
-    return Promise.reject();
-  }
-}
-
-export async function getAssetsInStash(username: string) {
-  try {
-    const assetsInStashList = await getTableRowStash<AssetsInStashResponse>(username);
-    if (assetsInStashList) {
-      store.dispatch(setAssetsInStash(assetsInStashList));
-      return assetsInStashList;
-    }
-  } catch (error: any) {
-    console.log(`Failed to fetch stash data: ${error.message}`);
-    return Promise.reject();
-  }
-}
-export async function getTableRow<Type>(userAccount: string, table: TableRowEnums): Promise<false | Type[]> {
+export async function getTableRow<Type>(
+  userAccount: string,
+  table: TableRowEnums
+): Promise<{ status: boolean; response: any } | { status: boolean; response: Type[] }> {
   const index = {
     accounts: 1,
     tools: 2,
@@ -145,27 +111,43 @@ export async function getTableRow<Type>(userAccount: string, table: TableRowEnum
       reverse: false,
       show_payer: false,
     });
-    return data.rows;
+    return { status: true, response: data.rows };
   } catch (error: any) {
-    console.log(`Failed to fetch ${table} data: ${error.message}`);
-    return false;
+    return { status: false, response: error };
+  }
+}
+export async function getAccountData(username: string) {
+  try {
+    const accountData = await rpc.get_account(username);
+    if (accountData) {
+      store.dispatch(setAccount(accountData as AccountResponse));
+      return accountData;
+    }
+  } catch (error: any) {
+    console.log(`Failed to fetch account data: ${error.message}`);
+    return Promise.reject();
   }
 }
 
-export async function getTableRowStash<Type>(userAccount: string): Promise<false | Type[]> {
+export async function getAssetsInStash(username: string) {
+  const payload = {
+    json: true,
+    code: "atomicassets",
+    scope: username,
+    table: "assets",
+    limit: 1000,
+    reverse: false,
+    show_payer: false,
+  };
   try {
-    const data = await rpc.get_table_rows({
-      json: true,
-      code: "atomicassets",
-      scope: userAccount,
-      table: "assets",
-      limit: 1000,
-      reverse: false,
-      show_payer: false,
-    });
-    return data.rows;
+    const { rows } = await rpc.get_table_rows(payload);
+    if (rows) {
+      const assetsInStashList: AssetsInStashResponse[] = rows;
+      store.dispatch(setAssetsInStash(assetsInStashList));
+      return assetsInStashList;
+    }
   } catch (error: any) {
     console.log(`Failed to fetch stash data: ${error.message}`);
-    return false;
+    return Promise.reject();
   }
 }
