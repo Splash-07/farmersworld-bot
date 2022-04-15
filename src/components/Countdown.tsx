@@ -12,7 +12,6 @@ const Countdown = ({ timer }: { timer: number }) => {
   }, [timer]);
   useEffect(() => {
     if (ms < 0) {
-      console.log("updated");
       dispatch(triggerNextAction(true));
     } else {
       const interval = setInterval(() => setMs(ms - 1000), 1000);
