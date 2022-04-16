@@ -96,26 +96,26 @@ export function filterAnimalList(
     const filteredDailyLimit = filterDailyLimits(day_claims_at);
     // if chicken egg
     if (template_id === 298612) {
-      if (dailyLimit && filteredDailyLimit.length === dailyLimit) return false;
+      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
     }
     // if chick or chicken
     if (template_id === 298613 || template_id === 298614) {
       // Dont feed chiken if disabled
       if (template_id === 298614 && feedChickenIsDisabled) return false;
       if (assetsInStash.barley.length === 0) return false;
-      if (dailyLimit && filteredDailyLimit.length === dailyLimit) return false;
+      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
     }
     // if Baby Calf
     if (template_id === 298597) {
       if (assetsInStash.milk.length === 0) return false;
-      if (dailyLimit && filteredDailyLimit.length === dailyLimit) return false;
+      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
     }
     // if Female Calf, Male Calf, Dairy Cow, Bull
     if (template_id === 298599 || template_id === 298600 || template_id === 298607 || template_id === 298611) {
       // Dont feed Dairy Cow
       if (template_id === 298607 && feedDairyCowIsDisabled) return false;
       if (assetsInStash.barley.length === 0) return false;
-      if (dailyLimit && filteredDailyLimit.length === dailyLimit) return false;
+      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
     }
     return true;
   });

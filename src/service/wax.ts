@@ -7,8 +7,10 @@ import { handleLogin } from "../store/slices/user.slice";
 const endpoints: string[] = [
   "https://chain.wax.io",
   "https://wax.pink.gg",
-  "https://api.waxsweden.org",
-  "https://wax.eosphere.io",
+  // "https://api.waxsweden.org",
+  // "https://wax.eosphere.io",
+  // "https://wax.cryptolions.io",
+  // "https://wax.dapplica.io",
 ];
 
 let endpointNum = Math.floor(Math.random() * endpoints.length);
