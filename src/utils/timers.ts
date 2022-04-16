@@ -19,7 +19,7 @@ export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 export function filterDailyLimits(dayClaimList: number[]) {
-  const dayInMs = 86832000; // ~=  1 day 7 min. 12 sec.
+  const dayInMs = 86486400; // ~=  1 day 1 min. 26 sec. 400 ms
   return dayClaimList.filter((time) => new Date().getTime() - time * 1000 > dayInMs);
 }
 

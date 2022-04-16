@@ -1,7 +1,7 @@
 import * as waxjs from "@waxio/waxjs/dist";
 import { JsonRpc } from "eosjs";
 import { store } from "../store/store";
-import { pushLog } from "../store/slices/settings.slice";
+import { pushLog, setCurrentServer } from "../store/slices/settings.slice";
 import { handleLogin } from "../store/slices/user.slice";
 
 const endpoints: string[] = [
@@ -16,6 +16,7 @@ const endpoints: string[] = [
 let endpointNum = Math.floor(Math.random() * endpoints.length);
 const defaultEndpoint = endpoints[endpointNum];
 const log = `Current RPC endpoint - <span style="color: #FEB2B2;"><strong>${defaultEndpoint}</strong></span>`;
+store.dispatch(setCurrentServer(defaultEndpoint));
 store.dispatch(pushLog(log));
 
 export let rpc = new JsonRpc(defaultEndpoint);
@@ -35,6 +36,7 @@ export async function changeEndpoint() {
   });
   await autoLogin();
   const log = `Failed to fetch some data. Endpoint has been changed to new one - <span style="color: #FEB2B2;"><strong>${endpoint}</strong></span>`;
+  store.dispatch(setCurrentServer(endpoint));
   store.dispatch(pushLog(log));
 }
 

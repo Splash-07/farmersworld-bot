@@ -48,20 +48,20 @@ const ItemList = () => {
             <Box overflow="hidden" isTruncated color={color} w="100%">
               {name}
             </Box>
-            {dayLimit && filterDailyLimits(day_claims_at).length === 0 ? (
-              <Flex justifyContent="center" w="100%" fontSize="14px" color="tomato">
-                Reached daily claim limit
+            {dayLimit &&
+            day_claims_at.length === animalsDailyClaimLimitMap.get(responseItem.template_id) &&
+            filterDailyLimits(day_claims_at).length === 0 ? (
+              <Flex justifyContent="center" w="50%" fontSize="14px" color="tomato">
+                Daily limit
               </Flex>
             ) : (
-              <>
-                <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
-                  {msToTime(timer)}
-                </Flex>
-                <Flex justifyContent="center" w="50%" fontSize="14px">{`${
-                  responseItem.times_claimed
-                }/${itemsClaimRequiredMap.get(template_id)}`}</Flex>
-              </>
+              <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+                {msToTime(timer)}
+              </Flex>
             )}
+            <Flex justifyContent="center" w="50%" fontSize="14px">{`${
+              responseItem.times_claimed
+            }/${itemsClaimRequiredMap.get(template_id)}`}</Flex>
           </GridItem>
         );
       } else {
