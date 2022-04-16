@@ -7,9 +7,11 @@ import { msToTime } from "../utils/timers";
 const Countdown = ({ timer }: { timer: number }) => {
   const [ms, setMs] = useState(timer);
   const dispatch = useDispatch();
+
   useEffect(() => {
     setMs(timer);
   }, [timer]);
+
   useEffect(() => {
     if (ms < 0) {
       dispatch(triggerNextAction(true));

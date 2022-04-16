@@ -65,7 +65,6 @@ const AccountTable = () => {
             .then(async (result) => {
               console.log(result);
               dispatch(setNextAction(settings));
-              await sleep(3000);
               dispatch(triggerNextAction(false));
             })
             .catch(async (error: any) => {

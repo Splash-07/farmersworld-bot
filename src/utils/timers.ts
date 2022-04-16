@@ -20,7 +20,6 @@ export function sleep(ms: number) {
 }
 export function filterDailyLimits(dayClaimList: number[]) {
   const dayInMs = 86832000; // ~=  1 day 7 min. 12 sec.
-
   return dayClaimList.filter((time) => new Date().getTime() - time * 1000 > dayInMs);
 }
 
