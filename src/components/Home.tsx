@@ -32,14 +32,14 @@ const Home = () => {
     );
   return (
     <Flex direction="column" marginTop="20px" gap="30px">
-      <Flex gap="10px" flexDir="row">
+      <Flex gap="20px" flexDir="row">
         <AccountTable />
         <Flex gap="10px" flexDir="column" w="100%">
           <AccountChest />
           <AccountResources />
         </Flex>
       </Flex>
-      <Flex justifyContent="center" gap="30px" flexWrap={breakPoint720 ? "unset" : "wrap"}>
+      <Flex justifyContent="center" gap="20px" flexWrap={breakPoint720 ? "unset" : "wrap"}>
         <ItemList />
         <Flex flexDir="column" alignContent="flex-start" gap="20px" width="100%">
           <NextAction />

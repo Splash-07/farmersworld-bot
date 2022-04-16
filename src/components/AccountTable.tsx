@@ -90,6 +90,7 @@ const AccountTable = () => {
       padding="3"
       boxShadow="md"
       w="65%"
+      maxWidth="450px"
     >
       <Flex gap="5px">
         <Text>Logged in as</Text>
