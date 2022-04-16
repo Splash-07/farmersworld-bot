@@ -7,6 +7,7 @@ export interface SettingsState {
   minFood: number;
   loggerArray: string[];
   updateData: boolean;
+  currentServer?: string;
   triggerNextAction: boolean;
   repairIsDisabled: boolean;
   energyIsDisabled: boolean;
@@ -19,6 +20,7 @@ const initialState: SettingsState = {
   minFood: 100,
   loggerArray: [],
   updateData: false,
+  currentServer: undefined,
   triggerNextAction: false,
   repairIsDisabled: false,
   energyIsDisabled: false,
@@ -31,6 +33,9 @@ export const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
+    setCurrentServer: (state, { payload }) => {
+      state.currentServer = payload;
+    },
     toggleUpdateData: (state, { payload }) => {
       state.updateData = payload;
     },
@@ -104,6 +109,7 @@ export const {
   setMinRepair,
   setMinEnergy,
   setMinFood,
+  setCurrentServer,
   toggleUpdateData,
   triggerNextAction,
   toggleRepair,

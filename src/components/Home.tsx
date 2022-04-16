@@ -32,12 +32,12 @@ const Home = () => {
     );
   return (
     <Flex direction="column" marginTop="20px" gap="30px">
-      <Flex gap="10px" flexDir="column">
-        <Flex gap="10px">
-          <AccountTable />
+      <Flex gap="10px" flexDir="row">
+        <AccountTable />
+        <Flex gap="10px" flexDir="column" w="100%">
           <AccountChest />
+          <AccountResources />
         </Flex>
-        <AccountResources />
       </Flex>
       <Flex justifyContent="center" gap="30px" flexWrap={breakPoint720 ? "unset" : "wrap"}>
         <ItemList />

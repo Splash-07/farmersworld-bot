@@ -98,6 +98,13 @@ const AccountTable = () => {
         </Text>
       </Flex>
 
+      <Flex gap="5px">
+        <Text>Current RPC endpoint -</Text>
+        <Text color="#FEB2B2" fontWeight="semibold">
+          {settings.currentServer}
+        </Text>
+      </Flex>
+
       <Flex flexDir="column" gap="10px" maxWidth="350px" width="100%">
         <Flex gap="5px" justifyContent="space-evenly">
           {!user.account ? (
