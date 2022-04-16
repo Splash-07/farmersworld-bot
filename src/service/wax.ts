@@ -6,16 +6,16 @@ import { handleLogin } from "../store/slices/user.slice";
 
 const endpoints: string[] = [
   "https://chain.wax.io",
-  "https://wax.pink.gg",
+  // "https://wax.pink.gg",
   // "https://api.waxsweden.org",
-  // "https://wax.eosphere.io",
+  "https://wax.eosphere.io",
   // "https://wax.cryptolions.io",
   // "https://wax.dapplica.io",
 ];
 
 let endpointNum = Math.floor(Math.random() * endpoints.length);
 const defaultEndpoint = endpoints[endpointNum];
-const log = `Current RPC endpoint - ${defaultEndpoint}`;
+const log = `Current RPC endpoint - <span style="color: #FEB2B2;"><strong>${defaultEndpoint}</strong></span>`;
 store.dispatch(pushLog(log));
 
 export let rpc = new JsonRpc(defaultEndpoint);
@@ -34,7 +34,7 @@ export async function changeEndpoint() {
     tryAutoLogin: true,
   });
   await autoLogin();
-  const log = `Failed to fetch some data. Endpoint has been changed to new one - ${endpoint}`;
+  const log = `Failed to fetch some data. Endpoint has been changed to new one - <span style="color: #FEB2B2;"><strong>${endpoint}</strong></span>`;
   store.dispatch(pushLog(log));
 }
 
