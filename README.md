@@ -9,7 +9,7 @@ Can be launched via VScode (on local host) or used from [web app](https://fw-cla
 
 # Important
 
-If u will ned new endpoints, or delete deprecated ones u can change endpoint array ![here](/src/service/wax.ts)
+If u will ned new endpoints, or delete deprecated ones u can change endpoint array [here](/src/service/wax.ts)
 
 ## Installation
 
