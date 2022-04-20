@@ -1,10 +1,10 @@
 # Farmersworld bot
 
 Simple farmersworld bot for:
-- claiming tools, membership cards, crops
-- raising and feeding animals
+- Claiming tools, membership cards, crops
+- Raising and feeding animals
 
-Can be launched via VScode (on local host) or used from web page
+Can be launched via VScode (on local host) or used from [web app](https://fw-claim-bot.web.app/)
 
 ## Installation
 
@@ -52,5 +52,4 @@ Pull requests are welcome. For feature requests and bug reports, please open an 
 
 Thanks [Shr1xy](https://github.com/Shr1xy) for account sharing for testing.
 
-More profound version of farmersworld bot [by shakhruz](https://github.com/shakhruz/angelfarmers-ui).
 ![Alt text](/public/FWbot.png)
