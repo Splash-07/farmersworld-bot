@@ -1,14 +1,15 @@
 # Farmersworld bot
 
 Simple farmersworld bot for:
+
 - Claiming tools, membership cards, crops
 - Raising and feeding animals
 
-Can be launched via VScode (on local host) or used from [web app](https://fw-claim-bot.web.app/)
+Can be launched via VScode (on local host) or used from [web app](https://fw-claim-bot.firebaseapp.com/)
 
 ## Installation
 
-1. Clone repository to the **current drectory**
+1. Clone repository to the **current directory**
 
 ```bash
 git clone https://github.com/Splash-07/fw-bot .
@@ -30,8 +31,7 @@ npm start
 
 - Claim tools, membership cards, crops
 - Raising animals
-- Feeding animals
-- Feeding chicks and dairy cow (optionaly)
+- Feeding chicks and dairy cow (optionally)
 - Restore energy (optionally)
 - Repair tools (optionally)
 - Storing charges depending on quantity and grade of membership cards (less CPU usage)
@@ -42,14 +42,14 @@ npm start
 2. Fetch blockchain data with eosio rpc api
 3. Auto fetch data every 26sec
 4. Finding asset with lowest cooldown (adjusted according mbs cards that you have, checking if charges can be stored)
-5. If cooldown is over -> prefoming energy restore action / repair action if conditions are meet -> performing claim \ feed action
-6. If there no food for feeding animals -> skiping this asset
+5. If cooldown is over -> preforming energy restore action | repair action if conditions are meet -> performing claim | feed action
+6. If there no food for feeding animals -> skipping this asset
 7. Repeating 4th - 6th steps
 
 ##
 
 Pull requests are welcome. For feature requests and bug reports, please open an issue first to discuss what you would like to change.
 
-Thanks [Shr1xy](https://github.com/Shr1xy) for account sharing for testing.
+Consider supporting next projects - ivrjw.wam
 
 ![Alt text](/public/FWbot.png)
