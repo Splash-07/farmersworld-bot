@@ -30,7 +30,10 @@ const Settings = () => {
       </Text>
       <Wrap flexDir="column">
         <WrapItem w="100%">
-          <SettingBar dispatchToggle={toggleRepair} isDisabled={settings.repairIsDisabled}>
+          <SettingBar
+            dispatchToggle={toggleRepair}
+            isDisabled={settings.repairIsDisabled}
+          >
             <CustomInput
               isDisabled={settings.repairIsDisabled}
               maxPossible={90}
@@ -41,7 +44,10 @@ const Settings = () => {
           </SettingBar>
         </WrapItem>
         <WrapItem w="100%">
-          <SettingBar dispatchToggle={toggleEnergy} isDisabled={settings.energyIsDisabled}>
+          <SettingBar
+            dispatchToggle={toggleEnergy}
+            isDisabled={settings.energyIsDisabled}
+          >
             <CustomInput
               isDisabled={settings.energyIsDisabled}
               maxPossible={user.resources?.max_energy! - 50}
@@ -52,10 +58,15 @@ const Settings = () => {
           </SettingBar>
         </WrapItem>
         <WrapItem w="100%">
-          <SettingBar dispatchToggle={toggleFeedDairyCows} isDisabled={settings.feedDairyCowIsDisabled}>
+          <SettingBar
+            dispatchToggle={toggleFeedDairyCows}
+            isDisabled={settings.feedDairyCowIsDisabled}
+          >
             <Box
               backgroundColor="whiteAlpha.100"
-              color={settings.feedDairyCowIsDisabled ? "whiteAlpha.400" : "orange.50"}
+              color={
+                settings.feedDairyCowIsDisabled ? "whiteAlpha.400" : "orange.50"
+              }
               padding="0 12px"
               border="1px solid"
               backdropBlur="lg"
@@ -70,10 +81,15 @@ const Settings = () => {
           </SettingBar>
         </WrapItem>
         <WrapItem w="100%">
-          <SettingBar dispatchToggle={toggleFeedChickens} isDisabled={settings.feedChickenIsDisabled}>
+          <SettingBar
+            dispatchToggle={toggleFeedChickens}
+            isDisabled={settings.feedChickenIsDisabled}
+          >
             <Box
               backgroundColor="whiteAlpha.100"
-              color={settings.feedChickenIsDisabled ? "whiteAlpha.400" : "orange.50"}
+              color={
+                settings.feedChickenIsDisabled ? "whiteAlpha.400" : "orange.50"
+              }
               padding="0 12px"
               border="1px solid"
               backdropBlur="lg"

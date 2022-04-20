@@ -16,11 +16,14 @@ import {
   CropsResponse,
   TableRowEnums,
   ToolsResponse,
-} from "./../types/data.types";
+} from "../types/data.types";
 import { rpc } from "./wax";
 
 export async function getBreedingsData(username: string) {
-  const { status, response } = await getTableRow<CropsResponse[]>(username, TableRowEnums.breedings);
+  const { status, response } = await getTableRow<CropsResponse[]>(
+    username,
+    TableRowEnums.breedings
+  );
 
   if (status === true) {
     store.dispatch(setBreedings(response));
@@ -31,7 +34,10 @@ export async function getBreedingsData(username: string) {
   }
 }
 export async function getAnimalsData(username: string) {
-  const { status, response } = await getTableRow<CropsResponse[]>(username, TableRowEnums.animals);
+  const { status, response } = await getTableRow<CropsResponse[]>(
+    username,
+    TableRowEnums.animals
+  );
   if (status === true) {
     store.dispatch(setAnimals(response));
     return response;
@@ -42,7 +48,10 @@ export async function getAnimalsData(username: string) {
 }
 
 export async function getCropsData(username: string) {
-  const { status, response } = await getTableRow<CropsResponse[]>(username, TableRowEnums.crops);
+  const { status, response } = await getTableRow<CropsResponse[]>(
+    username,
+    TableRowEnums.crops
+  );
   if (status === true) {
     store.dispatch(setCrops(response));
     return response;
@@ -53,7 +62,10 @@ export async function getCropsData(username: string) {
 }
 
 export async function getResourcesData(username: string) {
-  const { status, response } = await getTableRow<AccountResourcesResponse>(username, TableRowEnums.accounts);
+  const { status, response } = await getTableRow<AccountResourcesResponse>(
+    username,
+    TableRowEnums.accounts
+  );
   if (status === true) {
     store.dispatch(setResources(response));
     return response;
@@ -63,7 +75,10 @@ export async function getResourcesData(username: string) {
   }
 }
 export async function getToolsData(username: string) {
-  const { status, response } = await getTableRow<ToolsResponse>(username, TableRowEnums.tools);
+  const { status, response } = await getTableRow<ToolsResponse>(
+    username,
+    TableRowEnums.tools
+  );
   if (status === true) {
     store.dispatch(setTools(response));
     return response;
@@ -86,7 +101,9 @@ export async function getMbsData(username: string) {
 export async function getTableRow<Type>(
   userAccount: string,
   table: TableRowEnums
-): Promise<{ status: boolean; response: any } | { status: boolean; response: Type[] }> {
+): Promise<
+  { status: boolean; response: any } | { status: boolean; response: Type[] }
+> {
   const index = {
     accounts: 1,
     tools: 2,

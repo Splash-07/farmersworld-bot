@@ -1,4 +1,12 @@
-import { Box, Flex, Image, Skeleton, Slider, SliderFilledTrack, SliderTrack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Skeleton,
+  Slider,
+  SliderFilledTrack,
+  SliderTrack,
+  Text,
+} from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,10 +19,14 @@ import {
   getMbsData,
   getResourcesData,
   getToolsData,
-} from "../service/fmdata";
+} from "../service/dataHandlers";
 import { RootState } from "../store/store";
 
-import { pushLog, triggerNextAction, toggleUpdateData } from "../store/slices/settings.slice";
+import {
+  pushLog,
+  triggerNextAction,
+  toggleUpdateData,
+} from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
 import { changeEndpoint } from "../service/wax";
@@ -68,7 +80,9 @@ const AccountTable = () => {
               dispatch(triggerNextAction(false));
             })
             .catch(async (error: any) => {
-              console.log("Some of data fetch functions has been rejected, changing server");
+              console.log(
+                "Some of data fetch functions has been rejected, changing server"
+              );
               await changeEndpoint();
               dispatch(toggleUpdateData(false));
               await sleep(1000);
@@ -113,7 +127,9 @@ const AccountTable = () => {
               <Box>some text</Box>
             </Skeleton>
           ) : (
-            <Box>{`CPU: ${Math.ceil((user.account?.cpuUsed! / user.account?.cpuMax!) * 100)}%`}</Box>
+            <Box>{`CPU: ${Math.ceil(
+              (user.account?.cpuUsed! / user.account?.cpuMax!) * 100
+            )}%`}</Box>
           )}
           {!user.account ? (
             <Skeleton>
@@ -125,7 +141,13 @@ const AccountTable = () => {
         </Flex>
         <Slider
           aria-label="slider-ex-1"
-          value={user.account ? Math.ceil((user.account?.cpuUsed! / user.account?.cpuMax!) * 100) : 0}
+          value={
+            user.account
+              ? Math.ceil(
+                  (user.account?.cpuUsed! / user.account?.cpuMax!) * 100
+                )
+              : 0
+          }
           isDisabled
           colorScheme="green"
         >

@@ -1,7 +1,7 @@
-import { isAnimal, isMbs, isTool } from "./../types/data.typeguards";
-import { assetMap } from "./../store/data";
+import { isAnimal, isMbs, isTool } from "../types/data.typeguards";
+import { assetMap } from "../store/data";
 import { pushLog, SettingsState } from "../store/slices/settings.slice";
-import { store } from "./../store/store";
+import { store } from "../store/store";
 import { changeEndpoint, wax } from "./wax";
 import { UserState } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
@@ -24,7 +24,10 @@ export async function actionClaimTool(
         owner: username,
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -49,7 +52,10 @@ export async function actionClaimMembership(
         owner: username,
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -74,7 +80,10 @@ export async function actionClaimCrop(
         owner: username,
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -101,7 +110,10 @@ export async function actionFeedAnimal(
         to: "farmersworld",
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -125,7 +137,10 @@ export async function actionHatchEggs(
         owner: username,
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -150,7 +165,10 @@ export async function actionEnergyRecovery(
         owner: username,
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -175,7 +193,10 @@ export async function actionRepair(
         asset_owner: username,
       },
     };
-    const response = await wax.api.transact({ actions: [payload] }, { blocksBehind: 3, expireSeconds: 1200 });
+    const response = await wax.api.transact(
+      { actions: [payload] },
+      { blocksBehind: 3, expireSeconds: 1200 }
+    );
     if (response) return { status: true, result: response };
     else return { status: false, result: response };
   } catch (error: any) {
@@ -209,26 +230,31 @@ export async function handleAnimals(
   }
   return response;
 }
-export async function handleNextAction(user: UserState, settings: SettingsState) {
+export async function handleNextAction(
+  user: UserState,
+  settings: SettingsState
+) {
   const nextItem = user.items.next!;
   await handleToolRepair(user, settings);
   await handleEnergyRestore(user, settings);
   let response;
   console.log(nextItem.asset_id);
-  if (isTool(nextItem)) response = await actionClaimTool(nextItem.asset_id, user.username!);
-  else if (isMbs(nextItem)) response = await actionClaimMembership(nextItem.asset_id, user.username!);
+  if (isTool(nextItem))
+    response = await actionClaimTool(nextItem.asset_id, user.username!);
+  else if (isMbs(nextItem))
+    response = await actionClaimMembership(nextItem.asset_id, user.username!);
   else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, user);
   else response = await actionClaimCrop(nextItem.asset_id, user.username!);
 
   if (response?.status === true) {
     const log = `<span style="color: #38A169;">Successfully</span> claimed <span style="color: #feebc8;"><strong>${
       assetMap.get(nextItem!.template_id)?.name
-    }</strong></span> (asset id: ${nextItem.asset_id}).`;
+    }</strong></span>.`;
     store.dispatch(pushLog(log));
   } else {
     const log = `<span style="color: #E53E3E;">Failed</span> to claim <span style="color: #feebc8;"><strong>${
       assetMap.get(nextItem!.template_id)?.name
-    }</strong></span> (asset id: ${nextItem.asset_id}). (${response?.result})`;
+    }</strong></span>. (${response?.result})`;
     store.dispatch(pushLog(log));
 
     if (response.result.includes("Failed to fetch")) changeEndpoint();
@@ -237,10 +263,16 @@ export async function handleNextAction(user: UserState, settings: SettingsState)
   }
 }
 
-export async function handleToolRepair(user: UserState, settings: SettingsState) {
+export async function handleToolRepair(
+  user: UserState,
+  settings: SettingsState
+) {
   const tool = user.items.next!;
   if (!("current_durability" in tool)) return;
-  if (!settings.repairIsDisabled && (tool.current_durability / tool.durability) * 100 <= settings.minRepair) {
+  if (
+    !settings.repairIsDisabled &&
+    (tool.current_durability / tool.durability) * 100 <= settings.minRepair
+  ) {
     const res = await actionRepair(tool.asset_id, user.username!);
     if (res.status === true) {
       const log = `<span style="color: #38A169;">Successfully</span> repaired <span style="color: #feebc8;"><strong>${
@@ -253,11 +285,17 @@ export async function handleToolRepair(user: UserState, settings: SettingsState)
         assetMap.get(tool.template_id)?.name
       }</strong></span> (asset id: ${tool.asset_id}). (${res.result})`;
       store.dispatch(pushLog(log));
-      console.log(`Failed to repair ${assetMap.get(tool.template_id)?.name}`, res.result);
+      console.log(
+        `Failed to repair ${assetMap.get(tool.template_id)?.name}`,
+        res.result
+      );
     }
   }
 }
-export async function handleEnergyRestore(user: UserState, settings: SettingsState) {
+export async function handleEnergyRestore(
+  user: UserState,
+  settings: SettingsState
+) {
   const acc = user.resources;
   if (acc && !settings.energyIsDisabled && acc.energy <= settings.minEnergy) {
     let energyToRecover = acc.max_energy - acc.energy;

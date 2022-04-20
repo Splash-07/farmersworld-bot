@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { sleep } from "../utils/timers";
-import { handleNextAction } from "../service/fwactions";
+import { handleNextAction } from "../service/actionsHandlers";
 import { MemoisedCountdown } from "./Countdown";
 import { toggleUpdateData } from "../store/slices/settings.slice";
 import { getTextColor } from "../utils/utils";
@@ -17,16 +17,16 @@ const NextAction = () => {
 
   let nextItem = user.items.next;
 
-  // useEffect(() => {
-  //   if (settings.triggerNextAction) {
-  //     (async () => {
-  //       dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-  //       await handleNextAction(user, settings);
-  //       await sleep(10000);
-  //       dispatch(toggleUpdateData(true));
-  //     })();
-  //   }
-  // }, [settings.triggerNextAction]);
+  useEffect(() => {
+    if (settings.triggerNextAction) {
+      (async () => {
+        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+        await handleNextAction(user, settings);
+        await sleep(10000);
+        dispatch(toggleUpdateData(true));
+      })();
+    }
+  }, [settings.triggerNextAction]);
 
   if (!nextItem)
     return (
@@ -41,7 +41,7 @@ const NextAction = () => {
         fontSize="15px"
       >
         <Skeleton width="100%">
-          <Box width="100%">dsadasd</Box>
+          <Box width="100%">some text</Box>
         </Skeleton>
       </Flex>
     );
@@ -63,8 +63,11 @@ const NextAction = () => {
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>
           {assetMap.get(nextItem.template_id)?.name}
         </Text>
-        <Text>{`${"durability" in nextItem ? `(${nextItem.current_durability}/${nextItem.durability})` : ""}`}</Text>
-        <Text>{`[id:${nextItem.asset_id}]`}</Text>
+        <Text>{`${
+          "durability" in nextItem
+            ? `(${nextItem.current_durability}/${nextItem.durability})`
+            : ""
+        }`}</Text>
       </Flex>
     </Flex>
   );

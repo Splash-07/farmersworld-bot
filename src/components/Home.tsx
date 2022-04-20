@@ -17,7 +17,13 @@ const Home = () => {
 
   if (!username)
     return (
-      <Box display={"flex"} alignContent="center" justifyContent="center" gap="20px" marginTop="30px">
+      <Box
+        display={"flex"}
+        alignContent="center"
+        justifyContent="center"
+        gap="20px"
+        marginTop="30px"
+      >
         <Button
           onClick={login}
           bg={"whiteAlpha.100"}
@@ -31,7 +37,7 @@ const Home = () => {
       </Box>
     );
   return (
-    <Flex direction="column" marginTop="20px" gap="30px">
+    <Flex direction="column" marginTop="20px" gap="20px">
       <Flex gap="20px" flexDir="row">
         <AccountTable />
         <Flex gap="10px" flexDir="column" w="100%">
@@ -39,11 +45,20 @@ const Home = () => {
           <AccountResources />
         </Flex>
       </Flex>
-      <Flex justifyContent="center" gap="20px" flexWrap={breakPoint720 ? "unset" : "wrap"}>
+      <Flex
+        justifyContent="center"
+        gap="20px"
+        flexWrap={breakPoint720 ? "unset" : "wrap"}
+      >
         <ItemList />
-        <Flex flexDir="column" alignContent="flex-start" gap="20px" width="100%">
+        <Flex
+          flexDir="column"
+          alignContent="flex-start"
+          gap="10px"
+          width="100%"
+        >
           <NextAction />
-          <Flex gap="20px">
+          <Flex gap="10px">
             <Settings />
             <Ad />
           </Flex>
