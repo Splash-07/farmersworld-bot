@@ -9,7 +9,9 @@ Can be launched via VScode (on local host) or used from [web app](https://fw-cla
 
 # Important
 
-If u will ned new endpoints, or delete deprecated ones u can change endpoint array ![here](/src/service/wax.ts)
+If u will need new endpoints, or delete deprecated ones u can change endpoint array [here](/src/service/wax.ts)
+
+On some RPC servers account fetch request return not full data, it leads to problems with feeding animals. You need to check sometimes that RPC server, on witch bot currently working, fetching data correctly
 
 ## Installation
 
