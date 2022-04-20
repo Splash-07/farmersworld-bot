@@ -7,6 +7,10 @@ Simple farmersworld bot for:
 
 Can be launched via VScode (on local host) or used from [web app](https://fw-claim-bot.firebaseapp.com/)
 
+# Important
+
+If u will ned new endpoints, or delete deprecated ones u can change endpoint array ![here](/src/service/wax.ts)
+
 ## Installation
 
 1. Clone repository to the **current directory**
@@ -45,6 +49,10 @@ npm start
 5. If cooldown is over -> preforming energy restore action | repair action if conditions are meet -> performing claim | feed action
 6. If there no food for feeding animals -> skipping this asset
 7. Repeating 4th - 6th steps
+
+# TODO
+
+- Add feature to add and delete servers in app
 
 ##
 
