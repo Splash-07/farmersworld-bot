@@ -53,7 +53,7 @@ npm start
 
 # TODO
 
-- Add feature to add and delete servers in app
+- Refactor endpoint services
 
 ##
 
