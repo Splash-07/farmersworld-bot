@@ -11,7 +11,8 @@ import AccountChest from "./AccountChest";
 import AccountResources from "./AccountResources";
 import Ad from "./Ad";
 import { login } from "../service/wax";
-// import { waxLogin } from "../store/slices/user.slice";
+import Endpoints from "./Endpoints";
+
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
   const { username } = useSelector((state: RootState) => state.user);
@@ -73,6 +74,7 @@ const Home = () => {
           >
             <Logger />
           </Flex>
+          <Endpoints />
         </Flex>
       </Flex>
     </Flex>

@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
-interface Endpoint {
+export interface Endpoint {
   url: string;
   status: boolean;
 }
 
 export interface EndpointSliceState {
-  endpoints: Endpoint[];
+  endpointsArray: Endpoint[];
   currentEndpointId: number;
   currentEndpoint: Endpoint;
 }
@@ -37,11 +37,16 @@ const initialEndpoints: Endpoint[] = [
     status: true,
   },
 ];
-const initialEndpointId = Math.floor(Math.random() * initialEndpoints.length);
+const filteredEndpointsByStatus = initialEndpoints.filter(
+  (endpoint) => endpoint.status === true
+);
+const initialEndpointId = Math.floor(
+  Math.random() * filteredEndpointsByStatus.length
+);
 const initialCurrentEndpoint = initialEndpoints[initialEndpointId];
 
 const initialState: EndpointSliceState = {
-  endpoints: initialEndpoints,
+  endpointsArray: initialEndpoints,
   currentEndpointId: initialEndpointId,
   currentEndpoint: initialCurrentEndpoint,
 };
@@ -52,47 +57,58 @@ export const endpointSlice = createSlice({
   reducers: {
     toggleEndpointStatus: (
       state,
-      { payload }: { payload: { targetEndpoint: Endpoint; index: number } }
+      { payload }: { payload: { endpoint: Endpoint; index: number } }
     ) => {
-      const { targetEndpoint, index } = payload;
+      const { endpoint, index } = payload;
 
-      state.endpoints[index].status = !state.endpoints[index].status;
-      if (targetEndpoint.url === state.currentEndpoint.url) {
-        state.currentEndpointId = state.endpoints.findIndex(
-          (endpoint) => endpoint.status === true
+      state.endpointsArray[index].status = !state.endpointsArray[index].status;
+      if (endpoint.url === state.currentEndpoint.url) {
+        state.currentEndpointId = state.endpointsArray.findIndex(
+          (endp) => endp.status === true
         );
-        state.currentEndpoint = state.endpoints[state.currentEndpointId];
+        state.currentEndpoint = state.endpointsArray[state.currentEndpointId];
       }
     },
     addEndpoint: (state, { payload }: { payload: Endpoint }) => {
-      state.endpoints.push(payload);
+      state.endpointsArray.push(payload);
     },
-    changeEndpoint: (state) => {
-      let { endpoints, currentEndpointId } = state;
+    changeEndpoint: (
+      state,
+      { payload }: { payload: { endpoint: Endpoint; index: number } }
+    ) => {
+      const { endpoint, index } = payload;
+      state.currentEndpoint = endpoint;
+      state.currentEndpointId = index;
+    },
+    swapEndpoint: (state) => {
+      let { endpointsArray, currentEndpointId } = state;
       currentEndpointId =
-        currentEndpointId + 1 >= endpoints.length ? 0 : currentEndpointId + 1;
-      while (endpoints[currentEndpointId].status === false) {
+        currentEndpointId + 1 >= endpointsArray.length
+          ? 0
+          : currentEndpointId + 1;
+      while (endpointsArray[currentEndpointId].status === false) {
         currentEndpointId =
-          currentEndpointId + 1 >= endpoints.length ? 0 : currentEndpointId + 1;
+          currentEndpointId + 1 >= endpointsArray.length
+            ? 0
+            : currentEndpointId + 1;
       }
       state.currentEndpointId = currentEndpointId;
-      state.currentEndpoint = endpoints[currentEndpointId];
+      state.currentEndpoint = endpointsArray[currentEndpointId];
     },
     deleteEndpoint: (
       state,
-      { payload }: { payload: { targetEndpoint: Endpoint } }
+      { payload }: { payload: { endpoint: Endpoint; index: number } }
     ) => {
-      const { targetEndpoint } = payload;
-      let { currentEndpoint, currentEndpointId, endpoints } = state;
-      if (targetEndpoint.url === currentEndpoint.url) {
-        currentEndpointId = endpoints.findIndex(
-          (endpoint) => endpoint.status === true
-        );
-        currentEndpoint = endpoints[state.currentEndpointId];
-      }
-      endpoints = endpoints.filter(
-        (endpoint) => endpoint.url !== targetEndpoint.url
+      const { endpoint } = payload;
+      state.endpointsArray = state.endpointsArray.filter(
+        (endp) => endp.url !== endpoint.url
       );
+      if (endpoint.url === state.currentEndpoint.url) {
+        state.currentEndpointId = state.endpointsArray.findIndex(
+          (endp) => endp.status === true
+        );
+        state.currentEndpoint = state.endpointsArray[state.currentEndpointId];
+      }
     },
   },
 });
@@ -100,6 +116,7 @@ export const endpointSlice = createSlice({
 export const {
   toggleEndpointStatus,
   addEndpoint,
+  swapEndpoint,
   changeEndpoint,
   deleteEndpoint,
 } = endpointSlice.actions;

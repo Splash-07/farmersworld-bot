@@ -5,14 +5,18 @@ import { FC, ReactChild } from "react";
 import { useDispatch } from "react-redux";
 
 interface CustomSettingBarInterface {
-  isDisabled: boolean;
-  dispatchToggle: ActionCreatorWithoutPayload<string>;
+  isDisabled?: boolean;
+  dispatchedAction: ActionCreatorWithoutPayload<string>;
   children: ReactChild;
 }
-const SettingBar: FC<CustomSettingBarInterface> = ({ isDisabled, dispatchToggle, children }) => {
+const SettingBar: FC<CustomSettingBarInterface> = ({
+  isDisabled,
+  dispatchedAction,
+  children,
+}) => {
   const dispatch = useDispatch();
   return (
-    <Flex width="100%" alignItems="center" gap="10px">
+    <Flex alignItems="center" gap="10px">
       <IconButton
         size="sm"
         backdropBlur="lg"
@@ -23,7 +27,7 @@ const SettingBar: FC<CustomSettingBarInterface> = ({ isDisabled, dispatchToggle,
         boxShadow="md"
         aria-label="check"
         icon={<CheckIcon color={isDisabled ? "whiteAlpha.50" : "green.500"} />}
-        onClick={() => dispatch(dispatchToggle())}
+        onClick={() => dispatch(dispatchedAction())}
       />
       {children}
     </Flex>

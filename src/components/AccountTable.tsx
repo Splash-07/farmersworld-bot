@@ -29,11 +29,11 @@ import {
 } from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
-import { changeEndpoint } from "../store/slices/endpoint.slice";
 import { handleEndpointManipulations } from "../service/wax";
+import { swapEndpoint } from "../store/slices/endpoint.slice";
 
 const AccountTable = () => {
-  const { user, settings } = useSelector((state: RootState) => state);
+  const { user, settings, endpoint } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
   // fetch account data on mount
   useEffect(() => {
@@ -84,7 +84,7 @@ const AccountTable = () => {
               console.log(
                 "Some of data fetch functions has been rejected, changing server"
               );
-              await handleEndpointManipulations(changeEndpoint());
+              await handleEndpointManipulations(swapEndpoint, "SWAP");
               dispatch(toggleUpdateData(false));
               await sleep(1000);
               dispatch(toggleUpdateData(true));
@@ -104,8 +104,8 @@ const AccountTable = () => {
       borderRadius="md"
       padding="3"
       boxShadow="md"
-      w="65%"
-      maxWidth="450px"
+      w="100%"
+      maxW="450px"
     >
       <Flex gap="5px">
         <Text>Logged in as</Text>
@@ -113,11 +113,10 @@ const AccountTable = () => {
           {user.username}
         </Text>
       </Flex>
-
       <Flex gap="5px">
-        <Text>Current RPC endpoint -</Text>
-        <Text color="#FEB2B2" fontWeight="semibold">
-          {/* {settings.currentServer} */}
+        <Text>Current RPC -</Text>
+        <Text color="red.200" fontWeight="semibold">
+          {endpoint.currentEndpoint.url.replace(/^(https?|ftp):\/\//, "")}
         </Text>
       </Flex>
 

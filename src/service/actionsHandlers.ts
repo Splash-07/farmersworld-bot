@@ -7,7 +7,7 @@ import { handleEndpointManipulations, wax } from "./wax";
 import { UserState } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
 import { AnimalsResponse, ToolsResponse } from "../types/data.types";
-import { changeEndpoint } from "../store/slices/endpoint.slice";
+import { swapEndpoint } from "../store/slices/endpoint.slice";
 
 export async function actionClaimTool(
   asset_id: string,
@@ -265,7 +265,7 @@ export async function handleNextAction(
     store.dispatch(pushLog(log));
 
     if (response.result.includes("Failed to fetch")) {
-      await handleEndpointManipulations(changeEndpoint());
+      await handleEndpointManipulations(swapEndpoint, "SWAP");
     }
 
     console.log("Claim action FAILED", response?.result);
@@ -286,13 +286,13 @@ export async function handleToolRepair(
     if (res.status === true) {
       const log = `<span style="color: #38A169;">Successfully</span> repaired <span style="color: #feebc8;"><strong>${
         assetMap.get(nextTool.template_id)?.name
-      }</strong></span> (asset id: ${nextTool.asset_id}).`;
+      }</strong></span>.`;
       store.dispatch(pushLog(log));
       await sleep(2000);
     } else {
       const log = `<span style="color: #E53E3E;">Failed</span> to repair <span style="color: #feebc8;"><strong>${
         assetMap.get(nextTool.template_id)?.name
-      }</strong></span> (asset id: ${nextTool.asset_id}). (${res.result})`;
+      }</strong></span>. (${res.result})`;
       store.dispatch(pushLog(log));
       console.log(
         `Failed to repair ${assetMap.get(nextTool.template_id)?.name}`,

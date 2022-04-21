@@ -10,7 +10,7 @@ import {
 } from "../store/slices/settings.slice";
 import { RootState } from "../store/store";
 import CustomInput from "./CustomInput";
-import SettingBar from "./SettingBar";
+import SettingsBar from "./SettingsBar";
 
 const Settings = () => {
   const { user, settings } = useSelector((state: RootState) => state);
@@ -30,8 +30,8 @@ const Settings = () => {
       </Text>
       <Wrap flexDir="column">
         <WrapItem w="100%">
-          <SettingBar
-            dispatchToggle={toggleRepair}
+          <SettingsBar
+            dispatchedAction={toggleRepair}
             isDisabled={settings.repairIsDisabled}
           >
             <CustomInput
@@ -41,11 +41,11 @@ const Settings = () => {
               initialValue={settings.minRepair}
               dispatchAction={setMinRepair}
             />
-          </SettingBar>
+          </SettingsBar>
         </WrapItem>
         <WrapItem w="100%">
-          <SettingBar
-            dispatchToggle={toggleEnergy}
+          <SettingsBar
+            dispatchedAction={toggleEnergy}
             isDisabled={settings.energyIsDisabled}
           >
             <CustomInput
@@ -55,11 +55,11 @@ const Settings = () => {
               initialValue={settings.minEnergy}
               dispatchAction={setMinEnergy}
             />
-          </SettingBar>
+          </SettingsBar>
         </WrapItem>
         <WrapItem w="100%">
-          <SettingBar
-            dispatchToggle={toggleFeedDairyCows}
+          <SettingsBar
+            dispatchedAction={toggleFeedDairyCows}
             isDisabled={settings.feedDairyCowIsDisabled}
           >
             <Box
@@ -78,11 +78,11 @@ const Settings = () => {
             >
               Feed Chickens
             </Box>
-          </SettingBar>
+          </SettingsBar>
         </WrapItem>
         <WrapItem w="100%">
-          <SettingBar
-            dispatchToggle={toggleFeedChickens}
+          <SettingsBar
+            dispatchedAction={toggleFeedChickens}
             isDisabled={settings.feedChickenIsDisabled}
           >
             <Box
@@ -101,7 +101,7 @@ const Settings = () => {
             >
               Feed Dairy Cows
             </Box>
-          </SettingBar>
+          </SettingsBar>
         </WrapItem>
       </Wrap>
     </Flex>
