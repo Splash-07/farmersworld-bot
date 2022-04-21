@@ -1,14 +1,25 @@
-import { AnimalsResponse, CropsResponse, MbsResponse, ToolsResponse } from "./data.types";
+import {
+  AnimalsResponse,
+  CropsResponse,
+  MbsResponse,
+  ToolsResponse,
+} from "./data.types";
 
-export const isTool = (item: ToolsResponse | MbsResponse | AnimalsResponse | CropsResponse): item is ToolsResponse => {
+export const isTool = (
+  item: ToolsResponse | MbsResponse | AnimalsResponse | CropsResponse
+): item is ToolsResponse => {
   return "durability" in item;
 };
 
-export const isMbs = (item: ToolsResponse | MbsResponse | AnimalsResponse | CropsResponse): item is MbsResponse => {
+export const isMbs = (
+  item: ToolsResponse | MbsResponse | AnimalsResponse | CropsResponse
+): item is MbsResponse => {
   return "unstaking_time" in item;
 };
 
-export const isCrops = (item: ToolsResponse | MbsResponse | AnimalsResponse | CropsResponse): item is CropsResponse => {
+export const isCrops = (
+  item: ToolsResponse | MbsResponse | AnimalsResponse | CropsResponse
+): item is CropsResponse => {
   return "durability" in item;
 };
 
