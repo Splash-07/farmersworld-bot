@@ -76,7 +76,7 @@ const Settings = () => {
               fontSize="14px"
               minW="175px"
             >
-              Feed Chickens
+              Feed Dairy Cows
             </Box>
           </SettingBar>
         </WrapItem>
@@ -99,7 +99,7 @@ const Settings = () => {
               fontSize="14px"
               minW="175px"
             >
-              Feed Dairy Cows
+              Feed Chickens
             </Box>
           </SettingBar>
         </WrapItem>
