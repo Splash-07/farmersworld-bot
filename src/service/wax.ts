@@ -1,42 +1,31 @@
 import * as waxjs from "@waxio/waxjs/dist";
 import { JsonRpc } from "eosjs";
 import { store } from "../store/store";
-import { pushLog, setCurrentServer } from "../store/slices/settings.slice";
-import { handleLogin } from "../store/slices/user.slice";
+import { pushLog } from "../store/slices/settings.slice";
+import { setUsername } from "../store/slices/user.slice";
 
-const endpoints: string[] = [
-  "https://chain.wax.io",
-  // "https://wax.pink.gg",
-  // "https://api.waxsweden.org",
-  "https://wax.eosphere.io",
-  // "https://wax.cryptolions.io",
-  // "https://wax.dapplica.io",
-];
+const { currentEndpoint } = store.getState().endpoint;
 
-let endpointNum = Math.floor(Math.random() * endpoints.length);
-const defaultEndpoint = endpoints[endpointNum];
-const log = `Current RPC endpoint - <span style="color: #FEB2B2;"><strong>${defaultEndpoint}</strong></span>`;
-store.dispatch(setCurrentServer(defaultEndpoint));
+const log = `Current RPC endpoint - <span style="color: #FEB2B2;"><strong>${currentEndpoint.url}</strong></span>`;
 store.dispatch(pushLog(log));
 
-export let rpc = new JsonRpc(defaultEndpoint);
+export let rpc = new JsonRpc(currentEndpoint.url);
 export let wax = new waxjs.WaxJS({
-  rpcEndpoint: defaultEndpoint,
+  rpcEndpoint: currentEndpoint.url,
   tryAutoLogin: false,
 });
 
-export async function changeEndpoint() {
-  endpointNum = endpointNum + 1 >= endpoints.length ? 0 : endpointNum + 1;
-  const newEndpoint = endpoints[endpointNum];
-  const endpoint = newEndpoint;
-  rpc = new JsonRpc(endpoint);
+export async function handleEndpointManipulations(dispatchedAction: any) {
+  store.dispatch(dispatchedAction);
+  const { currentEndpoint } = store.getState().endpoint;
+
+  rpc = new JsonRpc(currentEndpoint.url);
   wax = new waxjs.WaxJS({
-    rpcEndpoint: endpoint,
+    rpcEndpoint: currentEndpoint.url,
     tryAutoLogin: true,
   });
   await autoLogin();
-  const log = `Failed to fetch some data. Endpoint has been changed to new one - <span style="color: #FEB2B2;"><strong>${endpoint}</strong></span>`;
-  store.dispatch(setCurrentServer(endpoint));
+  const log = `Endpoint has been changed to new one - <span style="color: #FEB2B2;"><strong>${currentEndpoint.url}</strong></span>`;
   store.dispatch(pushLog(log));
 }
 
@@ -49,6 +38,6 @@ export async function autoLogin() {
 export async function login() {
   try {
     const username = await wax.login();
-    store.dispatch(handleLogin(username));
+    store.dispatch(setUsername(username));
   } catch (error) {}
 }

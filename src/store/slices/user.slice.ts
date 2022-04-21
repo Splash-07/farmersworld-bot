@@ -1,3 +1,4 @@
+import { RootState } from "./../store";
 import {
   Account,
   AccountResourcesResponse,
@@ -17,7 +18,7 @@ import { SettingsState } from "./settings.slice";
 import { filterAnimalList } from "../data";
 
 export interface UserState {
-  username: string | null;
+  username?: string;
   account?: Account;
   resources?: Resources;
   items: {
@@ -32,7 +33,7 @@ export interface UserState {
 }
 
 const initialState: UserState = {
-  username: null,
+  username: undefined,
   account: undefined,
   resources: undefined,
   items: {
@@ -56,7 +57,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    handleLogin: (state, { payload }) => {
+    setUsername: (state, { payload }: { payload: string }) => {
       state.username = payload;
     },
     setAccount: (state, { payload }: { payload: AccountResponse }) => {
@@ -65,16 +66,35 @@ export const userSlice = createSlice({
         cpuMax: payload.cpu_limit.max,
         cpuAvailable: payload.cpu_limit.available,
         waxBalance: parseStringToNumber(payload.core_liquid_balance),
-        waxStackedOnCpu: parseStringToNumber(payload.total_resources.cpu_weight),
-        waxSelfStackedOnCpu: parseStringToNumber(payload.self_delegated_bandwidth.cpu_weight),
+        waxStackedOnCpu: parseStringToNumber(
+          payload.total_resources.cpu_weight
+        ),
+        waxSelfStackedOnCpu: parseStringToNumber(
+          payload.self_delegated_bandwidth.cpu_weight
+        ),
       };
       state.account = object;
     },
-    setResources: (state, { payload }: { payload: AccountResourcesResponse[] }) => {
+    setResources: (
+      state,
+      { payload }: { payload: AccountResourcesResponse[] }
+    ) => {
       const firstObj = payload[0];
-      const wood = parseInt(firstObj.balances.filter((item) => item.includes("WOOD"))[0].split(" ")[0]);
-      const gold = parseInt(firstObj.balances.filter((item) => item.includes("GOLD"))[0].split(" ")[0]);
-      const food = parseInt(firstObj.balances.filter((item) => item.includes("FOOD"))[0].split(" ")[0]);
+      const wood = parseInt(
+        firstObj.balances
+          .filter((item) => item.includes("WOOD"))[0]
+          .split(" ")[0]
+      );
+      const gold = parseInt(
+        firstObj.balances
+          .filter((item) => item.includes("GOLD"))[0]
+          .split(" ")[0]
+      );
+      const food = parseInt(
+        firstObj.balances
+          .filter((item) => item.includes("FOOD"))[0]
+          .split(" ")[0]
+      );
       state.resources = {
         account: firstObj.account,
         balances: {
@@ -102,7 +122,10 @@ export const userSlice = createSlice({
     setAnimals: (state, { payload }) => {
       state.items.animalsList = payload;
     },
-    setAssetsInStash: (state, { payload }: { payload: AssetsInStashResponse[] }) => {
+    setAssetsInStash: (
+      state,
+      { payload }: { payload: AssetsInStashResponse[] }
+    ) => {
       const assetsInStash: AssetsInStash = {
         milk: [],
         barley: [],
@@ -162,7 +185,7 @@ export const userSlice = createSlice({
 });
 
 export const {
-  handleLogin,
+  setUsername,
   setResources,
   setTools,
   setMbs,

@@ -29,7 +29,8 @@ import {
 } from "../store/slices/settings.slice";
 import { setNextAction } from "../store/slices/user.slice";
 import { sleep } from "../utils/timers";
-import { changeEndpoint } from "../service/wax";
+import { changeEndpoint } from "../store/slices/endpoint.slice";
+import { handleEndpointManipulations } from "../service/wax";
 
 const AccountTable = () => {
   const { user, settings } = useSelector((state: RootState) => state);
@@ -83,7 +84,7 @@ const AccountTable = () => {
               console.log(
                 "Some of data fetch functions has been rejected, changing server"
               );
-              await changeEndpoint();
+              await handleEndpointManipulations(changeEndpoint());
               dispatch(toggleUpdateData(false));
               await sleep(1000);
               dispatch(toggleUpdateData(true));
@@ -116,7 +117,7 @@ const AccountTable = () => {
       <Flex gap="5px">
         <Text>Current RPC endpoint -</Text>
         <Text color="#FEB2B2" fontWeight="semibold">
-          {settings.currentServer}
+          {/* {settings.currentServer} */}
         </Text>
       </Flex>
 
