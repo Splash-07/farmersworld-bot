@@ -5,7 +5,7 @@ Simple farmersworld bot for:
 - Claiming tools, membership cards, crops
 - Raising and feeding animals
 
-Can be launched via VScode (on local host) or used from [web app](fw-claim-bot.web.app/)
+Can be launched via VScode (on local host) or used from [web app](https://fw-claim-bot.web.app/)
 
 # Important
 
