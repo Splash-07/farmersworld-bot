@@ -16,6 +16,8 @@ export let wax = new waxjs.WaxJS({
   tryAutoLogin: false,
 });
 
+console.log(wax);
+
 export async function handleEndpointManipulations(
   dispatchedAction: any,
   actionType: "SWAP" | "CHANGE" | "ADD" | "DELETE" | "TOGGLE",

@@ -18,9 +18,14 @@ const settingsPersistConfig = {
   storage,
   blacklist: ["loggerArray", "updateData", "triggerNextAction"],
 };
+const endpointPersistConfig = {
+  key: "endpoint",
+  storage,
+  blacklist: ["currentEndpointId", "currentEndpoint"],
+};
 const reducers = combineReducers({
   user: userReducer,
-  endpoint: endpointReducer,
+  endpoint: persistReducer(endpointPersistConfig, endpointReducer),
   settings: persistReducer(settingsPersistConfig, settingsReducer),
 });
 

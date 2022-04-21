@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface Endpoint {
   url: string;
@@ -21,19 +21,7 @@ const initialEndpoints: Endpoint[] = [
     status: true,
   },
   {
-    url: "https://api.waxsweden.org",
-    status: true,
-  },
-  {
     url: "https://wax.eosphere.io",
-    status: true,
-  },
-  {
-    url: "https://wax.cryptolions.io",
-    status: true,
-  },
-  {
-    url: "https://wax.dapplica.io",
     status: true,
   },
 ];
@@ -44,7 +32,6 @@ const initialEndpointId = Math.floor(
   Math.random() * filteredEndpointsByStatus.length
 );
 const initialCurrentEndpoint = initialEndpoints[initialEndpointId];
-
 const initialState: EndpointSliceState = {
   endpointsArray: initialEndpoints,
   currentEndpointId: initialEndpointId,
