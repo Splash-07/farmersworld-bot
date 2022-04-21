@@ -1,4 +1,11 @@
-import { Box, Flex, Grid, GridItem, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import {
   animalsDailyClaimLimitMap,
@@ -9,7 +16,12 @@ import {
 } from "../store/data";
 import { RootState } from "../store/store";
 import { isAnimal, isTool } from "../types/data.typeguards";
-import { AnimalsResponse, CropsResponse, MbsResponse, ToolsResponse } from "../types/data.types";
+import {
+  AnimalsResponse,
+  CropsResponse,
+  MbsResponse,
+  ToolsResponse,
+} from "../types/data.types";
 import { adjustTime, filterDailyLimits, msToTime } from "../utils/timers";
 import { getTextColor } from "../utils/utils";
 
@@ -44,18 +56,35 @@ const ItemList = () => {
         const { day_claims_at, template_id } = responseItem;
         const dayLimit = animalsDailyClaimLimitMap.get(template_id);
         return (
-          <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+          <GridItem
+            key={key}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            w="100%"
+          >
             <Box overflow="hidden" isTruncated color={color} w="100%">
               {name}
             </Box>
             {dayLimit &&
-            day_claims_at.length === animalsDailyClaimLimitMap.get(responseItem.template_id) &&
+            day_claims_at.length ===
+              animalsDailyClaimLimitMap.get(responseItem.template_id) &&
             filterDailyLimits(day_claims_at).length === 0 ? (
-              <Flex justifyContent="center" w="50%" fontSize="14px" color="tomato">
+              <Flex
+                justifyContent="center"
+                w="50%"
+                fontSize="14px"
+                color="tomato"
+              >
                 Daily limit
               </Flex>
             ) : (
-              <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+              <Flex
+                justifyContent="center"
+                w="50%"
+                fontSize="14px"
+                color={timer < 0 ? "tomato" : "whiteAlpha.900"}
+              >
                 {msToTime(timer)}
               </Flex>
             )}
@@ -66,11 +95,22 @@ const ItemList = () => {
         );
       } else {
         return (
-          <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+          <GridItem
+            key={key}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            w="100%"
+          >
             <Box overflow="hidden" isTruncated color={color} w="100%">
               {name}
             </Box>
-            <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+            <Flex
+              justifyContent="center"
+              w="50%"
+              fontSize="14px"
+              color={timer < 0 ? "tomato" : "whiteAlpha.900"}
+            >
               {msToTime(timer)}
             </Flex>
             {"times_claimed" in responseItem ? (
@@ -89,17 +129,36 @@ const ItemList = () => {
     const exception = ["Ancient Stone Axe", "Mining Excavator"];
     const hour = exception.includes(name) ? 7200000 : 3600000;
     const filteredMbs = filterMbsByType(mbs, responseItem.type);
-    const canBeStored = filteredMbs.reduce((acc, cur) => (acc += mbsMultiMap.get(cur.template_id)!), 0) + 1;
+    const canBeStored =
+      filteredMbs.reduce(
+        (acc, cur) => (acc += mbsMultiMap.get(cur.template_id)!),
+        0
+      ) + 1;
     const currentlyStored = canBeStored - Math.ceil(timer / hour);
     return (
-      <GridItem key={key} display="flex" alignItems="center" justifyContent="space-between" w="100%">
+      <GridItem
+        key={key}
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        w="100%"
+      >
         <Box overflow="hidden" isTruncated color={color} w="100%">
           {name}
         </Box>
-        <Flex justifyContent="center" w="50%" fontSize="14px" color={timer < 0 ? "tomato" : "whiteAlpha.900"}>
+        <Flex
+          justifyContent="center"
+          w="50%"
+          fontSize="14px"
+          color={timer < 0 ? "tomato" : "whiteAlpha.900"}
+        >
           {msToTime(timer)}
         </Flex>
-        <Flex justifyContent="center" w="50%" fontSize="14px">{`${currentlyStored}/${canBeStored}`}</Flex>
+        <Flex
+          justifyContent="center"
+          w="50%"
+          fontSize="14px"
+        >{`${currentlyStored}/${canBeStored}`}</Flex>
       </GridItem>
     );
   }
@@ -114,9 +173,15 @@ const ItemList = () => {
       boxShadow="md"
       overflowX="auto"
       w="100%"
-      maxWidth="450px"
+      maxW="450px"
     >
-      <GridItem display="flex" alignItems="center" justifyContent="space-between" w="100%" textAlign={"center"}>
+      <GridItem
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        w="100%"
+        textAlign={"center"}
+      >
         <Flex w="100%" justifyContent="center">
           Asset name
         </Flex>
@@ -142,7 +207,12 @@ const ItemList = () => {
           },
         }}
       >
-        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+        <GridItem
+          padding="2"
+          borderRadius="md"
+          boxShadow="md"
+          backgroundColor="whiteAlpha.100"
+        >
           <Text
             textAlign="center"
             textTransform="uppercase"
@@ -158,9 +228,16 @@ const ItemList = () => {
             Tools
           </Text>
           {items.toolsList &&
-            sortList(items.toolsList).map((tool, index) => renderAsset(tool, tool.template_id, index, items.mbsList))}
+            sortList(items.toolsList).map((tool, index) =>
+              renderAsset(tool, tool.template_id, index, items.mbsList)
+            )}
         </GridItem>
-        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+        <GridItem
+          padding="2"
+          borderRadius="md"
+          boxShadow="md"
+          backgroundColor="whiteAlpha.100"
+        >
           <Text
             textAlign="center"
             textTransform="uppercase"
@@ -175,9 +252,16 @@ const ItemList = () => {
           >
             Crops
           </Text>
-          {items.cropsList.map((crop, index) => renderAsset(crop, crop.template_id, index, items.mbsList))}
+          {items.cropsList.map((crop, index) =>
+            renderAsset(crop, crop.template_id, index, items.mbsList)
+          )}
         </GridItem>
-        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+        <GridItem
+          padding="2"
+          borderRadius="md"
+          boxShadow="md"
+          backgroundColor="whiteAlpha.100"
+        >
           <Text
             textAlign="center"
             textTransform="uppercase"
@@ -192,9 +276,16 @@ const ItemList = () => {
           >
             Animals
           </Text>
-          {items.animalsList.map((animal, index) => renderAsset(animal, animal.template_id, index, items.mbsList))}
+          {items.animalsList.map((animal, index) =>
+            renderAsset(animal, animal.template_id, index, items.mbsList)
+          )}
         </GridItem>
-        <GridItem padding="2" borderRadius="md" boxShadow="md" backgroundColor="whiteAlpha.100">
+        <GridItem
+          padding="2"
+          borderRadius="md"
+          boxShadow="md"
+          backgroundColor="whiteAlpha.100"
+        >
           <Text
             textAlign="center"
             textTransform="uppercase"
@@ -209,7 +300,10 @@ const ItemList = () => {
           >
             Memberships
           </Text>
-          {items.mbsList && items.mbsList.map((mbs, index) => renderAsset(mbs, mbs.template_id, index, items.mbsList))}
+          {items.mbsList &&
+            items.mbsList.map((mbs, index) =>
+              renderAsset(mbs, mbs.template_id, index, items.mbsList)
+            )}
         </GridItem>
       </Grid>
     </Grid>

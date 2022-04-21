@@ -1,6 +1,5 @@
 import { Box, Button, Flex, useMediaQuery } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { login } from "../service/wax";
 import { RootState } from "../store/store";
 
 import AccountTable from "./AccountTable";
@@ -11,6 +10,9 @@ import ItemList from "./ItemList";
 import AccountChest from "./AccountChest";
 import AccountResources from "./AccountResources";
 import Ad from "./Ad";
+import { login } from "../service/wax";
+import Endpoints from "./Endpoints";
+
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
   const { username } = useSelector((state: RootState) => state.user);
@@ -72,6 +74,7 @@ const Home = () => {
           >
             <Logger />
           </Flex>
+          <Endpoints />
         </Flex>
       </Flex>
     </Flex>

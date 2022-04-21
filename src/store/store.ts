@@ -1,16 +1,31 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import userReducer from "./slices/user.slice";
 import settingsReducer from "./slices/settings.slice";
-import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import endpointReducer from "./slices/endpoint.slice";
 
 const settingsPersistConfig = {
   key: "settings",
   storage,
-  blacklist: ["loggerArray", "updateData", "triggerNextAction", "currentServer"],
+  blacklist: ["loggerArray", "updateData", "triggerNextAction"],
+};
+const endpointPersistConfig = {
+  key: "endpoint",
+  storage,
+  blacklist: ["currentEndpointId", "currentEndpoint"],
 };
 const reducers = combineReducers({
   user: userReducer,
+  endpoint: persistReducer(endpointPersistConfig, endpointReducer),
   settings: persistReducer(settingsPersistConfig, settingsReducer),
 });
 
