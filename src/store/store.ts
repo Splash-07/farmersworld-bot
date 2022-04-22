@@ -21,7 +21,6 @@ const settingsPersistConfig = {
 const endpointPersistConfig = {
   key: "endpoint",
   storage,
-  blacklist: ["currentEndpointId", "currentEndpoint"],
 };
 const reducers = combineReducers({
   user: userReducer,
