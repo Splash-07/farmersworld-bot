@@ -16,7 +16,6 @@ import Endpoints from "./Endpoints";
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
   const { username } = useSelector((state: RootState) => state.user);
-
   if (!username)
     return (
       <Box
@@ -38,6 +37,7 @@ const Home = () => {
         </Button>
       </Box>
     );
+
   return (
     <Flex direction="column" marginTop="20px" gap="20px">
       <Flex gap="20px" flexDir="row">

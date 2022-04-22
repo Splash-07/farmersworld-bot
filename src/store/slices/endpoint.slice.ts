@@ -11,7 +11,9 @@ export interface EndpointSliceState {
   currentEndpoint: Endpoint;
 }
 
-const initialEndpoints: Endpoint[] = [
+const initialEndpoints: Endpoint[] = JSON.parse(
+  JSON.parse(localStorage.getItem("persist:endpoint")!).endpointsArray
+) ?? [
   {
     url: "https://chain.wax.io",
     status: true,
@@ -28,10 +30,15 @@ const initialEndpoints: Endpoint[] = [
 const filteredEndpointsByStatus = initialEndpoints.filter(
   (endpoint) => endpoint.status === true
 );
-const initialEndpointId = Math.floor(
-  Math.random() * filteredEndpointsByStatus.length
-);
-const initialCurrentEndpoint = initialEndpoints[initialEndpointId];
+const initialEndpointId =
+  JSON.parse(
+    JSON.parse(localStorage.getItem("persist:endpoint")!).currentEndpointId
+  ) ?? Math.floor(Math.random() * filteredEndpointsByStatus.length);
+const initialCurrentEndpoint =
+  JSON.parse(
+    JSON.parse(localStorage.getItem("persist:endpoint")!).currentEndpoint
+  ) ?? initialEndpoints[initialEndpointId];
+
 const initialState: EndpointSliceState = {
   endpointsArray: initialEndpoints,
   currentEndpointId: initialEndpointId,
