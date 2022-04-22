@@ -53,7 +53,7 @@ npm start
 
 # TODO
 
-- Refactor endpoint services
+- endpoint slice and wax service needs to be refactored
 
 ##
 
