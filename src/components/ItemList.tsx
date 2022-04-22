@@ -168,6 +168,7 @@ const ItemList = () => {
       width={breakPoint480 ? "unset" : "100%"}
       backgroundColor="whiteAlpha.100"
       alignContent="flex-start"
+      alignSelf="flex-start"
       borderRadius="md"
       padding="3"
       boxShadow="md"
@@ -207,104 +208,119 @@ const ItemList = () => {
           },
         }}
       >
-        <GridItem
-          padding="2"
-          borderRadius="md"
-          boxShadow="md"
-          backgroundColor="whiteAlpha.100"
-        >
-          <Text
-            textAlign="center"
-            textTransform="uppercase"
-            paddingTop="1"
-            paddingBottom="1"
-            paddingLeft="4"
-            paddingRight="4"
-            borderRadius="md"
-            boxShadow="md"
-            backgroundColor="whiteAlpha.100"
-            marginBottom="10px"
-          >
-            Tools
-          </Text>
-          {items.toolsList &&
-            sortList(items.toolsList).map((tool, index) =>
-              renderAsset(tool, tool.template_id, index, items.mbsList)
-            )}
-        </GridItem>
-        <GridItem
-          padding="2"
-          borderRadius="md"
-          boxShadow="md"
-          backgroundColor="whiteAlpha.100"
-        >
-          <Text
-            textAlign="center"
-            textTransform="uppercase"
-            paddingTop="1"
-            paddingBottom="1"
-            paddingLeft="4"
-            paddingRight="4"
-            borderRadius="md"
-            boxShadow="md"
-            backgroundColor="whiteAlpha.100"
-            marginBottom="10px"
-          >
-            Crops
-          </Text>
-          {items.cropsList.map((crop, index) =>
-            renderAsset(crop, crop.template_id, index, items.mbsList)
-          )}
-        </GridItem>
-        <GridItem
-          padding="2"
-          borderRadius="md"
-          boxShadow="md"
-          backgroundColor="whiteAlpha.100"
-        >
-          <Text
-            textAlign="center"
-            textTransform="uppercase"
-            paddingTop="1"
-            paddingBottom="1"
-            paddingLeft="4"
-            paddingRight="4"
-            borderRadius="md"
-            boxShadow="md"
-            backgroundColor="whiteAlpha.100"
-            marginBottom="10px"
-          >
-            Animals
-          </Text>
-          {items.animalsList.map((animal, index) =>
-            renderAsset(animal, animal.template_id, index, items.mbsList)
-          )}
-        </GridItem>
-        <GridItem
-          padding="2"
-          borderRadius="md"
-          boxShadow="md"
-          backgroundColor="whiteAlpha.100"
-        >
-          <Text
-            textAlign="center"
-            textTransform="uppercase"
-            paddingTop="1"
-            paddingBottom="1"
-            paddingLeft="4"
-            paddingRight="4"
-            borderRadius="md"
-            boxShadow="md"
-            backgroundColor="whiteAlpha.100"
-            marginBottom="10px"
-          >
-            Memberships
-          </Text>
-          {items.mbsList &&
-            items.mbsList.map((mbs, index) =>
-              renderAsset(mbs, mbs.template_id, index, items.mbsList)
-            )}
-        </GridItem>
+        {items.toolsList.length > 0 && (
+          <>
+            <GridItem
+              padding="2"
+              borderRadius="md"
+              boxShadow="md"
+              backgroundColor="whiteAlpha.100"
+            >
+              <Text
+                textAlign="center"
+                textTransform="uppercase"
+                paddingTop="1"
+                paddingBottom="1"
+                paddingLeft="4"
+                paddingRight="4"
+                borderRadius="md"
+                boxShadow="md"
+                backgroundColor="whiteAlpha.100"
+                marginBottom="10px"
+              >
+                Tools
+              </Text>
+              {items.toolsList &&
+                sortList(items.toolsList).map((tool, index) =>
+                  renderAsset(tool, tool.template_id, index, items.mbsList)
+                )}
+            </GridItem>
+          </>
+        )}
+        {items.cropsList.length > 0 && (
+          <>
+            <GridItem
+              padding="2"
+              borderRadius="md"
+              boxShadow="md"
+              backgroundColor="whiteAlpha.100"
+            >
+              <Text
+                textAlign="center"
+                textTransform="uppercase"
+                paddingTop="1"
+                paddingBottom="1"
+                paddingLeft="4"
+                paddingRight="4"
+                borderRadius="md"
+                boxShadow="md"
+                backgroundColor="whiteAlpha.100"
+                marginBottom="10px"
+              >
+                Crops
+              </Text>
+              {items.cropsList.map((crop, index) =>
+                renderAsset(crop, crop.template_id, index, items.mbsList)
+              )}
+            </GridItem>
+          </>
+        )}
+        {items.animalsList.length > 0 && (
+          <>
+            <GridItem
+              padding="2"
+              borderRadius="md"
+              boxShadow="md"
+              backgroundColor="whiteAlpha.100"
+            >
+              <Text
+                textAlign="center"
+                textTransform="uppercase"
+                paddingTop="1"
+                paddingBottom="1"
+                paddingLeft="4"
+                paddingRight="4"
+                borderRadius="md"
+                boxShadow="md"
+                backgroundColor="whiteAlpha.100"
+                marginBottom="10px"
+              >
+                Animals
+              </Text>
+              {items.animalsList.map((animal, index) =>
+                renderAsset(animal, animal.template_id, index, items.mbsList)
+              )}
+            </GridItem>
+          </>
+        )}
+        {items.mbsList.length > 0 && (
+          <>
+            <GridItem
+              padding="2"
+              borderRadius="md"
+              boxShadow="md"
+              backgroundColor="whiteAlpha.100"
+            >
+              <Text
+                textAlign="center"
+                textTransform="uppercase"
+                paddingTop="1"
+                paddingBottom="1"
+                paddingLeft="4"
+                paddingRight="4"
+                borderRadius="md"
+                boxShadow="md"
+                backgroundColor="whiteAlpha.100"
+                marginBottom="10px"
+              >
+                Memberships
+              </Text>
+              {items.mbsList.map((mbs, index) =>
+                renderAsset(mbs, mbs.template_id, index, items.mbsList)
+              )}
+            </GridItem>
+          </>
+        )}
       </Grid>
     </Grid>
   );
