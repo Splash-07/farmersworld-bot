@@ -6,6 +6,7 @@ import {
   toggleEnergy,
   toggleFeedChickens,
   toggleFeedDairyCows,
+  toggleMbsStore,
   toggleRepair,
 } from "../store/slices/settings.slice";
 import { RootState } from "../store/store";
@@ -55,6 +56,29 @@ const Settings = () => {
               initialValue={settings.minEnergy}
               dispatchAction={setMinEnergy}
             />
+          </SettingsBar>
+        </WrapItem>
+        <WrapItem w="100%">
+          <SettingsBar
+            dispatchedAction={toggleMbsStore}
+            isDisabled={settings.mbsStoreIsDisabled}
+          >
+            <Box
+              backgroundColor="whiteAlpha.100"
+              color={
+                settings.mbsStoreIsDisabled ? "whiteAlpha.400" : "orange.50"
+              }
+              padding="0 12px"
+              border="1px solid"
+              backdropBlur="lg"
+              borderColor="whiteAlpha.100"
+              boxShadow="md"
+              lineHeight="30px"
+              fontSize="14px"
+              minW="175px"
+            >
+              Store mbs cards
+            </Box>
           </SettingsBar>
         </WrapItem>
         <WrapItem w="100%">

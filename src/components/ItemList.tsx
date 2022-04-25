@@ -15,7 +15,7 @@ import {
   mbsMultiMap,
 } from "../store/data";
 import { RootState } from "../store/store";
-import { isAnimal, isTool } from "../types/data.typeguards";
+import { isAnimal, isMbs, isTool } from "../types/data.typeguards";
 import {
   AnimalsResponse,
   CropsResponse,
@@ -28,6 +28,9 @@ import { getTextColor } from "../utils/utils";
 const ItemList = () => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
   const { items } = useSelector((state: RootState) => state.user);
+  const { mbsStoreIsDisabled } = useSelector(
+    (state: RootState) => state.settings
+  );
 
   function sortList(list: ToolsResponse[]) {
     const array = [...list];
@@ -49,7 +52,8 @@ const ItemList = () => {
     if (!asset) return;
     const { name, type } = asset;
     const color = getTextColor(type);
-    const timer = adjustTime(responseItem, mbs);
+    const timer = adjustTime(responseItem, mbs, mbsStoreIsDisabled);
+    const mbsCooldown = 86400000; // 24 hours
     // IF item is not Tool, return without store count
     if (!isTool(responseItem)) {
       if (isAnimal(responseItem)) {
@@ -93,36 +97,39 @@ const ItemList = () => {
             }/${itemsClaimRequiredMap.get(template_id)}`}</Flex>
           </GridItem>
         );
-      } else {
-        return (
-          <GridItem
-            key={key}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            w="100%"
-          >
-            <Box overflow="hidden" isTruncated color={color} w="100%">
-              {name}
-            </Box>
-            <Flex
-              justifyContent="center"
-              w="50%"
-              fontSize="14px"
-              color={timer < 0 ? "tomato" : "whiteAlpha.900"}
-            >
-              {msToTime(timer)}
-            </Flex>
-            {"times_claimed" in responseItem ? (
-              <Flex justifyContent="center" w="50%" fontSize="14px">{`${
-                responseItem.times_claimed
-              }/${itemsClaimRequiredMap.get(responseItem.template_id)}`}</Flex>
-            ) : (
-              <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
-            )}
-          </GridItem>
-        );
       }
+      return (
+        <GridItem
+          key={key}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          w="100%"
+        >
+          <Box overflow="hidden" isTruncated color={color} w="100%">
+            {name}
+          </Box>
+          <Flex
+            justifyContent="center"
+            w="50%"
+            fontSize="14px"
+            color={timer < 0 ? "tomato" : "whiteAlpha.900"}
+          >
+            {msToTime(timer)}
+          </Flex>
+          {"times_claimed" in responseItem ? (
+            <Flex justifyContent="center" w="50%" fontSize="14px">{`${
+              responseItem.times_claimed
+            }/${itemsClaimRequiredMap.get(responseItem.template_id)}`}</Flex>
+          ) : isMbs(responseItem) && !mbsStoreIsDisabled ? (
+            <Flex justifyContent="center" w="50%" fontSize="14px">
+              {`${Math.floor(timer / (mbsCooldown * 4))}/4`}
+            </Flex>
+          ) : (
+            <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
+          )}
+        </GridItem>
+      );
     }
 
     // count store/max store

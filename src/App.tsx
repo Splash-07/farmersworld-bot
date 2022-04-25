@@ -21,6 +21,7 @@ const theme = extendTheme({
   },
 });
 function App() {
+  console.log("render");
   return (
     <ChakraProvider theme={theme}>
       <Box h={"100vh"}>

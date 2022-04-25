@@ -12,6 +12,7 @@ export interface SettingsState {
   energyIsDisabled: boolean;
   feedChickenIsDisabled: boolean;
   feedDairyCowIsDisabled: boolean;
+  mbsStoreIsDisabled: boolean;
 }
 const initialState: SettingsState = {
   minRepair: 50,
@@ -20,8 +21,10 @@ const initialState: SettingsState = {
   loggerArray: [],
   updateData: false,
   triggerNextAction: false,
+
   repairIsDisabled: false,
   energyIsDisabled: false,
+  mbsStoreIsDisabled: false,
 
   feedChickenIsDisabled: true,
   feedDairyCowIsDisabled: true,
@@ -89,6 +92,15 @@ export const settingsSlice = createSlice({
       state.feedChickenIsDisabled = !state.feedChickenIsDisabled;
       state.loggerArray.push(log);
     },
+    toggleMbsStore: (state) => {
+      const log = logger(
+        `Membership cards storing <span style="color: #feebc8;"><strong>${
+          !state.mbsStoreIsDisabled ? "disabled" : "enabled"
+        }</strong></span>.`
+      );
+      state.mbsStoreIsDisabled = !state.mbsStoreIsDisabled;
+      state.loggerArray.push(log);
+    },
     triggerNextAction: (state, { payload }) => {
       state.triggerNextAction = payload;
     },
@@ -110,6 +122,7 @@ export const {
   toggleEnergy,
   toggleFeedChickens,
   toggleFeedDairyCows,
+  toggleMbsStore,
   pushLog,
 } = settingsSlice.actions;
 
