@@ -166,7 +166,11 @@ export const userSlice = createSlice({
       state.items.assetsInStash = assetsInStash;
     },
     setNextAction: (state, { payload }: { payload: SettingsState }) => {
-      const { feedChickenIsDisabled, feedDairyCowIsDisabled } = payload;
+      const {
+        feedChickenIsDisabled,
+        feedDairyCowIsDisabled,
+        mbsStoreIsDisabled,
+      } = payload;
       const filteredAnimalList = filterAnimalList(
         state.items.animalsList,
         state.items.assetsInStash,
@@ -177,7 +181,8 @@ export const userSlice = createSlice({
         state.items.toolsList,
         state.items.mbsList,
         state.items.cropsList,
-        filteredAnimalList
+        filteredAnimalList,
+        mbsStoreIsDisabled
       );
       state.items.next = lowCdItem;
     },
