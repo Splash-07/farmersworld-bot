@@ -10,7 +10,8 @@ import { getTextColor } from "../utils/utils";
 import { assetMap } from "../store/data";
 
 const NextAction = () => {
-  const { user, settings } = useSelector((state: RootState) => state);
+  const user = useSelector((state: RootState) => state.user);
+  const settings = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");

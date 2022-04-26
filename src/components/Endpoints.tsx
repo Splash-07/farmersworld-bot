@@ -15,6 +15,7 @@ const Endpoints = () => {
     (state: RootState) => state.endpoint
   );
   const dispatch = useDispatch();
+
   function handleAddNewServer() {
     const newUrl = prompt(
       'Add new server in format like this: "https://chain.wax.io"'

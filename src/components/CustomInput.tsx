@@ -1,6 +1,13 @@
-import { Flex, Input, InputGroup, InputLeftAddon, InputRightAddon, useMediaQuery } from "@chakra-ui/react";
+import {
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { FC, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 
@@ -11,23 +18,36 @@ interface CustomInputInterface {
   dispatchAction: ActionCreatorWithPayload<any, string>;
   maxPossible: number;
 }
-const CustomInput: FC<CustomInputInterface> = ({ isDisabled, initialValue, type, dispatchAction, maxPossible }) => {
-  const dispatch = useDispatch();
-
+const CustomInput: FC<CustomInputInterface> = ({
+  isDisabled,
+  initialValue,
+  type,
+  dispatchAction,
+  maxPossible,
+}) => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
   const [value, setValue] = useState<string>(initialValue.toString());
+  const dispatch = useDispatch();
 
-  const dispatchValue = useMemo(
-    () =>
-      debounce((value) => {
-        if (value.length === 0) {
-          dispatch(dispatchAction(0));
-        } else {
-          dispatch(dispatchAction(parseInt(value)));
-        }
-      }, 1000),
-    []
-  );
+  const dispatchValue = debounce((value) => {
+    if (value.length === 0) {
+      dispatch(dispatchAction(0));
+    } else {
+      dispatch(dispatchAction(parseInt(value)));
+    }
+  }, 1000);
+
+  function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    if (value.length === 0) return setValue(value);
+    if (parseInt(value) <= maxPossible) {
+      setValue(value);
+      dispatchValue(value);
+    } else {
+      setValue(maxPossible.toString());
+      dispatchValue(maxPossible.toString());
+    }
+  }
   return (
     <Flex width="100%" alignItems="center" gap="10px">
       <InputGroup size="sm" fontSize="14px">
@@ -53,17 +73,7 @@ const CustomInput: FC<CustomInputInterface> = ({ isDisabled, initialValue, type,
           isDisabled={isDisabled}
           value={value}
           maxW="15ch"
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value.length === 0) return setValue(value);
-            if (parseInt(value) <= maxPossible) {
-              setValue(value);
-              dispatchValue(value);
-            } else {
-              setValue(maxPossible.toString());
-              dispatchValue(maxPossible.toString());
-            }
-          }}
+          onChange={(e) => handleInput(e)}
         />
         {type.includes("Repair") && (
           <InputRightAddon

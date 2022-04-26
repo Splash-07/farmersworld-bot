@@ -4,8 +4,9 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 const Logger = () => {
-  const { settings } = useSelector((state: RootState) => state);
+  const settings = useSelector((state: RootState) => state.settings);
   const log = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const logBox = log.current!;
     if (logBox.scrollTop + logBox.clientHeight >= logBox.scrollHeight - 80) {

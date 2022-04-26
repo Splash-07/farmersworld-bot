@@ -2,7 +2,7 @@ import { Box, Button, Flex, useMediaQuery } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-import AccountTable from "./AccountTable";
+import AccountInfo from "./AccountInfo";
 import Logger from "./Logger";
 import NextAction from "./NextAction";
 import Settings from "./Settings";
@@ -15,7 +15,7 @@ import Endpoints from "./Endpoints";
 
 const Home = () => {
   const [breakPoint720] = useMediaQuery("(min-width: 720px)");
-  const { username } = useSelector((state: RootState) => state.user);
+  const username = useSelector((state: RootState) => state.user.username);
   if (!username)
     return (
       <Box
@@ -41,7 +41,7 @@ const Home = () => {
   return (
     <Flex direction="column" marginTop="20px" gap="20px">
       <Flex gap="20px" flexDir="row">
-        <AccountTable />
+        <AccountInfo />
         <Flex gap="10px" flexDir="column" w="100%">
           <AccountChest />
           <AccountResources />

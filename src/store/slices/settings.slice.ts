@@ -67,7 +67,7 @@ export const settingsSlice = createSlice({
     toggleEnergy: (state) => {
       const log = logger(
         `Energy restore has been <span style="color: #feebc8;"><strong>${
-          !state.repairIsDisabled ? "disabled" : "enabled"
+          !state.energyIsDisabled ? "disabled" : "enabled"
         }</strong></span>.`
       );
       state.energyIsDisabled = !state.energyIsDisabled;

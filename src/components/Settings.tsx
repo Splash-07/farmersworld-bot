@@ -14,7 +14,8 @@ import CustomInput from "./CustomInput";
 import SettingsBar from "./SettingsBar";
 
 const Settings = () => {
-  const { user, settings } = useSelector((state: RootState) => state);
+  const resources = useSelector((state: RootState) => state.user.resources);
+  const settings = useSelector((state: RootState) => state.settings);
   return (
     <Flex
       justifyContent="center"
@@ -51,7 +52,7 @@ const Settings = () => {
           >
             <CustomInput
               isDisabled={settings.energyIsDisabled}
-              maxPossible={user.resources?.max_energy! - 50}
+              maxPossible={resources?.max_energy! - 50}
               type="Restore energy when <"
               initialValue={settings.minEnergy}
               dispatchAction={setMinEnergy}

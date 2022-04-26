@@ -1,14 +1,14 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 import WoodIcon from "../assets/icons/wood-icon.png";
 import FoodIcon from "../assets/icons/food-icon.png";
 import GoldIcon from "../assets/icons/gold-icon.png";
 import EnergyIcon from "../assets/icons/energy-icon.png";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 
 const AccountResources = () => {
-  const { user } = useSelector((state: RootState) => state);
+  const user = useSelector((state: RootState) => state.user);
   return (
     <Flex
       justify="space-evenly"
@@ -22,7 +22,11 @@ const AccountResources = () => {
       fontSize="15px"
     >
       <Flex gap="10px" flexDir={"column"} flexWrap="wrap">
-        <Text textAlign="center" textTransform="uppercase" fontWeight="semibold">
+        <Text
+          textAlign="center"
+          textTransform="uppercase"
+          fontWeight="semibold"
+        >
           Account resources
         </Text>
         <Flex gap="20px">
@@ -36,7 +40,9 @@ const AccountResources = () => {
             backgroundColor="whiteAlpha.100"
           >
             <Image w="32px" src={WoodIcon} />
-            <Text fontSize="15px">{user.resources?.balances.wood.toFixed(2)}</Text>
+            <Text fontSize="15px">
+              {user.resources?.balances.wood.toFixed(2)}
+            </Text>
           </Box>
           <Box
             display="flex"
@@ -48,7 +54,9 @@ const AccountResources = () => {
             backgroundColor="whiteAlpha.100"
           >
             <Image w="32px" src={GoldIcon} alignContent="center" />
-            <Text fontSize="15px">{user.resources?.balances.gold.toFixed(2)}</Text>
+            <Text fontSize="15px">
+              {user.resources?.balances.gold.toFixed(2)}
+            </Text>
           </Box>
 
           <Box
@@ -61,7 +69,9 @@ const AccountResources = () => {
             backgroundColor="whiteAlpha.100"
           >
             <Image w="32px" src={FoodIcon} />
-            <Text fontSize="15px">{user.resources?.balances.food.toFixed(2)}</Text>
+            <Text fontSize="15px">
+              {user.resources?.balances.food.toFixed(2)}
+            </Text>
           </Box>
           <Box
             display="flex"

@@ -27,9 +27,11 @@ import { getTextColor } from "../utils/utils";
 
 const ItemList = () => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
-  const { items } = useSelector((state: RootState) => state.user);
-  const { mbsStoreIsDisabled } = useSelector(
-    (state: RootState) => state.settings
+
+  const items = useSelector((state: RootState) => state.user.items);
+
+  const mbsStoreIsDisabled = useSelector(
+    (state: RootState) => state.settings.mbsStoreIsDisabled
   );
 
   function sortList(list: ToolsResponse[]) {

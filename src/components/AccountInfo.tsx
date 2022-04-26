@@ -33,18 +33,23 @@ import { handleEndpointManipulations } from "../service/wax";
 import { swapEndpoint } from "../store/slices/endpoint.slice";
 
 const AccountTable = () => {
-  const { user, settings, endpoint } = useSelector((state: RootState) => state);
+  const username = useSelector((state: RootState) => state.user.username);
+  const account = useSelector((state: RootState) => state.user.account);
+  const settings = useSelector((state: RootState) => state.settings);
+  const endpoint = useSelector((state: RootState) => state.endpoint);
+
   const dispatch = useDispatch();
+
   // fetch account data on mount
   useEffect(() => {
     (async () => {
       dispatch(toggleUpdateData(true));
-      if (user.username) {
-        const log = `Logged in. Hello, <strong><span style="color: #feebc8;">${user.username}</span></strong>`;
+      if (username) {
+        const log = `Logged in. Hello, <strong><span style="color: #feebc8;">${username}</span></strong>`;
         dispatch(pushLog(log));
       }
     })();
-  }, [user.username]);
+  }, [username]);
 
   // Trigger data fetch each 30 sec
   useEffect(() => {
@@ -63,17 +68,17 @@ const AccountTable = () => {
   useEffect(() => {
     if (settings.updateData === true) {
       (async () => {
-        if (user.username) {
-          // / Action will not perform, untill data fetched correctly
+        if (username) {
+          // / Action will not perform, until data fetched correctly
           Promise.all([
-            getAccountData(user.username),
-            getResourcesData(user.username),
-            getToolsData(user.username),
-            getMbsData(user.username),
-            getCropsData(user.username),
-            getBreedingsData(user.username),
-            getAnimalsData(user.username),
-            getAssetsInStash(user.username),
+            getAccountData(username),
+            getResourcesData(username),
+            getToolsData(username),
+            getMbsData(username),
+            getCropsData(username),
+            getBreedingsData(username),
+            getAnimalsData(username),
+            getAssetsInStash(username),
           ])
             .then(async (result) => {
               console.log(result);
@@ -110,7 +115,7 @@ const AccountTable = () => {
       <Flex gap="5px">
         <Text>Logged in as</Text>
         <Text color="orange.100" fontWeight="semibold">
-          {user.username}
+          {username}
         </Text>
       </Flex>
       <Flex gap="5px">
@@ -122,30 +127,28 @@ const AccountTable = () => {
 
       <Flex flexDir="column" gap="10px" maxWidth="350px" width="100%">
         <Flex gap="5px" justifyContent="space-evenly">
-          {!user.account ? (
+          {!account ? (
             <Skeleton>
               <Box>some text</Box>
             </Skeleton>
           ) : (
             <Box>{`CPU: ${Math.ceil(
-              (user.account?.cpuUsed! / user.account?.cpuMax!) * 100
+              (account?.cpuUsed! / account?.cpuMax!) * 100
             )}%`}</Box>
           )}
-          {!user.account ? (
+          {!account ? (
             <Skeleton>
               <Box>some text</Box>
             </Skeleton>
           ) : (
-            <Box>{`Stacking: ${user.account?.waxStackedOnCpu}W`}</Box>
+            <Box>{`Stacking: ${account?.waxStackedOnCpu}W`}</Box>
           )}
         </Flex>
         <Slider
           aria-label="slider-ex-1"
           value={
-            user.account
-              ? Math.ceil(
-                  (user.account?.cpuUsed! / user.account?.cpuMax!) * 100
-                )
+            account
+              ? Math.ceil((account?.cpuUsed! / account?.cpuMax!) * 100)
               : 0
           }
           isDisabled

@@ -15,6 +15,7 @@ const SettingBar: FC<CustomSettingBarInterface> = ({
   children,
 }) => {
   const dispatch = useDispatch();
+
   return (
     <Flex alignItems="center" gap="10px">
       <IconButton
