@@ -1,5 +1,3 @@
-import { filterDailyLimits } from "../utils/timers";
-import { AnimalsResponse, AssetsInStash, MbsResponse } from "./../types/data.types";
 export const mbsMultiMap = new Map([
   [260636, 1],
   [260638, 2],
@@ -23,13 +21,7 @@ export const itemsClaimRequiredMap = new Map([
   [298613, 16],
   [298614, 28],
 ]);
-// 298612, { name: "Chicken Egg", type: "Animals" }],
-//   [298613, { name: "Chick", type: "Animals" }],
-//   [298614, { name: "Chicken", type: "Animals" }],
-//   [298597, { name: "Baby Calf", type: "Animals" }],
-//   [298599, { name: "Female Calf", type: "Animals" }],
-//   [298600, { name: "Male Calf", type: "Animals" }],
-//   [298607, { name: "Dairy Cow", type: "Animals" }],
+
 export const animalsDailyClaimLimitMap = new Map([
   [298597, 2],
   [298599, 4],
@@ -39,6 +31,7 @@ export const animalsDailyClaimLimitMap = new Map([
   [298613, 4],
   [298614, 4],
 ]);
+
 export const assetMap = new Map([
   [318606, { name: "Barley", type: "Crops" }],
   [318607, { name: "Corn", type: "Crops" }],
@@ -84,46 +77,3 @@ export const colorsMap = new Map([
   ["Crops", "#ECC94B"],
   ["Animals", "#FFFFF0"],
 ]);
-
-export function filterMbsByType(mbs: MbsResponse[], type: string) {
-  return mbs.filter((mbs) => mbs.type === type);
-}
-
-export function filterAnimalList(
-  animals: AnimalsResponse[],
-  assetsInStash: AssetsInStash,
-  feedChickenIsDisabled: boolean,
-  feedDairyCowIsDisabled: boolean
-) {
-  const filteredList = animals.filter((animal) => {
-    // if (settings.feedDairyCowIsDisabled) return false;
-    const { template_id, day_claims_at } = animal;
-    const dailyLimit = animalsDailyClaimLimitMap.get(template_id);
-    const filteredDailyLimit = filterDailyLimits(day_claims_at);
-    // if chicken egg
-    if (template_id === 298612) {
-      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
-    }
-    // if chick or chicken
-    if (template_id === 298613 || template_id === 298614) {
-      // Dont feed chiken if disabled
-      if (template_id === 298614 && feedChickenIsDisabled) return false;
-      if (assetsInStash.barley.length === 0) return false;
-      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
-    }
-    // if Baby Calf
-    if (template_id === 298597) {
-      if (assetsInStash.milk.length === 0) return false;
-      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
-    }
-    // if Female Calf, Male Calf, Dairy Cow, Bull
-    if (template_id === 298599 || template_id === 298600 || template_id === 298607 || template_id === 298611) {
-      // Dont feed Dairy Cow
-      if (template_id === 298607 && feedDairyCowIsDisabled) return false;
-      if (assetsInStash.barley.length === 0) return false;
-      if (dailyLimit && day_claims_at.length === dailyLimit && filteredDailyLimit.length === 0) return false;
-    }
-    return true;
-  });
-  return filteredList;
-}

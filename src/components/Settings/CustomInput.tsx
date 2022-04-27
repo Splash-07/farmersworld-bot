@@ -1,3 +1,8 @@
+import { FC, useState } from "react";
+import { useAppDispatch } from "../../hooks/store.hooks";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import debounce from "lodash.debounce";
+
 import {
   Flex,
   Input,
@@ -6,10 +11,6 @@ import {
   InputRightAddon,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { FC, useState } from "react";
-import { useDispatch } from "react-redux";
-import debounce from "lodash.debounce";
 
 interface CustomInputInterface {
   initialValue: number;
@@ -18,6 +19,7 @@ interface CustomInputInterface {
   dispatchAction: ActionCreatorWithPayload<any, string>;
   maxPossible: number;
 }
+
 const CustomInput: FC<CustomInputInterface> = ({
   isDisabled,
   initialValue,
@@ -27,7 +29,7 @@ const CustomInput: FC<CustomInputInterface> = ({
 }) => {
   const [breakPoint480] = useMediaQuery("(min-width: 480px)");
   const [value, setValue] = useState<string>(initialValue.toString());
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const dispatchValue = debounce((value) => {
     if (value.length === 0) {

@@ -9,7 +9,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import userReducer from "./slices/user.slice";
+import dataReducer from "./slices/data.slice";
 import settingsReducer from "./slices/settings.slice";
 import endpointReducer from "./slices/endpoint.slice";
 
@@ -23,7 +23,7 @@ const endpointPersistConfig = {
   storage,
 };
 const reducers = combineReducers({
-  user: userReducer,
+  data: dataReducer,
   endpoint: persistReducer(endpointPersistConfig, endpointReducer),
   settings: persistReducer(settingsPersistConfig, settingsReducer),
 });

@@ -1,13 +1,12 @@
-import { Resources } from "./../types/data.types";
+import { Animal, Resources, Tool } from "./../types/data.types";
 import { isAnimal, isMbs, isTool } from "../types/data.typeguards";
 import { assetMap } from "../store/data";
 import { pushLog, SettingsState } from "../store/slices/settings.slice";
 import { store } from "../store/store";
-import { handleEndpointManipulations, wax } from "./wax";
-import { UserState } from "../store/slices/user.slice";
+import { DataState } from "../store/slices/data.slice";
 import { sleep } from "../utils/timers";
-import { AnimalsResponse, ToolsResponse } from "../types/data.types";
 import { swapEndpoint } from "../store/slices/endpoint.slice";
+import { handleEndpointManipulations, wax } from "./wax.service";
 
 export async function actionClaimTool(
   asset_id: string,
@@ -206,15 +205,15 @@ export async function actionRepair(
   }
 }
 export async function handleAnimals(
-  nextItem: AnimalsResponse,
-  user: UserState
+  nextAnimal: Animal,
+  data: DataState
 ): Promise<{
   status: boolean;
   result: any;
 }> {
-  const { username, items } = user;
+  const { username, items } = data;
   const { assetsInStash } = items;
-  const { template_id, asset_id } = nextItem;
+  const { template_id, asset_id } = nextAnimal;
 
   let response;
   //  hatch eggs
@@ -233,12 +232,12 @@ export async function handleAnimals(
   return response;
 }
 export async function handleNextAction(
-  user: UserState,
+  data: DataState,
   settings: SettingsState
 ) {
-  const username = user.username!;
-  const nextItem = user.items.next!;
-  const accountResources = user.resources!;
+  const accountResources = data.resources!;
+  const username = data.username!;
+  const nextItem = data.items.next!;
 
   if ("current_durability" in nextItem) {
     await handleToolRepair(username, nextItem, settings);
@@ -250,7 +249,7 @@ export async function handleNextAction(
     response = await actionClaimTool(nextItem.asset_id, username);
   else if (isMbs(nextItem))
     response = await actionClaimMembership(nextItem.asset_id, username);
-  else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, user);
+  else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, data);
   else response = await actionClaimCrop(nextItem.asset_id, username);
 
   if (response?.status === true) {
@@ -274,7 +273,7 @@ export async function handleNextAction(
 
 export async function handleToolRepair(
   username: string,
-  nextTool: ToolsResponse,
+  nextTool: Tool,
   settings: SettingsState
 ) {
   if (

@@ -1,9 +1,15 @@
-import { assetMap } from "./../store/data";
-import { AnimalsResponse, CropsResponse } from "./../types/data.types";
-import { filterMbsByType, mbsMultiMap } from "../store/data";
+import { assetMap, mbsMultiMap } from "./../store/data";
+import {
+  Animal,
+  AnimalsResponse,
+  Crop,
+  CropsResponse,
+  Mbs,
+  Tool,
+} from "./../types/data.types";
 import { MbsResponse, ToolsResponse } from "../types/data.types";
-import { store } from "../store/store";
 import { isMbs, isTool } from "../types/data.typeguards";
+import { filterMbsByType } from "./utils";
 
 export function msToTime(ms: number) {
   if (ms < 0) return "00:00:00";
@@ -32,9 +38,9 @@ export function filterDailyLimits(dayClaimList: number[]) {
 }
 
 export function adjustTime(
-  item: ToolsResponse | MbsResponse | CropsResponse | AnimalsResponse,
-  mbs: MbsResponse[],
-  mbsStoreIsDisabled: boolean
+  item: Tool | Mbs | Crop | Animal,
+  mbs?: MbsResponse,
+  mbsStoreIsDisabled?: boolean
 ) {
   const delay = 10000;
   const itemName = assetMap.get(item.template_id)?.name;
@@ -47,7 +53,7 @@ export function adjustTime(
   }
 
   // if item is not Tool -> return timer
-  if (!isTool(item)) return timer + delay;
+  if (!isTool(item) || !mbs) return timer + delay;
 
   const mbsFiltered = filterMbsByType(mbs, item.type);
   if (mbsFiltered.length === 0) return timer + delay;
@@ -64,10 +70,10 @@ export function adjustTime(
 }
 
 export function findLowestCD(
-  tools: ToolsResponse[],
-  mbs: MbsResponse[],
-  crops: CropsResponse[],
-  animals: AnimalsResponse[],
+  tools: ToolsResponse,
+  mbs: MbsResponse,
+  crops: CropsResponse,
+  animals: AnimalsResponse,
   mbsStoreIsDisabled: boolean
 ) {
   const array = [...tools, ...mbs, ...crops, ...animals];
@@ -77,6 +83,7 @@ export function findLowestCD(
       next_availability: adjustTime(item, mbs, mbsStoreIsDisabled),
     };
   });
+
   const foundedItem = adjustedTimeArray.reduce((prev, cur) => {
     return prev.next_availability < cur.next_availability ? prev : cur;
   });

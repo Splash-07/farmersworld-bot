@@ -1,10 +1,10 @@
-import { Flex, Text } from "@chakra-ui/react";
-import parse from "html-react-parser";
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import parse from "html-react-parser";
+import { Flex, Text } from "@chakra-ui/react";
+import { useAppSelector } from "../../hooks/store.hooks";
+
 const Logger = () => {
-  const settings = useSelector((state: RootState) => state.settings);
+  const settings = useAppSelector((state) => state.settings);
   const log = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

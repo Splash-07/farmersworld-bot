@@ -1,5 +1,7 @@
-import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/store.hooks";
+import CustomInput from "./CustomInput";
+import SettingsBar from "./SettingsBar";
+
 import {
   setMinEnergy,
   setMinRepair,
@@ -8,14 +10,14 @@ import {
   toggleFeedDairyCows,
   toggleMbsStore,
   toggleRepair,
-} from "../store/slices/settings.slice";
-import { RootState } from "../store/store";
-import CustomInput from "./CustomInput";
-import SettingsBar from "./SettingsBar";
+} from "../../store/slices/settings.slice";
+
+import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
 
 const Settings = () => {
-  const resources = useSelector((state: RootState) => state.user.resources);
-  const settings = useSelector((state: RootState) => state.settings);
+  const resources = useAppSelector((state) => state.data.resources);
+  const settings = useAppSelector((state) => state.settings);
+
   return (
     <Flex
       justifyContent="center"

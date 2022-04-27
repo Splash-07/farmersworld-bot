@@ -1,20 +1,20 @@
-import { AddIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, IconButton, Text } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
 import {
   addEndpoint,
   changeEndpoint,
   deleteEndpoint,
   toggleEndpointStatus,
-} from "../store/slices/endpoint.slice";
-import { handleEndpointManipulations } from "../service/wax";
+} from "../../store/slices/endpoint.slice";
+
+import { Box, Button, Flex, IconButton, Text } from "@chakra-ui/react";
+import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
+import { useAppDispatch, useAppSelector } from "../../hooks/store.hooks";
+import { handleEndpointManipulations } from "../../service/wax.service";
 
 const Endpoints = () => {
-  const { endpointsArray, currentEndpoint } = useSelector(
-    (state: RootState) => state.endpoint
+  const { endpointsArray, currentEndpoint } = useAppSelector(
+    (state) => state.endpoint
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   function handleAddNewServer() {
     const newUrl = prompt(

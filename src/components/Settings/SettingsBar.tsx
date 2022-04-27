@@ -1,8 +1,9 @@
+import { FC, ReactChild } from "react";
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+
 import { CheckIcon } from "@chakra-ui/icons";
 import { Flex, IconButton } from "@chakra-ui/react";
-import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
-import { FC, ReactChild } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/store.hooks";
 
 interface CustomSettingBarInterface {
   isDisabled?: boolean;
@@ -14,7 +15,7 @@ const SettingBar: FC<CustomSettingBarInterface> = ({
   dispatchedAction,
   children,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <Flex alignItems="center" gap="10px">
