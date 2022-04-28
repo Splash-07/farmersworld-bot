@@ -46,6 +46,7 @@ const NextAction = () => {
       </Flex>
     );
   const color = getTextColor(assetMap.get(nextItem.template_id)!.type);
+
   return (
     <Flex
       gap={"5px"}

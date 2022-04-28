@@ -70,16 +70,19 @@ export const endpointSlice = createSlice({
     },
     swapEndpoint: (state) => {
       let { endpointsArray, currentEndpointId } = state;
+
       currentEndpointId =
         currentEndpointId + 1 >= endpointsArray.length
           ? 0
           : currentEndpointId + 1;
+
       while (endpointsArray[currentEndpointId].status === false) {
         currentEndpointId =
           currentEndpointId + 1 >= endpointsArray.length
             ? 0
             : currentEndpointId + 1;
       }
+
       state.currentEndpointId = currentEndpointId;
       state.currentEndpoint = endpointsArray[currentEndpointId];
     },

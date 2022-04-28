@@ -50,15 +50,24 @@ export function parseAccountInfo(accountInfo: AccountInfoResponse): Account {
 export function parseAccountResources(
   resources: AccountResourcesResponse
 ): Resources {
-  const wood = parseInt(
-    resources.balances.filter((item) => item.includes("WOOD"))[0].split(" ")[0]
-  );
-  const gold = parseInt(
-    resources.balances.filter((item) => item.includes("GOLD"))[0].split(" ")[0]
-  );
-  const food = parseInt(
-    resources.balances.filter((item) => item.includes("FOOD"))[0].split(" ")[0]
-  );
+  const wood =
+    parseInt(
+      resources.balances
+        .filter((item) => item.includes("WOOD"))[0]
+        ?.split(" ")[0]
+    ) || 0;
+  const gold =
+    parseInt(
+      resources.balances
+        .filter((item) => item.includes("GOLD"))[0]
+        ?.split(" ")[0]
+    ) || 0;
+  const food =
+    parseInt(
+      resources.balances
+        .filter((item) => item.includes("FOOD"))[0]
+        ?.split(" ")[0]
+    ) || 0;
   return {
     account: resources.account,
     balances: {

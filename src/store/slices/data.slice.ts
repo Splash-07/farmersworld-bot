@@ -99,6 +99,7 @@ export const getAllData = createAsyncThunk<
       animals,
       assetsInStash,
     };
+    console.log(response);
     return response;
   } catch (error: any) {
     console.log(error);
