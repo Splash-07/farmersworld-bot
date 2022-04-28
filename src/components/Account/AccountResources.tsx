@@ -45,7 +45,7 @@ const AccountResources = () => {
           />
           <AssetInfo
             image={EnergyIcon}
-            text={`${resources?.energy} / ${resources?.max_energy}`}
+            text={resources && `${resources.energy} / ${resources.max_energy}`}
           />
         </Flex>
       </Flex>

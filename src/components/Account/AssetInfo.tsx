@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image, Skeleton, Text } from "@chakra-ui/react";
 
 interface AssetInfoProps {
   image: any;
@@ -19,7 +19,13 @@ const AssetInfo: FC<AssetInfoProps> = ({ image, text }) => {
       backgroundColor="whiteAlpha.100"
     >
       <Image w="32px" src={image} />
-      <Text fontSize="15px">{text}</Text>
+      {text ? (
+        <Text fontSize="15px">{text}</Text>
+      ) : (
+        <Skeleton width="100%">
+          <Box width="100%">222</Box>
+        </Skeleton>
+      )}
     </Box>
   );
 };

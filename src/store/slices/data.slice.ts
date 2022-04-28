@@ -17,8 +17,8 @@ import {
   ToolsResponse,
 } from "../../types/data.types";
 
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { SettingsState } from "./settings.slice";
+import { createAsyncThunk, createSlice, Dispatch } from "@reduxjs/toolkit";
+import { pushLog, SettingsState } from "./settings.slice";
 
 import { findLowestCD } from "../../utils/timers";
 import {
@@ -34,12 +34,12 @@ export interface DataState {
   accountInfo?: Account;
   resources?: Resources;
   items: {
-    toolsList: ToolsResponse;
-    mbsList: MbsResponse;
-    cropsList: CropsResponse;
-    breedingsList: any;
-    animalsList: AnimalsResponse;
-    assetsInStash: AssetsInStash;
+    toolsList?: ToolsResponse;
+    mbsList?: MbsResponse;
+    cropsList?: CropsResponse;
+    breedingsList?: any;
+    animalsList?: AnimalsResponse;
+    assetsInStash?: AssetsInStash;
     next?: Tool | Mbs | Crop | Animal;
   };
 }
@@ -47,7 +47,7 @@ export interface DataState {
 export const getAllData = createAsyncThunk<
   GetAllDataResponse,
   { rpc: JsonRpc; username: string },
-  { rejectValue: any }
+  { rejectValue: any; dispatch: Dispatch }
 >("data/fetchData", async ({ rpc, username }, thunkAPI) => {
   try {
     const accountInfo = (await rpc.get_account(
@@ -100,7 +100,9 @@ export const getAllData = createAsyncThunk<
       assetsInStash,
     };
     return response;
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error);
+    thunkAPI.dispatch(pushLog(`${error}`));
     return thunkAPI.rejectWithValue(error);
   }
 });
@@ -151,18 +153,12 @@ const initialState: DataState = {
   accountInfo: undefined,
   resources: undefined,
   items: {
-    toolsList: [],
-    cropsList: [],
-    mbsList: [],
-    breedingsList: [],
-    animalsList: [],
-    assetsInStash: {
-      milk: [],
-      barley: [],
-      corn: [],
-      eggs: [],
-      coins: [],
-    },
+    toolsList: undefined,
+    cropsList: undefined,
+    mbsList: undefined,
+    breedingsList: undefined,
+    animalsList: undefined,
+    assetsInStash: undefined,
     next: undefined,
   },
 };
@@ -186,16 +182,16 @@ export const dataSlice = createSlice({
       } = payload;
 
       const filteredAnimalList = filterAnimalList(
-        animalsList,
-        assetsInStash,
+        animalsList!,
+        assetsInStash!,
         feedChickenIsDisabled,
         feedDairyCowIsDisabled
       );
 
       const lowCdItem = findLowestCD(
-        toolsList,
-        mbsList,
-        cropsList,
+        toolsList!,
+        mbsList!,
+        cropsList!,
         filteredAnimalList,
         mbsStoreIsDisabled
       );

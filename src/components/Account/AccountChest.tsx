@@ -37,23 +37,23 @@ const AccountChest = () => {
         <Flex justifyContent="space-between" gap="15px">
           <AssetInfo
             image={CoinIcon}
-            text={assetsInStash.coins.length.toString()}
+            text={assetsInStash?.coins.length.toString()}
           />
           <AssetInfo
             image={EggIcon}
-            text={assetsInStash.eggs.length.toString()}
+            text={assetsInStash?.eggs.length.toString()}
           />
           <AssetInfo
             image={MilkIcon}
-            text={assetsInStash.milk.length.toString()}
+            text={assetsInStash?.milk.length.toString()}
           />
           <AssetInfo
             image={BarleyIcon}
-            text={assetsInStash.barley.length.toString()}
+            text={assetsInStash?.barley.length.toString()}
           />
           <AssetInfo
             image={CornIcon}
-            text={assetsInStash.corn.length.toString()}
+            text={assetsInStash?.corn.length.toString()}
           />
         </Flex>
       </Flex>

@@ -8,14 +8,12 @@ import { getTextColor } from "../../utils/utils";
 import { sleep } from "../../utils/timers";
 import { handleNextAction } from "../../service/action.service";
 
-import { Box, Flex, Skeleton, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
 
 const NextAction = () => {
   const data = useAppSelector((state) => state.data);
   const settings = useAppSelector((state) => state.settings);
   const dispatch = useAppDispatch();
-
-  const [breakPoint480] = useMediaQuery("(min-width: 480px)");
 
   let nextItem = data.items.next;
 
@@ -61,7 +59,7 @@ const NextAction = () => {
     >
       <MemoisedCountdown timer={nextItem.next_availability} />
       <Flex gap="5px" alignItems="center">
-        <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
+        <Text>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>
           {assetMap.get(nextItem.template_id)?.name}
         </Text>

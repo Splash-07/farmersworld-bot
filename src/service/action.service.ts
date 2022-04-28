@@ -91,6 +91,7 @@ export async function actionClaimCrop(
     return { status: false, result: error.message };
   }
 }
+
 export async function actionFeedAnimal(
   asset_id: string,
   username: string,
@@ -121,6 +122,7 @@ export async function actionFeedAnimal(
     return { status: false, result: error.message };
   }
 }
+
 export async function actionHatchEggs(
   asset_id: string,
   username: string
@@ -204,6 +206,7 @@ export async function actionRepair(
     return { status: false, result: error.message };
   }
 }
+
 export async function handleAnimals(
   nextAnimal: Animal,
   data: DataState
@@ -223,14 +226,15 @@ export async function handleAnimals(
     let food_id;
     // if baby calf
     if (template_id === 298597) {
-      food_id = assetsInStash.milk[0];
+      food_id = assetsInStash?.milk[0];
     } else {
-      food_id = assetsInStash.barley[0];
+      food_id = assetsInStash?.barley[0];
     }
-    response = await actionFeedAnimal(asset_id, username!, food_id);
+    response = await actionFeedAnimal(asset_id, username!, food_id!);
   }
   return response;
 }
+
 export async function handleNextAction(
   data: DataState,
   settings: SettingsState
@@ -300,6 +304,7 @@ export async function handleToolRepair(
     }
   }
 }
+
 export async function handleEnergyRestore(
   username: string,
   resources: Resources,

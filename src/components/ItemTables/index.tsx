@@ -1,17 +1,20 @@
+import TableSkeleton from "./TableSkeleton";
 import TableWrapper from "./TableWrapper";
 import ToolRow from "./ToolRow";
-import { useAppSelector } from "../../hooks/store.hooks";
-
-import { Flex, Grid, GridItem } from "@chakra-ui/react";
 import CropRow from "./CropsRow";
 import AnimalRow from "./AnimalRow";
 import MbsRow from "./MbsRow";
+import { useAppSelector } from "../../hooks/store.hooks";
 import { sortByType } from "../../utils/utils";
+
+import { Flex, Grid, GridItem } from "@chakra-ui/react";
 
 const ItemTables = () => {
   const items = useAppSelector((state) => state.data.items);
 
-  const sortedToolList = sortByType(items.toolsList);
+  const sortedToolList = items.toolsList && sortByType(items.toolsList);
+
+  if (!items.toolsList) return <TableSkeleton />;
 
   return (
     <Grid
@@ -58,31 +61,44 @@ const ItemTables = () => {
           },
         }}
       >
-        {sortedToolList.length > 0 && (
+        {sortedToolList && (
           <TableWrapper tableName="Tools">
-            {sortedToolList.map((tool) => (
-              <ToolRow item={tool} mbs={items.mbsList} />
+            {sortedToolList.map((tool, index) => (
+              <ToolRow
+                key={`${tool.template_id + tool.next_availability + index}`}
+                item={tool}
+                mbs={items.mbsList!}
+              />
             ))}
           </TableWrapper>
         )}
-        {items.cropsList.length > 0 && (
+        {items.cropsList && (
           <TableWrapper tableName="Crops">
-            {items.cropsList.map((crop) => (
-              <CropRow item={crop} />
+            {items.cropsList?.map((crop, index) => (
+              <CropRow
+                key={`${crop.template_id + crop.next_availability + index}`}
+                item={crop}
+              />
             ))}
           </TableWrapper>
         )}
-        {items.animalsList.length > 0 && (
+        {items.animalsList && (
           <TableWrapper tableName="Animals">
-            {items.animalsList.map((animal) => (
-              <AnimalRow item={animal} />
+            {items.animalsList.map((animal, index) => (
+              <AnimalRow
+                key={`${animal.template_id + animal.next_availability + index}`}
+                item={animal}
+              />
             ))}
           </TableWrapper>
         )}
-        {items.mbsList.length > 0 && (
+        {items.mbsList && (
           <TableWrapper tableName="Mbs">
-            {items.mbsList.map((mbs) => (
-              <MbsRow item={mbs} />
+            {items.mbsList.map((mbs, index) => (
+              <MbsRow
+                key={`${mbs.template_id + mbs.next_availability + index}`}
+                item={mbs}
+              />
             ))}
           </TableWrapper>
         )}
