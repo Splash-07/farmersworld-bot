@@ -49,7 +49,7 @@ const MbsRow: FC<MbsRowProps> = ({ item }) => {
       ) : (
         <Flex justifyContent="center" w="50%" fontSize="14px">
           {`${
-            mbsStoreLimit - Math.ceil((timer + mbsClaimDelay) / mbsCooldown)
+            mbsStoreLimit - Math.ceil((timer - mbsClaimDelay) / mbsCooldown)
           }/${mbsStoreLimit}`}
         </Flex>
       )}
