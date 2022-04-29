@@ -21,6 +21,7 @@ const MbsRow: FC<MbsRowProps> = ({ item }) => {
 
   const mbsCooldown = 86400000;
   const mbsStoreLimit = mbsMultiMap.get(template_id)! + 2;
+  const mbsClaimDelay = 30000;
 
   const color = getTextColor(type);
   const timer = adjustTime(item);
@@ -47,7 +48,9 @@ const MbsRow: FC<MbsRowProps> = ({ item }) => {
         <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
       ) : (
         <Flex justifyContent="center" w="50%" fontSize="14px">
-          {`${mbsStoreLimit - Math.ceil(timer / mbsCooldown)}/${mbsStoreLimit}`}
+          {`${
+            mbsStoreLimit - Math.ceil((timer + mbsClaimDelay) / mbsCooldown)
+          }/${mbsStoreLimit}`}
         </Flex>
       )}
     </GridItem>

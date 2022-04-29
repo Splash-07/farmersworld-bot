@@ -5,6 +5,7 @@ import { pushLog, SettingsState } from "../store/slices/settings.slice";
 import { store } from "../store/store";
 import { DataState } from "../store/slices/data.slice";
 import { sleep } from "../utils/timers";
+import { logger } from "../utils/logger";
 import { swapEndpoint } from "../store/slices/endpoint.slice";
 import { handleEndpointManipulations, wax } from "./wax.service";
 
@@ -242,7 +243,9 @@ export async function handleNextAction(
   const username = data.username!;
   const nextItem = data.next!;
 
-  if ("current_durability" in nextItem) {
+  console.log(logger(`Performing action on ${nextItem.asset_id}: ${nextItem}`));
+
+  if (isTool(nextItem)) {
     await handleToolRepair(username, nextItem, settings);
   }
   await handleEnergyRestore(username, accountResources, settings);

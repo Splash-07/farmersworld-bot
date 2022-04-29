@@ -24,7 +24,7 @@ const initialState: SettingsState = {
 
   repairIsDisabled: false,
   energyIsDisabled: false,
-  mbsStoreIsDisabled: false,
+  mbsStoreIsDisabled: true,
 
   feedChickenIsDisabled: true,
   feedDairyCowIsDisabled: true,

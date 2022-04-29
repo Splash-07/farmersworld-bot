@@ -49,7 +49,7 @@ export function adjustTime(
   // if item is mbs card, and if storing is enabled, store up to x4
   if (isMbs(item) && !mbsStoreIsDisabled) {
     const mbsCooldown = 86400000; // 24 hours
-    const mbsClaimDelay = 600000; // 1 min
+    const mbsClaimDelay = 30000; // 30sec
     const mbsStoreLimit = mbsMultiMap.get(item.template_id)! + 1;
 
     return timer + mbsCooldown * mbsStoreLimit + mbsClaimDelay;

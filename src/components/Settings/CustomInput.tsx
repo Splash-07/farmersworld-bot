@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useAppDispatch } from "../../hooks/store.hooks";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import debounce from "lodash.debounce";
@@ -31,17 +31,22 @@ const CustomInput: FC<CustomInputInterface> = ({
   const [value, setValue] = useState<string>(initialValue.toString());
   const dispatch = useAppDispatch();
 
-  const dispatchValue = debounce((value) => {
-    if (value.length === 0) {
-      dispatch(dispatchAction(0));
-    } else {
-      dispatch(dispatchAction(parseInt(value)));
-    }
-  }, 1000);
+  const dispatchValue = useMemo(
+    () =>
+      debounce((value) => {
+        dispatch(dispatchAction(parseInt(value)));
+      }, 1000),
+    []
+  );
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    if (value.length === 0) return setValue(value);
+    if (value.length === 0) {
+      setValue(value);
+      dispatchValue(0);
+      return;
+    }
+
     if (parseInt(value) <= maxPossible) {
       setValue(value);
       dispatchValue(value);
