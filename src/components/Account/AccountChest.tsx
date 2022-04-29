@@ -10,9 +10,7 @@ import BarleyIcon from "../../assets/icons/barley-icon.png";
 import CornIcon from "../../assets/icons/corn-icon.png";
 
 const AccountChest = () => {
-  const assetsInStash = useAppSelector(
-    (state) => state.data.items.assetsInStash
-  );
+  const assetsInStash = useAppSelector((state) => state.data.assetsInStash);
 
   return (
     <Flex

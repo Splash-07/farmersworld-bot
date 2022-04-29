@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { Mbs } from "../../types/data.types";
-import { assetMap } from "../../store/data";
+import { assetMap, mbsMultiMap } from "../../store/data";
 import { getTextColor } from "../../utils/utils";
 import { adjustTime, msToTime } from "../../utils/timers";
 import { useAppSelector } from "../../hooks/store.hooks";
@@ -20,6 +20,7 @@ const MbsRow: FC<MbsRowProps> = ({ item }) => {
   const { name, type } = asset;
 
   const mbsCooldown = 86400000;
+  const mbsStoreLimit = mbsMultiMap.get(template_id)! + 2;
 
   const color = getTextColor(type);
   const timer = adjustTime(item);
@@ -46,7 +47,7 @@ const MbsRow: FC<MbsRowProps> = ({ item }) => {
         <Flex justifyContent="center" w="50%" fontSize="14px"></Flex>
       ) : (
         <Flex justifyContent="center" w="50%" fontSize="14px">
-          {`${4 - Math.ceil(timer / mbsCooldown)}/4`}
+          {`${mbsStoreLimit - Math.ceil(timer / mbsCooldown)}/${mbsStoreLimit}`}
         </Flex>
       )}
     </GridItem>

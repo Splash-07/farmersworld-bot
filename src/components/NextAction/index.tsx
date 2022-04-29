@@ -15,18 +15,18 @@ const NextAction = () => {
   const settings = useAppSelector((state) => state.settings);
   const dispatch = useAppDispatch();
 
-  let nextItem = data.items.next;
+  let nextItem = data.next;
 
-  useEffect(() => {
-    if (settings.triggerNextAction) {
-      (async () => {
-        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-        await handleNextAction(data, settings);
-        await sleep(10000);
-        dispatch(toggleUpdateData(true));
-      })();
-    }
-  }, [settings.triggerNextAction]);
+  // useEffect(() => {
+  //   if (settings.triggerNextAction) {
+  //     (async () => {
+  //       dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+  //       await handleNextAction(data, settings);
+  //       await sleep(10000);
+  //       dispatch(toggleUpdateData(true));
+  //     })();
+  //   }
+  // }, [settings.triggerNextAction]);
 
   if (!nextItem)
     return (

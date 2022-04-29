@@ -33,15 +33,13 @@ export interface DataState {
   username?: string;
   accountInfo?: Account;
   resources?: Resources;
-  items: {
-    toolsList?: ToolsResponse;
-    mbsList?: MbsResponse;
-    cropsList?: CropsResponse;
-    breedingsList?: any;
-    animalsList?: AnimalsResponse;
-    assetsInStash?: AssetsInStash;
-    next?: Tool | Mbs | Crop | Animal;
-  };
+  toolsList?: ToolsResponse;
+  mbsList?: MbsResponse;
+  cropsList?: CropsResponse;
+  breedingsList?: any;
+  animalsList?: AnimalsResponse;
+  assetsInStash?: AssetsInStash;
+  next?: Tool | Mbs | Crop | Animal;
 }
 
 export const getAllData = createAsyncThunk<
@@ -153,15 +151,13 @@ const initialState: DataState = {
   username: undefined,
   accountInfo: undefined,
   resources: undefined,
-  items: {
-    toolsList: undefined,
-    cropsList: undefined,
-    mbsList: undefined,
-    breedingsList: undefined,
-    animalsList: undefined,
-    assetsInStash: undefined,
-    next: undefined,
-  },
+  toolsList: undefined,
+  cropsList: undefined,
+  mbsList: undefined,
+  breedingsList: undefined,
+  animalsList: undefined,
+  assetsInStash: undefined,
+  next: undefined,
 };
 
 export const dataSlice = createSlice({
@@ -174,7 +170,7 @@ export const dataSlice = createSlice({
 
     setNextAction: (state, { payload }: { payload: SettingsState }) => {
       const { animalsList, assetsInStash, toolsList, mbsList, cropsList } =
-        state.items;
+        state;
 
       const {
         feedChickenIsDisabled,
@@ -197,7 +193,7 @@ export const dataSlice = createSlice({
         mbsStoreIsDisabled
       );
 
-      state.items.next = lowCdItem;
+      state.next = lowCdItem;
     },
   },
   extraReducers: (builder) => {
@@ -215,12 +211,12 @@ export const dataSlice = createSlice({
 
       state.accountInfo = parseAccountInfo(accountInfo);
       state.resources = parseAccountResources(resources);
-      state.items.toolsList = tools;
-      state.items.animalsList = animals;
-      state.items.mbsList = mbs;
-      state.items.cropsList = crops;
-      state.items.breedingsList = breedings;
-      state.items.assetsInStash = parseAssetsInStash(assetsInStash);
+      state.toolsList = tools;
+      state.animalsList = animals;
+      state.mbsList = mbs;
+      state.cropsList = crops;
+      state.breedingsList = breedings;
+      state.assetsInStash = parseAssetsInStash(assetsInStash);
     });
   },
 });

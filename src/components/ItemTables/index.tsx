@@ -10,11 +10,11 @@ import { sortByType } from "../../utils/utils";
 import { Flex, Grid, GridItem } from "@chakra-ui/react";
 
 const ItemTables = () => {
-  const items = useAppSelector((state) => state.data.items);
+  const data = useAppSelector((state) => state.data);
 
-  const sortedToolList = items.toolsList && sortByType(items.toolsList);
+  const sortedToolList = data.toolsList && sortByType(data.toolsList);
 
-  if (!items.toolsList) return <TableSkeleton />;
+  if (!data.toolsList) return <TableSkeleton />;
 
   return (
     <Grid
@@ -67,14 +67,14 @@ const ItemTables = () => {
               <ToolRow
                 key={`${tool.template_id + tool.next_availability + index}`}
                 item={tool}
-                mbs={items.mbsList!}
+                mbs={data.mbsList!}
               />
             ))}
           </TableWrapper>
         )}
-        {items.cropsList && (
+        {data.cropsList && (
           <TableWrapper tableName="Crops">
-            {items.cropsList?.map((crop, index) => (
+            {data.cropsList?.map((crop, index) => (
               <CropRow
                 key={`${crop.template_id + crop.next_availability + index}`}
                 item={crop}
@@ -82,9 +82,9 @@ const ItemTables = () => {
             ))}
           </TableWrapper>
         )}
-        {items.animalsList && (
+        {data.animalsList && (
           <TableWrapper tableName="Animals">
-            {items.animalsList.map((animal, index) => (
+            {data.animalsList.map((animal, index) => (
               <AnimalRow
                 key={`${animal.template_id + animal.next_availability + index}`}
                 item={animal}
@@ -92,9 +92,9 @@ const ItemTables = () => {
             ))}
           </TableWrapper>
         )}
-        {items.mbsList && (
+        {data.mbsList && (
           <TableWrapper tableName="Mbs">
-            {items.mbsList.map((mbs, index) => (
+            {data.mbsList.map((mbs, index) => (
               <MbsRow
                 key={`${mbs.template_id + mbs.next_availability + index}`}
                 item={mbs}

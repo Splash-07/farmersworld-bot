@@ -214,8 +214,7 @@ export async function handleAnimals(
   status: boolean;
   result: any;
 }> {
-  const { username, items } = data;
-  const { assetsInStash } = items;
+  const { username, assetsInStash } = data;
   const { template_id, asset_id } = nextAnimal;
 
   let response;
@@ -241,7 +240,7 @@ export async function handleNextAction(
 ) {
   const accountResources = data.resources!;
   const username = data.username!;
-  const nextItem = data.items.next!;
+  const nextItem = data.next!;
 
   if ("current_durability" in nextItem) {
     await handleToolRepair(username, nextItem, settings);
