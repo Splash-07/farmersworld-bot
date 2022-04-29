@@ -17,16 +17,16 @@ const NextAction = () => {
 
   let nextItem = data.next;
 
-  // useEffect(() => {
-  //   if (settings.triggerNextAction) {
-  //     (async () => {
-  //       dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-  //       await handleNextAction(data, settings);
-  //       await sleep(10000);
-  //       dispatch(toggleUpdateData(true));
-  //     })();
-  //   }
-  // }, [settings.triggerNextAction]);
+  useEffect(() => {
+    if (settings.triggerNextAction) {
+      (async () => {
+        dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
+        await handleNextAction(data, settings);
+        await sleep(10000);
+        dispatch(toggleUpdateData(true));
+      })();
+    }
+  }, [settings.triggerNextAction]);
 
   if (!nextItem)
     return (
