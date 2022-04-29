@@ -1,8 +1,9 @@
+import { Box, ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
 import "@fontsource/m-plus-rounded-1c";
 
-import { Box, ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
-import Home from "./components/Home";
+import Home from "./page/Home";
 import Header from "./components/Header";
+
 const theme = extendTheme({
   styles: {
     global: {

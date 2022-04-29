@@ -1,19 +1,23 @@
-import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/store.hooks";
+import CustomInput from "./CustomInput";
+import SettingsBar from "./SettingsBar";
+
 import {
   setMinEnergy,
   setMinRepair,
   toggleEnergy,
   toggleFeedChickens,
   toggleFeedDairyCows,
+  toggleMbsStore,
   toggleRepair,
-} from "../store/slices/settings.slice";
-import { RootState } from "../store/store";
-import CustomInput from "./CustomInput";
-import SettingsBar from "./SettingsBar";
+} from "../../store/slices/settings.slice";
+
+import { Box, Flex, Text, Wrap, WrapItem } from "@chakra-ui/react";
 
 const Settings = () => {
-  const { user, settings } = useSelector((state: RootState) => state);
+  const resources = useAppSelector((state) => state.data.resources);
+  const settings = useAppSelector((state) => state.settings);
+
   return (
     <Flex
       justifyContent="center"
@@ -50,11 +54,34 @@ const Settings = () => {
           >
             <CustomInput
               isDisabled={settings.energyIsDisabled}
-              maxPossible={user.resources?.max_energy! - 50}
+              maxPossible={resources?.max_energy! - 50}
               type="Restore energy when <"
               initialValue={settings.minEnergy}
               dispatchAction={setMinEnergy}
             />
+          </SettingsBar>
+        </WrapItem>
+        <WrapItem w="100%">
+          <SettingsBar
+            dispatchedAction={toggleMbsStore}
+            isDisabled={settings.mbsStoreIsDisabled}
+          >
+            <Box
+              backgroundColor="whiteAlpha.100"
+              color={
+                settings.mbsStoreIsDisabled ? "whiteAlpha.400" : "orange.50"
+              }
+              padding="0 12px"
+              border="1px solid"
+              backdropBlur="lg"
+              borderColor="whiteAlpha.100"
+              boxShadow="md"
+              lineHeight="30px"
+              fontSize="14px"
+              minW="175px"
+            >
+              Store mbs cards
+            </Box>
           </SettingsBar>
         </WrapItem>
         <WrapItem w="100%">

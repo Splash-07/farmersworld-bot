@@ -1,27 +1,27 @@
-import { Box, Flex, Skeleton, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { sleep } from "../utils/timers";
-import { handleNextAction } from "../service/actionsHandlers";
 import { MemoisedCountdown } from "./Countdown";
-import { toggleUpdateData } from "../store/slices/settings.slice";
-import { getTextColor } from "../utils/utils";
-import { assetMap } from "../store/data";
+
+import { assetMap } from "../../store/data";
+import { toggleUpdateData } from "../../store/slices/settings.slice";
+import { useAppDispatch, useAppSelector } from "../../hooks/store.hooks";
+import { getTextColor } from "../../utils/utils";
+import { sleep } from "../../utils/timers";
+import { handleNextAction } from "../../service/action.service";
+
+import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
 
 const NextAction = () => {
-  const { user, settings } = useSelector((state: RootState) => state);
-  const dispatch = useDispatch();
+  const data = useAppSelector((state) => state.data);
+  const settings = useAppSelector((state) => state.settings);
+  const dispatch = useAppDispatch();
 
-  const [breakPoint480] = useMediaQuery("(min-width: 480px)");
-
-  let nextItem = user.items.next;
+  let nextItem = data.next;
 
   useEffect(() => {
     if (settings.triggerNextAction) {
       (async () => {
         dispatch(toggleUpdateData(false)); // prevent data update, while doing actions
-        await handleNextAction(user, settings);
+        await handleNextAction(data, settings);
         await sleep(10000);
         dispatch(toggleUpdateData(true));
       })();
@@ -46,6 +46,7 @@ const NextAction = () => {
       </Flex>
     );
   const color = getTextColor(assetMap.get(nextItem.template_id)!.type);
+
   return (
     <Flex
       gap={"5px"}
@@ -59,7 +60,7 @@ const NextAction = () => {
     >
       <MemoisedCountdown timer={nextItem.next_availability} />
       <Flex gap="5px" alignItems="center">
-        <Text display={breakPoint480 ? "block" : "none"}>Claim with:</Text>
+        <Text>Claim with:</Text>
         <Text color={color} fontWeight="semibold" maxWidth="50ch" isTruncated>
           {assetMap.get(nextItem.template_id)?.name}
         </Text>

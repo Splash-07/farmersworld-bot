@@ -1,12 +1,13 @@
-import { Box } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { triggerNextAction } from "../store/slices/settings.slice";
-import { msToTime } from "../utils/timers";
+import { useAppDispatch } from "../../hooks/store.hooks";
+import { triggerNextAction } from "../../store/slices/settings.slice";
+import { msToTime } from "../../utils/timers";
+
+import { Box } from "@chakra-ui/react";
 
 const Countdown = ({ timer }: { timer: number }) => {
   const [ms, setMs] = useState(timer);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setMs(timer);

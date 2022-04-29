@@ -1,13 +1,13 @@
-import { Resources } from "./../types/data.types";
+import { Animal, Resources, Tool } from "./../types/data.types";
 import { isAnimal, isMbs, isTool } from "../types/data.typeguards";
 import { assetMap } from "../store/data";
 import { pushLog, SettingsState } from "../store/slices/settings.slice";
 import { store } from "../store/store";
-import { handleEndpointManipulations, wax } from "./wax";
-import { UserState } from "../store/slices/user.slice";
+import { DataState } from "../store/slices/data.slice";
 import { sleep } from "../utils/timers";
-import { AnimalsResponse, ToolsResponse } from "../types/data.types";
+import { logger } from "../utils/logger";
 import { swapEndpoint } from "../store/slices/endpoint.slice";
+import { handleEndpointManipulations, wax } from "./wax.service";
 
 export async function actionClaimTool(
   asset_id: string,
@@ -92,6 +92,7 @@ export async function actionClaimCrop(
     return { status: false, result: error.message };
   }
 }
+
 export async function actionFeedAnimal(
   asset_id: string,
   username: string,
@@ -122,6 +123,7 @@ export async function actionFeedAnimal(
     return { status: false, result: error.message };
   }
 }
+
 export async function actionHatchEggs(
   asset_id: string,
   username: string
@@ -205,16 +207,16 @@ export async function actionRepair(
     return { status: false, result: error.message };
   }
 }
+
 export async function handleAnimals(
-  nextItem: AnimalsResponse,
-  user: UserState
+  nextAnimal: Animal,
+  data: DataState
 ): Promise<{
   status: boolean;
   result: any;
 }> {
-  const { username, items } = user;
-  const { assetsInStash } = items;
-  const { template_id, asset_id } = nextItem;
+  const { username, assetsInStash } = data;
+  const { template_id, asset_id } = nextAnimal;
 
   let response;
   //  hatch eggs
@@ -224,23 +226,26 @@ export async function handleAnimals(
     let food_id;
     // if baby calf
     if (template_id === 298597) {
-      food_id = assetsInStash.milk[0];
+      food_id = assetsInStash?.milk[0];
     } else {
-      food_id = assetsInStash.barley[0];
+      food_id = assetsInStash?.barley[0];
     }
-    response = await actionFeedAnimal(asset_id, username!, food_id);
+    response = await actionFeedAnimal(asset_id, username!, food_id!);
   }
   return response;
 }
+
 export async function handleNextAction(
-  user: UserState,
+  data: DataState,
   settings: SettingsState
 ) {
-  const username = user.username!;
-  const nextItem = user.items.next!;
-  const accountResources = user.resources!;
+  const accountResources = data.resources!;
+  const username = data.username!;
+  const nextItem = data.next!;
 
-  if ("current_durability" in nextItem) {
+  console.log(logger(`Performing action on ${nextItem.asset_id}: ${nextItem}`));
+
+  if (isTool(nextItem)) {
     await handleToolRepair(username, nextItem, settings);
   }
   await handleEnergyRestore(username, accountResources, settings);
@@ -250,7 +255,7 @@ export async function handleNextAction(
     response = await actionClaimTool(nextItem.asset_id, username);
   else if (isMbs(nextItem))
     response = await actionClaimMembership(nextItem.asset_id, username);
-  else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, user);
+  else if (isAnimal(nextItem)) response = await handleAnimals(nextItem, data);
   else response = await actionClaimCrop(nextItem.asset_id, username);
 
   if (response?.status === true) {
@@ -274,7 +279,7 @@ export async function handleNextAction(
 
 export async function handleToolRepair(
   username: string,
-  nextTool: ToolsResponse,
+  nextTool: Tool,
   settings: SettingsState
 ) {
   if (
@@ -301,6 +306,7 @@ export async function handleToolRepair(
     }
   }
 }
+
 export async function handleEnergyRestore(
   username: string,
   resources: Resources,

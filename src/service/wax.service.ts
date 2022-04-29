@@ -2,21 +2,27 @@ import * as waxjs from "@waxio/waxjs/dist";
 import { JsonRpc } from "eosjs";
 import { store } from "../store/store";
 import { pushLog } from "../store/slices/settings.slice";
-import { setUsername } from "../store/slices/user.slice";
+import { setUsername } from "../store/slices/data.slice";
 import { Endpoint } from "../store/slices/endpoint.slice";
 
-const { currentEndpoint } = store.getState().endpoint;
-
-const log = `Current RPC endpoint - <span style="color: #FEB2B2;"><strong>${currentEndpoint.url}</strong></span>`;
-store.dispatch(pushLog(log));
-
-export let rpc = new JsonRpc(currentEndpoint.url);
+export let rpc = new JsonRpc("");
 export let wax = new waxjs.WaxJS({
-  rpcEndpoint: currentEndpoint.url,
+  rpcEndpoint: "",
   tryAutoLogin: false,
 });
 
-console.log(wax);
+export async function waxInit(endpoint: Endpoint) {
+  rpc = new JsonRpc(endpoint.url);
+  wax = new waxjs.WaxJS({
+    rpcEndpoint: endpoint.url,
+    tryAutoLogin: false,
+  });
+
+  await login();
+
+  const log = `Current RPC endpoint - <span style="color: #FEB2B2;"><strong>${endpoint.url}</strong></span>`;
+  store.dispatch(pushLog(log));
+}
 
 export async function handleEndpointManipulations(
   dispatchedAction: any,
@@ -68,7 +74,7 @@ export async function handleEndpointManipulations(
   }
 }
 
-async function signinNewRPCServerAndWaxLogin() {
+export async function signinNewRPCServerAndWaxLogin() {
   const newEndpoint = store.getState().endpoint.currentEndpoint;
   rpc = new JsonRpc(newEndpoint.url);
   wax = new waxjs.WaxJS({
@@ -81,7 +87,7 @@ async function signinNewRPCServerAndWaxLogin() {
   store.dispatch(pushLog(log));
 }
 
-async function autoLogin() {
+export async function autoLogin() {
   let isAutoLoginAvailable = await wax.isAutoLoginAvailable();
   if (isAutoLoginAvailable) {
     await login();

@@ -11,37 +11,27 @@ export interface EndpointSliceState {
   currentEndpoint: Endpoint;
 }
 
-const initialEndpoints: Endpoint[] = localStorage.getItem("persist:endpoint")
-  ? JSON.parse(
-      JSON.parse(localStorage.getItem("persist:endpoint")!).endpointsArray
-    )
-  : [
-      {
-        url: "https://chain.wax.io",
-        status: true,
-      },
-      {
-        url: "https://wax.pink.gg",
-        status: true,
-      },
-      {
-        url: "https://wax.eosphere.io",
-        status: true,
-      },
-    ];
+const initialEndpoints: Endpoint[] = [
+  {
+    url: "https://chain.wax.io",
+    status: true,
+  },
+  {
+    url: "https://wax.pink.gg",
+    status: true,
+  },
+  {
+    url: "https://wax.eosphere.io",
+    status: true,
+  },
+];
 const filteredEndpointsByStatus = initialEndpoints.filter(
   (endpoint) => endpoint.status === true
 );
-const initialEndpointId = localStorage.getItem("persist:endpoint")
-  ? JSON.parse(
-      JSON.parse(localStorage.getItem("persist:endpoint")!).currentEndpointId
-    )
-  : Math.floor(Math.random() * filteredEndpointsByStatus.length);
-const initialCurrentEndpoint = localStorage.getItem("persist:endpoint")
-  ? JSON.parse(
-      JSON.parse(localStorage.getItem("persist:endpoint")!).currentEndpoint
-    )
-  : initialEndpoints[initialEndpointId];
+const initialEndpointId = Math.floor(
+  Math.random() * filteredEndpointsByStatus.length
+);
+const initialCurrentEndpoint = initialEndpoints[initialEndpointId];
 
 const initialState: EndpointSliceState = {
   endpointsArray: initialEndpoints,
@@ -80,16 +70,19 @@ export const endpointSlice = createSlice({
     },
     swapEndpoint: (state) => {
       let { endpointsArray, currentEndpointId } = state;
+
       currentEndpointId =
         currentEndpointId + 1 >= endpointsArray.length
           ? 0
           : currentEndpointId + 1;
+
       while (endpointsArray[currentEndpointId].status === false) {
         currentEndpointId =
           currentEndpointId + 1 >= endpointsArray.length
             ? 0
             : currentEndpointId + 1;
       }
+
       state.currentEndpointId = currentEndpointId;
       state.currentEndpoint = endpointsArray[currentEndpointId];
     },

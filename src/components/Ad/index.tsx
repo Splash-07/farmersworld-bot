@@ -1,5 +1,6 @@
 import { Flex, Image, Link, Text } from "@chakra-ui/react";
-import DiscordAvatar from "../assets/icons/discord-icon-profile.jpg";
+import DiscordAvatar from "../../assets/icons/discord-icon-profile.jpg";
+
 const Ad = () => {
   return (
     <Flex

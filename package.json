@@ -1,7 +1,7 @@
 {
   "name": "farmersworld",
   "author": "Splash.07",
-  "version": "2.0.3",
+  "version": "2.1.1",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
