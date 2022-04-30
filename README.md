@@ -40,7 +40,7 @@ npm start
 - Restore energy (optionally)
 - Repair tools (optionally)
 - Storing charges depending on quantity and grade of membership cards (less CPU usage)
-- Storing membership cards (less CPU usage) (optionally)
+- Storing membership cards depending on the rarity of the card (less CPU usage) (optionally)
 
 ## Bot workflow
 
