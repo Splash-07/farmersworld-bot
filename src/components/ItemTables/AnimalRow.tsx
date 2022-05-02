@@ -22,7 +22,7 @@ const AnimalRow: FC<AnimalRowProps> = ({ item }) => {
   const dayLimit = animalsDailyClaimLimitMap.get(template_id);
 
   const color = getTextColor(type);
-  const timer = adjustTime(item);
+  const timer = adjustTime({ item });
 
   function showLimit() {
     return (

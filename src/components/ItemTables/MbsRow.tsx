@@ -24,7 +24,7 @@ const MbsRow: FC<MbsRowProps> = ({ item }) => {
   const mbsClaimDelay = 30000;
 
   const color = getTextColor(type);
-  const timer = adjustTime(item);
+  const timer = adjustTime({ item, mbsStoreIsDisabled });
 
   return (
     <GridItem

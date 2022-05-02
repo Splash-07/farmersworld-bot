@@ -16,7 +16,7 @@ const CropRow: FC<CropRowProps> = ({ item }) => {
   const { name, type } = asset;
 
   const color = getTextColor(type);
-  const timer = adjustTime(item);
+  const timer = adjustTime({ item });
 
   return (
     <GridItem

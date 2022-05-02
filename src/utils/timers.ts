@@ -37,19 +37,25 @@ export function filterDailyLimits(dayClaimList: number[]) {
   );
 }
 
-export function adjustTime(
-  item: Tool | Mbs | Crop | Animal,
-  mbs?: MbsResponse,
-  mbsStoreIsDisabled?: boolean
-) {
+export function adjustTime({
+  item,
+  mbs,
+  mbsStoreIsDisabled,
+}: {
+  item: Tool | Mbs | Crop | Animal;
+  mbs?: MbsResponse;
+  mbsStoreIsDisabled?: boolean;
+}) {
   const delay = 10000;
   const itemName = assetMap.get(item.template_id)?.name;
   let timer = item.next_availability * 1000 - new Date().getTime();
 
-  // if item is mbs card, and if storing is enabled, store up to x4
-  if (isMbs(item) && !mbsStoreIsDisabled) {
-    const mbsCooldown = 86400000; // 24 hours
+  // if item is mbs card, and if storing is not disabled, store up to x4
+  if (isMbs(item)) {
     const mbsClaimDelay = 30000; // 30sec
+    if (mbsStoreIsDisabled) return timer + mbsClaimDelay;
+
+    const mbsCooldown = 86400000; // 24 hours
     const mbsStoreLimit = mbsMultiMap.get(item.template_id)! + 1;
 
     return timer + mbsCooldown * mbsStoreLimit + mbsClaimDelay;
@@ -83,7 +89,7 @@ export function findLowestCD(
   const adjustedTimeArray = array.map((item) => {
     return {
       ...item,
-      next_availability: adjustTime(item, mbs, mbsStoreIsDisabled),
+      next_availability: adjustTime({ item, mbs, mbsStoreIsDisabled }),
     };
   });
 

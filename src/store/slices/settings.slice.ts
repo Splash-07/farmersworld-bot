@@ -94,7 +94,7 @@ export const settingsSlice = createSlice({
     },
     toggleMbsStore: (state) => {
       const log = logger(
-        `Membership cards storing <span style="color: #feebc8;"><strong>${
+        `Membership cards storing has been <span style="color: #feebc8;"><strong>${
           !state.mbsStoreIsDisabled ? "disabled" : "enabled"
         }</strong></span>.`
       );

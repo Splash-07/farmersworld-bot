@@ -17,7 +17,7 @@ const ToolRow: FC<ToolRowProps> = ({ item, mbs }) => {
   const { name, type } = asset;
 
   const color = getTextColor(type);
-  const timer = adjustTime(item, mbs);
+  const timer = adjustTime({ item, mbs });
 
   // count store/max store
   const exception = ["Ancient Stone Axe", "Mining Excavator"];
