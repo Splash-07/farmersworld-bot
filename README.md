@@ -14,19 +14,20 @@ Best server is - https://chain.wax.io
 
 ## Installation
 
-1. Clone repository
+1. Install nodejs latest version download [here](https://nodejs.org/en/)
+2. Clone repository
 
 ```bash
 git clone https://github.com/Splash-07/fw-bot
 ```
 
-2. Install all dependencies
+3. Install all dependencies
 
 ```bash
 npm i
 ```
 
-3. Start bot on localhost
+4. Start bot on localhost
 
 ```bash
 npm start
