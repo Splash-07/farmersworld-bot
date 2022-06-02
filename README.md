@@ -53,9 +53,6 @@ npm start
 6. If there no food for feeding animals -> skipping this asset
 7. Repeating 4th - 6th steps
 
-# TODO
-
-- endpoint slice and wax service needs to be refactored
 
 ##
 
